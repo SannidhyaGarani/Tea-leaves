@@ -1,0 +1,35 @@
+import React from 'react';
+import HeroSection from '../Home/HeroSection';
+import Bestsellers from '../Home/Bestsellers';
+import Banner from '../Home/Banner';
+import TeaJourney from '../Home/TeaJourney';
+import Testimonials from '../Home/Testimonials';
+import GallerySwiper from '../Home/GallerySwiper';
+
+const Home = () => {
+  return (
+    <main className="bg-white min-h-screen selection:bg-[#2d5a27] selection:text-white">
+      {/* 1. World-Class Luxury Cinematic Video Hero */}
+      <HeroSection />
+
+      {/* 2. Explore Our Premium Teas — Product swiper */}
+      <div id="home-content">
+        <Bestsellers />
+      </div>
+
+      {/* 3. Our Story — "Every Conversation Begins With Tea" */}
+      <Banner />
+
+      {/* 4. From Our Gardens To Your Cup — 5-step journey */}
+      <TeaJourney />
+
+      {/* 5. Loved By Thousands Of Tea Lovers — Testimonials */}
+      <Testimonials />
+
+      {/* 6. Follow Our Journey — Instagram section */}
+      <GallerySwiper />
+    </main>
+  );
+};
+
+export default Home;
