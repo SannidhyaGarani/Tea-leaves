@@ -116,11 +116,11 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 w-full z-[100] font-sans transition-all duration-300">
       {/* ── 1. TOP ANNOUNCEMENT BAR (28-30px slim) ── */}
-      <div className="h-[28px] sm:h-[30px] bg-[#173B25] text-[#F7F2E8] text-[11px] tracking-wider font-medium px-4 md:px-10 flex items-center justify-between transition-colors duration-300">
+      <div className="h-[28px] sm:h-[30px] bg-[#173B25] text-[#F7F2E8] text-[9.5px] sm:text-[11px] tracking-wider font-medium px-3 sm:px-4 md:px-10 flex items-center justify-between transition-colors duration-300">
         <div className="hidden sm:block w-24" /> {/* Spacer */}
 
-        <div className="flex-1 text-center flex items-center justify-center gap-2">
-          <Leaf size={12} className="text-[#B38A45]" />
+        <div className="flex-1 text-center flex items-center justify-center gap-1.5 sm:gap-2">
+          <Leaf size={12} className="text-[#B38A45] shrink-0" />
           <span>FREE SHIPPING on all prepaid orders above ₹499</span>
         </div>
 
