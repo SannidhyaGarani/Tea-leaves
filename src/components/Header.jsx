@@ -120,7 +120,7 @@ const Header = () => {
         <div className="hidden sm:block w-24" /> {/* Spacer */}
 
         <div className="flex-1 text-center flex items-center justify-center gap-1.5 sm:gap-2">
-          <Leaf size={12} className="text-[#B38A45] shrink-0" />
+         
           <span>FREE SHIPPING on all prepaid orders above ₹499</span>
         </div>
 
