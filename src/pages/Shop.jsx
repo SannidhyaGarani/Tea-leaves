@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { db } from "../components/Firebase";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import {
   Search,
   Heart,
@@ -17,34 +15,56 @@ import PageHeader from "../components/Home/PageHeader";
 import { useStore } from "../components/StoreProvider";
 import ShopFilterSidebar, { DEFAULT_CATEGORIES } from "../components/ShopFilterSidebar";
 
-const ProductCard = ({ product, idx, triggerToast }) => {
+const ProductCard = ({ product, idx, triggerToast, selectedSizes }) => {
   const navigate = useNavigate();
   const { addToCart, addToWishlist, removeFromWishlist, wishlist, cart } = useStore();
   const isWishlisted = wishlist.some(item => item.id === product.id);
   const [isHovered, setIsHovered] = useState(false);
 
-  const defaultSize =
-    product.size_prices && product.size_prices.length > 0
-      ? product.size_prices.find(s => s.size?.toUpperCase() === "L") || product.size_prices[0]
-      : null;
+  // Dynamic variant selection based on selected size filter or default 250g / base variant
+  const selectedVariant = useMemo(() => {
+    if (!product.size_prices || product.size_prices.length === 0) return null;
 
-  const displayPrice = defaultSize ? defaultSize.price : product.price;
+    if (selectedSizes && selectedSizes.length > 0) {
+      for (const fs of selectedSizes) {
+        const target = fs.toLowerCase().replace(/\s+/g, '');
+        const match = product.size_prices.find(sp => {
+          const sz = sp.size ? String(sp.size).toLowerCase().replace(/\s+/g, '') : '';
+          return sz === target || sz.includes(target) || target.includes(sz);
+        });
+        if (match) return match;
+      }
+    }
+
+    const match250 = product.size_prices.find(sp => {
+      const s = sp.size ? String(sp.size).toLowerCase().replace(/\s+/g, '') : '';
+      return s.includes('250g') || s.includes('250gm');
+    });
+    return match250 || product.size_prices[0];
+  }, [product.size_prices, selectedSizes]);
+
+  const variantName = selectedVariant?.size || (product.sizes ? product.sizes.split(',')[0] : '');
+
+  const displayPrice = selectedVariant ? selectedVariant.price : product.price;
   const originalPrice =
-    product.mrp || product.original_price || Math.round((displayPrice || 999) * 1.25);
-  const savingsPercent = displayPrice
+    selectedVariant?.original_price || product.mrp || product.original_price || Math.round((displayPrice || 999) * 1.25);
+  const savingsPercent = displayPrice && originalPrice > displayPrice
     ? Math.round(((originalPrice - displayPrice) / originalPrice) * 100)
     : 0;
-  const cartItemId = defaultSize ? `${product.id}-${defaultSize.size}` : product.id;
+
+  const cartItemId = selectedVariant ? `${product.id}-${selectedVariant.size}` : product.id;
   const isInCart = cart.some(item => (item.cartId || item.id) === cartItemId);
-  const isOutOfStock = product.stock === 0 || product.stock_status === "Out of Stock";
+
+  const variantStock = selectedVariant?.stock ?? product.stock ?? 999;
+  const isOutOfStock = variantStock === 0 || product.stock_status === "Out of Stock";
 
   const handleAction = async (e, type) => {
     e.preventDefault();
     e.stopPropagation();
     if (type === "cart") {
       if (isInCart) return;
-      await addToCart(product, defaultSize);
-      triggerToast("Added to bag");
+      await addToCart(product, selectedVariant);
+      triggerToast(`Added ${product.name} (${variantName || 'Default'}) to bag`);
     } else {
       if (isWishlisted) {
         await removeFromWishlist(product.id);
@@ -63,7 +83,7 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       ? product.images[1]
       : product.image ||
         product.images?.[0] ||
-        "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop";
+        "https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=800&auto=format&fit=crop";
 
   return (
     <motion.div
@@ -93,21 +113,26 @@ const ProductCard = ({ product, idx, triggerToast }) => {
           </div>
         )}
 
-        {/* Top-left Badge */}
-        <div className="absolute top-2.5 left-2.5 z-10">
+        {/* Top-left Badge & Discount Pill */}
+        <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1 items-start">
           <span className="bg-black text-white font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1 shadow-sm">
             {badgeText}
           </span>
+          {savingsPercent > 0 && (
+            <span className="bg-[#b8860b] text-white font-extrabold uppercase text-[8px] tracking-wider px-2 py-0.5 shadow-sm rounded-sm">
+              {savingsPercent}% OFF
+            </span>
+          )}
         </div>
 
         {/* Wishlist */}
         <button
           type="button"
           onClick={e => handleAction(e, "wishlist")}
-          className="absolute top-2.5 right-2.5 z-30 text-zinc-700 hover:text-black hover:scale-110 drop-shadow-sm transition-all duration-300 pointer-events-auto cursor-pointer"
+          className="absolute top-2.5 right-2.5 z-30 text-zinc-700 hover:text-black hover:scale-110 drop-shadow-sm transition-all duration-300 pointer-events-auto cursor-pointer bg-white/90 p-2 rounded-full border border-zinc-200"
         >
           <Heart
-            size={15}
+            size={14}
             strokeWidth={2}
             fill={isWishlisted ? "#ef4444" : "none"}
             stroke={isWishlisted ? "#ef4444" : "currentColor"}
@@ -117,36 +142,44 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       </div>
 
       {/* Info */}
-      <div className="pt-3.5 pb-4 px-3 flex flex-col flex-grow bg-white">
-        {product.category && (
-          <span className="text-[9px] uppercase tracking-[0.2em] text-[#b8860b] font-semibold mb-1">
-            {product.category}
-          </span>
-        )}
-        <h3 className="text-[12px] font-bold text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-[#b8860b] transition-colors duration-300">
+      <div className="pt-3.5 pb-4 px-3.5 flex flex-col flex-grow bg-white">
+        <div className="flex items-center justify-between gap-1 mb-1">
+          {product.category && (
+            <span className="text-[9px] uppercase tracking-[0.2em] text-[#b8860b] font-semibold">
+              {product.category}
+            </span>
+          )}
+          {variantName && (
+            <span className="text-[9px] uppercase font-mono font-bold text-zinc-700 bg-zinc-100 border border-zinc-200 px-1.5 py-0.5 rounded-sm">
+              {variantName}
+            </span>
+          )}
+        </div>
+
+        <h3 className="text-xs sm:text-sm font-bold text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-[#b8860b] transition-colors duration-300 font-serif">
           {product.name}
         </h3>
 
         {/* Stars */}
-        <div className="flex items-center gap-1 mb-2.5 text-[10px] text-zinc-500">
+        <div className="flex items-center gap-1 mb-2 text-[10px] text-zinc-500">
           <span className="text-[#b8860b]">★</span>
-          <span className="font-semibold">{rating.toFixed(1)}</span>
+          <span className="font-bold text-zinc-800">{rating.toFixed(1)}</span>
         </div>
 
         {/* Price & Cart row */}
-        <div className="flex items-center justify-between mt-auto pt-2 border-t border-zinc-200">
-          <div className="flex items-baseline gap-2">
-            <span className="text-sm font-semibold tracking-wide text-zinc-900">
+        <div className="flex items-center justify-between mt-auto pt-2.5 border-t border-zinc-200">
+          <div className="flex items-baseline gap-1.5 flex-wrap">
+            <span className="text-base sm:text-lg font-extrabold font-mono tracking-tight text-zinc-900">
               ₹{displayPrice?.toLocaleString("en-IN")}
             </span>
-            {originalPrice !== displayPrice && (
-              <span className="text-[11px] text-zinc-400 line-through">
+            {originalPrice > displayPrice && (
+              <span className="text-xs font-mono text-zinc-400 line-through">
                 ₹{originalPrice?.toLocaleString("en-IN")}
               </span>
             )}
-            {savingsPercent > 0 && (
-              <span className="hidden md:inline text-red-600 text-[9px] font-bold">
-                ({savingsPercent}% OFF)
+            {variantName && (
+              <span className="text-[10px] font-mono text-zinc-500 font-semibold">
+                / {variantName}
               </span>
             )}
           </div>
@@ -187,8 +220,9 @@ const INITIAL_FILTERS = {
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // ── Pull real-time products & loading from StoreProvider (onSnapshot) ──
+  const { products, productsLoading: loading } = useStore();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -234,21 +268,6 @@ const Shop = () => {
 
     setFilters(newFilters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
-        const snap = await getDocs(q);
-        setProducts(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
   }, []);
 
   const triggerToast = msg => {
@@ -443,7 +462,7 @@ const Shop = () => {
             />
             <input
               type="text"
-              placeholder="Search by name, fabric, or style..."
+              placeholder="Search by name, flavor, or origin..."
               className="w-full bg-white border border-zinc-300 pl-10 pr-9 py-3 text-xs text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
@@ -654,6 +673,7 @@ const Shop = () => {
                     product={product}
                     idx={idx}
                     triggerToast={triggerToast}
+                    selectedSizes={filters.sizes}
                   />
                 ))}
               </div>

@@ -85,7 +85,7 @@ const Cart = () => {
                   </div>
                   <h3 className="text-xl font-light text-zinc-900 tracking-widest uppercase mb-2">Your bag is empty</h3>
                   <p className="text-[13px] text-zinc-500 leading-relaxed mb-6">Start exploring our collection.</p>
-                  <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-black text-white font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all">
+                  <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#1c2b21] text-[#c9a962] font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-[#2c3e30] transition-all">
                     Continue Shopping <ArrowRight size={13} />
                   </Link>
                 </motion.div>
@@ -116,7 +116,7 @@ const Cart = () => {
                           <div className="flex-1 text-center sm:text-left space-y-0.5">
                             {item.category && <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#b8860b]">{item.category}</span>}
                             <h3 className="text-sm font-bold text-zinc-900 group-hover:text-black transition-colors leading-tight">{item.name}</h3>
-                            {item.size && <p className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Size: {item.size}</p>}
+                            {item.size && <p className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Pack Weight: {item.size}</p>}
                             <div className="flex flex-wrap items-center gap-2 mt-1 sm:justify-start justify-center">
                               <p className="text-sm font-bold text-zinc-900">₹{Number(item.price).toLocaleString("en-IN")}</p>
                               {isOutOfStock ? (
@@ -211,10 +211,10 @@ const Cart = () => {
                 <button 
                   onClick={() => !hasOutOfStockItem && handleCheckout()}
                   disabled={hasOutOfStockItem}
-                  className={`w-full py-4 font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5 ${
+                  className={`w-full py-4 font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5 cursor-pointer ${
                     hasOutOfStockItem
                       ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
-                      : 'bg-black hover:bg-zinc-800 text-white'
+                      : 'bg-[#1c2b21] hover:bg-[#2c3e30] text-[#c9a962]'
                   }`}
                 >
                   {hasOutOfStockItem ? 'Remove Out of Stock Items' : 'Checkout'} <ChevronRight size={14} />
@@ -224,7 +224,7 @@ const Cart = () => {
                   {[
                     { icon: ShieldCheck, title: 'Secure Checkout', sub: '256-bit encryption' },
                     { icon: Truck, title: 'Free Shipping', sub: 'On orders ₹1999+' },
-                    { icon: RotateCcw, title: 'Easy Returns', sub: '30-day hassle-free' },
+                    { icon: RotateCcw, title: 'Freshness Guarantee', sub: '100% garden fresh' },
                   ].map(({ icon: Icon, title, sub }, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 shrink-0">

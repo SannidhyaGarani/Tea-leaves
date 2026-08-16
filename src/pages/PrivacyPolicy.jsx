@@ -17,7 +17,7 @@ const PrivacyPolicy = () => {
             1. Commitment To Privacy
           </h2>
           <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
-            PASOJA ("we", "our", "us") respects your personal privacy and is committed to protecting the confidential data you share with us. This Privacy Policy details how we collect, store, utilize, and protect your personal information when you visit or make a purchase from our store.
+            Vaarta Chai ("we", "our", "us") respects your personal privacy and is committed to protecting the confidential data you share with us. This Privacy Policy details how we collect, store, utilize, and protect your personal information when you visit or make a purchase from our store.
           </p>
         </section>
 
@@ -27,7 +27,7 @@ const PrivacyPolicy = () => {
             2. Information We Collect
           </h2>
           <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
-            When you interact with our platform, we collect information necessary to fulfill your orders and enhance your atelier experience:
+            When you interact with our platform, we collect information necessary to fulfill your orders and enhance your tea experience:
           </p>
           <ul className="list-disc list-inside text-xs md:text-sm text-zinc-600 space-y-2 pl-2">
             <li><strong className="text-zinc-900">Account Data:</strong> Name, email address, phone number, and delivery addresses provided upon registration or checkout.</li>
@@ -45,9 +45,9 @@ const PrivacyPolicy = () => {
             We strictly utilize your data for essential operational and service purposes:
           </p>
           <ul className="list-disc list-inside text-xs md:text-sm text-zinc-600 space-y-2 pl-2">
-            <li>Processing, fulfilling, and shipping your apparel orders.</li>
+            <li>Processing, fulfilling, and shipping your tea orders.</li>
             <li>Sending real-time shipment tracking status and invoice documentation.</li>
-            <li>Responding to customer support requests and providing personal styling recommendations.</li>
+            <li>Responding to customer support requests and providing personal tea recommendations.</li>
             <li>Maintaining platform security and preventing fraudulent transactions.</li>
           </ul>
         </section>
@@ -68,7 +68,7 @@ const PrivacyPolicy = () => {
             5. Your Rights & Contact Information
           </h2>
           <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
-            You have the right to access, update, or request deletion of your personal account information at any time from your Account Dashboard. If you have questions regarding this Privacy Policy, please email us at <span className="text-zinc-900 font-bold">privacy@pasoja.com</span>.
+            You have the right to access, update, or request deletion of your personal account information at any time from your Account Dashboard. If you have questions regarding this Privacy Policy, please email us at <span className="text-zinc-900 font-bold">privacy@vartachai.com</span>.
           </p>
         </section>
       </div>

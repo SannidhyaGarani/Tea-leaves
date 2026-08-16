@@ -4,8 +4,8 @@ import { useAuth } from "../components/useAuth";
 import { auth, db } from "../components/Firebase";
 import { updateProfile } from "firebase/auth";
 import { doc, getDoc, collection, getDocs, query, where, updateDoc, setDoc, addDoc, deleteDoc } from "firebase/firestore";
-import { useNavigate, Link } from "react-router-dom";
-import Preloader from "./Preloader";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { uploadToCloudinary } from "../utils/cloudinary";
 import {
   User, Package, Heart, LogOut, ChevronRight, Settings, ShoppingBag,
   CreditCard, MapPin, Bell, Camera, Plus, Trash2, Edit3, Check, X,
@@ -15,13 +15,27 @@ import {
 const Account = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [userData, setUserData] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
   const [stats, setStats] = useState({ cart: 0, wishlist: 0, orders: 0 });
   const [loading, setLoading] = useState(true);
   const [dataReady, setDataReady] = useState(false);
-  const [showPreloader, setShowPreloader] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview"); // overview, profile, orders, payments, addresses, notifications
+
+  const tabFromUrl = searchParams.get("tab") || "overview";
+  const [activeTab, setActiveTabState] = useState(tabFromUrl);
+
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && tabParam !== activeTab) {
+      setActiveTabState(tabParam);
+    }
+  }, [searchParams]);
+
+  const setActiveTab = (tab) => {
+    setActiveTabState(tab);
+    setSearchParams({ tab }, { replace: true });
+  };
 
   // Modals & Feedback
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -135,17 +149,7 @@ const Account = () => {
     if (!file) return;
     setUploadingAvatar(true);
     try {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "Mahanta_group");
-
-      const response = await fetch("https://api.cloudinary.com/v1_1/dlsbj8nug/image/upload", {
-        method: "POST",
-        body: data
-      });
-      if (!response.ok) throw new Error("Failed to upload image");
-      const resData = await response.json();
-      const imageUrl = resData.secure_url;
+      const imageUrl = await uploadToCloudinary(file, "avatars");
 
       await updateProfile(auth.currentUser, { photoURL: imageUrl });
       await setDoc(doc(db, "users", user.uid), { photoURL: imageUrl }, { merge: true });
@@ -322,7 +326,7 @@ const Account = () => {
       <html>
         <head>
           <meta charset="utf-8" />
-          <title>Invoice #${order.id.slice(0, 10).toUpperCase()} - PASOJA</title>
+          <title>Invoice #${order.id.slice(0, 10).toUpperCase()} - VAARTA CHAI</title>
           <style>
             * { box-sizing: border-box; }
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1a1a1a; margin: 0; padding: 40px; background: #fafafa; }
@@ -360,8 +364,8 @@ const Account = () => {
           <div class="container">
             <div class="header">
               <div>
-                <h1 class="brand">PASOJA</h1>
-                <div class="tagline">Luxury Couture & Apparel</div>
+                <h1 class="brand">VAARTA CHAI</h1>
+                <div class="tagline">Artisanal Tea Estate & Blends</div>
               </div>
               <div class="inv-meta">
                 <h2>TAX INVOICE</h2>
@@ -426,7 +430,7 @@ const Account = () => {
             </div>
 
             <div class="footer">
-              <p>Thank you for choosing PASOJA. For support, returns, or queries regarding this invoice, please reach us at support@pasoja.com</p>
+              <p>Thank you for choosing Vaarta Chai. For support or queries regarding this invoice, please reach us at support@vartachai.com</p>
             </div>
           </div>
         </body>
@@ -479,7 +483,7 @@ const Account = () => {
               <div className="space-y-1.5">
                 <div className="flex items-center justify-center md:justify-start gap-3">
                   <h1 className="text-2xl font-light text-zinc-900 uppercase tracking-widest">
-                    {userData?.displayName || user?.displayName || "Atelier Guest"}
+                    {userData?.displayName || user?.displayName || "Tea Connoisseur"}
                   </h1>
                   <span className="px-2.5 py-0.5 bg-[#b8860b]/10 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-black uppercase tracking-widest">Client Member</span>
                 </div>
@@ -611,11 +615,10 @@ const Account = () => {
                           <div className="w-full sm:w-auto flex sm:flex-row items-center justify-between sm:justify-end gap-3">
                             <div className="text-right">
                               <p className="text-sm font-bold text-zinc-900">₹{order.total?.toLocaleString()}</p>
-                              <span className={`inline-block px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider border ${
-                                order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                                : order.status === 'failed' ? 'bg-red-50 text-red-700 border-red-300'
-                                : 'bg-amber-50 text-amber-700 border-amber-300'
-                              }`}>{order.status || 'Confirmed'}</span>
+                              <span className={`inline-block px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider border ${order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                  : order.status === 'failed' ? 'bg-red-50 text-red-700 border-red-300'
+                                    : 'bg-amber-50 text-amber-700 border-amber-300'
+                                }`}>{order.status || 'Confirmed'}</span>
                             </div>
 
                             <div className="flex gap-2">
@@ -773,11 +776,10 @@ const Account = () => {
                             <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">#{order.id.slice(0, 14).toUpperCase()}</h4>
                           </div>
                           <div className="flex items-center gap-3">
-                            <span className={`px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-widest border ${
-                              order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                              : order.status === 'failed' ? 'bg-red-50 text-red-700 border-red-300'
-                              : 'bg-amber-50 text-amber-700 border-amber-300'
-                            }`}>{order.status || 'Confirmed'}</span>
+                            <span className={`px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-widest border ${order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                : order.status === 'failed' ? 'bg-red-50 text-red-700 border-red-300'
+                                  : 'bg-amber-50 text-amber-700 border-amber-300'
+                              }`}>{order.status || 'Confirmed'}</span>
 
                             <button
                               onClick={() => handleDownloadInvoice(order)}
@@ -854,7 +856,7 @@ const Account = () => {
                     <h4 className="text-xs font-bold uppercase tracking-widest text-[#b8860b] mb-2">
                       {editingAddressId ? "Edit Address" : "New Address Details"}
                     </h4>
-                    
+
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Contact Person Name</label>
@@ -1171,7 +1173,7 @@ const Account = () => {
       {selectedOrder && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white border border-zinc-200 max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded shadow-2xl text-zinc-900">
-            
+
             {/* Modal Header */}
             <div className="px-6 py-5 border-b border-zinc-200 flex items-center justify-between sticky top-0 bg-white z-10">
               <div>
@@ -1205,9 +1207,8 @@ const Account = () => {
 
                 <div className="relative pt-2">
                   <div className="h-1 bg-zinc-200 w-full rounded" />
-                  <div className={`absolute top-2 h-1 bg-[#b8860b] rounded transition-all duration-500 ${
-                    selectedOrder.status === 'delivered' ? 'w-full' : selectedOrder.status === 'shipped' || selectedOrder.status === 'shipping' ? 'w-2/3' : 'w-1/3'
-                  }`} />
+                  <div className={`absolute top-2 h-1 bg-[#b8860b] rounded transition-all duration-500 ${selectedOrder.status === 'delivered' ? 'w-full' : selectedOrder.status === 'shipped' || selectedOrder.status === 'shipping' ? 'w-2/3' : 'w-1/3'
+                    }`} />
                   <div className="flex justify-between text-[9px] uppercase tracking-wider mt-3 text-zinc-500 font-bold">
                     <span className="text-zinc-900 flex items-center gap-1"><CheckCircle2 size={10} className="text-[#b8860b]" /> Confirmed</span>
                     <span className={selectedOrder.status === 'shipped' || selectedOrder.status === 'delivered' ? 'text-zinc-900 flex items-center gap-1' : ''}>

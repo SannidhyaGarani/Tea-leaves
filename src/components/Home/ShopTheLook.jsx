@@ -21,10 +21,10 @@ const ShopTheLook = () => {
         const snap = await getDocs(q);
         if (snap.empty) {
           const defaults = [
-            { id: 'look_1', title: 'TEES', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317398/yastxilcsghbsdmkcp2x.jpg', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' },
-            { id: 'look_2', title: 'JEANS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317396/kq4a9s5dkptuvp8iev2j.jpg', link: '/shop?category=Jeans', sort_order: 2, is_active: true, price: 2499, category: 'WAFFLE KNIT' },
-            { id: 'look_3', title: 'HOODIES', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317395/qegbcn6kqdrl2s44cwm0.jpg', link: '/shop?category=Hoodies', sort_order: 3, is_active: true, price: 2000, category: 'BABY TEE' },
-            { id: 'look_4', title: 'SETS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317397/pac3lrqmjr4nsemoldna.jpg', link: '/shop?category=Sets', sort_order: 4, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' }
+            { id: 'look_1', title: 'BLACK TEA', image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Black Tea', sort_order: 1, is_active: true, price: 499, category: 'ASSAM CTC' },
+            { id: 'look_2', title: 'GREEN TEA', image: 'https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Green Tea', sort_order: 2, is_active: true, price: 549, category: 'MATCHA POWDER' },
+            { id: 'look_3', title: 'HERBAL BLEND', image: 'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Herbal Tea', sort_order: 3, is_active: true, price: 399, category: 'ROSE & MINT' },
+            { id: 'look_4', title: 'CHAI SPICES', image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Chai Spices', sort_order: 4, is_active: true, price: 449, category: 'MASALA BLEND' }
           ];
           for (const item of defaults) {
             await setDoc(doc(db, 'shop_the_look', item.id), item);
@@ -58,14 +58,14 @@ const ShopTheLook = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2 font-bold">
-              SHOP THE LOOK
+              TEA HIGHLIGHTS
             </p>
             <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap leading-none">
-              CURATED FITS. MADE TO STAND OUT.
+              CURATED BLENDS. CRAFTED FOR FLAVOR.
             </h2>
           </div>
           <div className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
-            Handpicked pieces styled for impact. Explore the looks.
+            Handpicked tea leaves harvested for peak aroma. Explore the blends.
           </div>
         </div>
       </div>

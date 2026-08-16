@@ -19,7 +19,6 @@ const POPULAR_SEARCHES = [
   'Assam Tea',
   'Masala Chai',
   'Elaichi Tea',
-  'Gift Box',
   'CTC Tea'
 ];
 
@@ -37,10 +36,10 @@ const Header = () => {
   const { cart, wishlist } = useStore();
 
   const isHomePage = location.pathname === '/';
-  const isTransparent = isHomePage && !isScrolled;
+  const isTransparent = false;
 
-  const cartCount = cart.length || 2;
-  const wishlistCount = wishlist.length || 3;
+  const cartCount = cart ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
+  const wishlistCount = wishlist ? wishlist.length : 0;
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -107,7 +106,7 @@ const Header = () => {
   const navLinks = [
     { label: 'HOME', path: '/' },
     { label: 'COLLECTION', path: '/shop', hasDropdown: true },
-    { label: 'GIFT BOX', path: '/shop?category=Gift+Collection' },
+    // { label: 'GIFT BOX', path: '/shop?category=Gift+Collection' },
     { label: 'OUR STORY', path: '/about' },
     { label: 'TEA JOURNAL', path: '/about' },
     { label: 'CONTACT US', path: '/contact' },
@@ -287,9 +286,11 @@ const Header = () => {
               aria-label="Wishlist"
             >
               <Heart size={19} strokeWidth={1.8} className="group-hover:scale-110 transition-transform" />
-              <span className="absolute -top-0.5 -right-1 w-4 h-4 bg-[#B38A45] text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-xs">
-                {wishlistCount}
-              </span>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-0.5 -right-1 w-4 h-4 bg-[#B38A45] text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-xs">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
 
             {/* Shopping Bag Icon */}
@@ -303,9 +304,11 @@ const Header = () => {
               aria-label="Shopping Bag"
             >
               <ShoppingBag size={19} strokeWidth={1.8} className="group-hover:scale-110 transition-transform" />
-              <span className="absolute -top-0.5 -right-1 w-4 h-4 bg-[#173B25] text-[#F7F2E8] text-[9px] font-bold rounded-full flex items-center justify-center shadow-xs">
-                {cartCount}
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-1 w-4 h-4 bg-[#173B25] text-[#F7F2E8] text-[9px] font-bold rounded-full flex items-center justify-center shadow-xs">
+                  {cartCount}
+                </span>
+              )}
             </Link>
 
             {/* Mobile Hamburger Toggle */}
@@ -323,41 +326,58 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* ── 3. SEARCH OVERLAY ── */}
+      {/* ── 3. SEARCH OVERLAY (Compact & Premium) ── */}
       <AnimatePresence>
         {isSearchActive && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
-            className="absolute left-0 top-full w-full bg-[#F7F2E8] border-b border-[#EFE6D7] px-6 py-6 z-[90] shadow-xl"
+            transition={{ duration: 0.2 }}
+            className="absolute left-0 top-full w-full bg-[#F7F2E8]/98 backdrop-blur-xl border-b border-[#EFE6D7] px-4 sm:px-8 py-3.5 z-[90] shadow-2xl"
           >
             <div className="max-w-3xl mx-auto">
-              <form onSubmit={handleSearchSubmit} className="flex items-center gap-3 border-b-2 border-[#173B25] pb-2">
-                <Search size={20} className="text-[#173B25]" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search premium Assam teas, masala chai, gift boxes..."
-                  className="w-full bg-transparent text-base text-[#1D2A21] placeholder-[#1D2A21]/50 outline-none font-medium"
-                  autoFocus
-                />
-                {searchQuery && (
-                  <button type="button" onClick={() => setSearchQuery('')} className="p-1 text-[#1D2A21]/50 hover:text-[#173B25]">
-                    <X size={16} />
+              {/* Search Bar + Visible Exit/Close Button */}
+              <div className="flex items-center gap-2 sm:gap-3">
+                <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-2 bg-white border border-[#EFE6D7] focus-within:border-[#173B25] px-3.5 py-2 rounded-full shadow-xs transition-colors">
+                  <Search size={16} className="text-[#173B25] shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search Assam teas, masala chai, gift boxes..."
+                    className="w-full bg-transparent text-xs sm:text-sm text-[#1D2A21] placeholder-[#1D2A21]/50 outline-none font-medium"
+                    autoFocus
+                  />
+                  {searchQuery && (
+                    <button type="button" onClick={() => setSearchQuery('')} className="p-1 text-zinc-400 hover:text-[#173B25] transition-colors">
+                      <X size={14} />
+                    </button>
+                  )}
+                  <button type="submit" className="bg-[#173B25] text-[#F7F2E8] text-[10px] uppercase font-black tracking-widest px-3.5 py-1.5 rounded-full hover:bg-[#B38A45] transition-colors shrink-0">
+                    Search
                   </button>
-                )}
-                <button type="submit" className="bg-[#173B25] text-[#F7F2E8] text-xs uppercase font-bold px-4 py-2 rounded-xs hover:bg-[#244b23] transition-colors">
-                  Search
+                </form>
+
+                {/* Explicit Exit/Close Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSearchActive(false);
+                    setSearchQuery('');
+                  }}
+                  className="flex items-center gap-1 bg-[#173B25]/10 hover:bg-[#173B25] text-[#173B25] hover:text-[#F7F2E8] text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-2 rounded-full transition-all shrink-0 cursor-pointer border border-[#173B25]/20"
+                  aria-label="Close search"
+                >
+                  <X size={15} strokeWidth={2.5} />
+                  <span className="hidden sm:inline">Close</span>
                 </button>
-              </form>
+              </div>
 
               {/* Popular Search Tag Chips */}
               {!searchQuery.trim() && (
-                <div className="mt-4 flex items-center gap-2 flex-wrap">
-                  <span className="text-xs text-[#1D2A21]/60 font-semibold tracking-wider uppercase">Popular:</span>
+                <div className="mt-3 flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] text-[#1D2A21]/60 font-extrabold tracking-widest uppercase">Popular:</span>
                   {POPULAR_SEARCHES.map(tag => (
                     <button
                       key={tag}
@@ -366,7 +386,7 @@ const Header = () => {
                         navigate(`/shop?search=${encodeURIComponent(tag)}`);
                         setIsSearchActive(false);
                       }}
-                      className="text-xs bg-[#EFE6D7] hover:bg-[#173B25] hover:text-[#F7F2E8] text-[#173B25] px-3 py-1 rounded-full transition-colors duration-300 font-medium"
+                      className="text-[10px] font-bold bg-[#EFE6D7] hover:bg-[#173B25] hover:text-[#F7F2E8] text-[#173B25] px-3 py-1 rounded-full transition-colors duration-200 uppercase tracking-wider cursor-pointer"
                     >
                       {tag}
                     </button>
@@ -374,9 +394,9 @@ const Header = () => {
                 </div>
               )}
 
-              {/* Live Search Results */}
+              {/* Live Search Results (Compact Layout) */}
               {liveSearchResults.length > 0 && (
-                <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                   {liveSearchResults.slice(0, 4).map(product => (
                     <div
                       key={product.id}
@@ -384,11 +404,13 @@ const Header = () => {
                         navigate(`/product/${product.id}`);
                         setIsSearchActive(false);
                       }}
-                      className="cursor-pointer bg-white p-2 rounded-xs border border-[#EFE6D7] hover:border-[#173B25] transition-all duration-300"
+                      className="cursor-pointer bg-white p-2 rounded-lg border border-[#EFE6D7] hover:border-[#173B25] hover:shadow-md transition-all duration-200 flex items-center gap-2.5 group"
                     >
-                      <img src={product.image || 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=400'} alt={product.name} className="w-full h-24 object-cover rounded-xs mb-1" />
-                      <p className="text-xs font-bold text-[#1D2A21] truncate">{product.name}</p>
-                      <p className="text-xs text-[#173B25] font-bold">₹{product.price}</p>
+                      <img src={product.image || 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=400'} alt={product.name} className="w-11 h-11 object-cover rounded-md shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[11px] font-bold text-[#1D2A21] truncate group-hover:text-[#B38A45] transition-colors">{product.name}</p>
+                        <p className="text-[10px] text-[#173B25] font-extrabold font-mono">₹{product.price}</p>
+                      </div>
                     </div>
                   ))}
                 </div>

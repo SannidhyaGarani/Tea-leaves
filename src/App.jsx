@@ -6,11 +6,12 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import AuthProvider from "./components/AuthProvider";
 import { StoreProvider } from "./components/StoreProvider";
 import ScrollToTop from "./components/ScrollToTop";
-import Preloader from "./pages/Preloader";
 
 // Lazy loaded page components
 const Home = lazy(() => import("./components/Homepage/Home"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
+const AdminLogin = lazy(() => import("./pages/Admin/AdminLogin"));
+const AdminSignup = lazy(() => import("./pages/Admin/AdminSignup"));
 const Login = lazy(() => import("./components/Login"));
 const Signup = lazy(() => import("./components/Signup"));
 const Cart = lazy(() => import("./layouts/Cart"));
@@ -49,7 +50,11 @@ const AppRoutes = () => {
         <Suspense fallback={<RouteLoader />}>
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin/signup" element={<AdminSignup />} />
+            <Route path="/admin-signup" element={<AdminSignup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/cart" element={<Cart />} />
@@ -58,16 +63,16 @@ const AppRoutes = () => {
             <Route path="/account" element={<Account />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/shop" element={<Shop />} /> */}
+            <Route path="/shop" element={<Shop />} />
 
-            {/* <Route path="/orders" element={<Orders />} />
+            <Route path="/orders" element={<Orders />} />
             <Route path="/terms" element={<TermsConditions />} />
             <Route path="/terms-and-conditions" element={<TermsConditions />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             
             <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/product/:id/quickview" element={<QuickView />} /> */}
+            <Route path="/product/:id/quickview" element={<QuickView />} />
 
             {/* 404 Route */}
             {/* <Route path="*" element={<NotFound />} /> */}
@@ -80,19 +85,14 @@ const AppRoutes = () => {
 };
 
 function App() {
-  const [isPreloaderDone, setIsPreloaderDone] = useState(false);
-
   return (
-    <>
-      {!isPreloaderDone && <Preloader onComplete={() => setIsPreloaderDone(true)} />}
-      <AuthProvider>
-        <StoreProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </StoreProvider>
-      </AuthProvider>
-    </>
+    <AuthProvider>
+      <StoreProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </StoreProvider>
+    </AuthProvider>
   );
 }
 

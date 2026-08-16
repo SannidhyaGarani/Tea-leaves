@@ -105,7 +105,7 @@ const Orders = () => {
       <html>
         <head>
           <meta charset="utf-8" />
-          <title>Invoice #${order.id.slice(0, 10).toUpperCase()} - PASOJA</title>
+          <title>Invoice #${order.id.slice(0, 10).toUpperCase()} - VAARTA CHAI</title>
           <style>
             * { box-sizing: border-box; }
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1a1a1a; margin: 0; padding: 40px; background: #fafafa; }
@@ -143,8 +143,8 @@ const Orders = () => {
           <div class="container">
             <div class="header">
               <div>
-                <h1 class="brand">PASOJA</h1>
-                <div class="tagline">Luxury Couture & Apparel</div>
+                <h1 class="brand">VAARTA CHAI</h1>
+                <div class="tagline">Artisanal Tea Estate & Blends</div>
               </div>
               <div class="inv-meta">
                 <h2>TAX INVOICE</h2>
@@ -209,7 +209,7 @@ const Orders = () => {
             </div>
 
             <div class="footer">
-              <p>Thank you for shopping with PASOJA Couture. For support or returns, contact support@pasoja.com</p>
+              <p>Thank you for shopping with Vaarta Chai. For support or queries, contact support@vartachai.com</p>
             </div>
           </div>
         </body>

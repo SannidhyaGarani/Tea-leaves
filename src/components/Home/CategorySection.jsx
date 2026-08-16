@@ -5,10 +5,10 @@ import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
 
 const mobileCategories = [
-  { id: 'm_1', title: 'OVERSIZED T-SHIRT', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&auto=format&fit=crop', link: '/shop?category=tshirts' },
-  { id: 'm_2', title: 'SHIRTS', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=600&auto=format&fit=crop', link: '/shop?category=shirts' },
-  { id: 'm_3', title: 'WAFFLE KNIT', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=600&auto=format&fit=crop', link: '/shop?category=sweaters' },
-  { id: 'm_4', title: 'QUARTER ZIP', image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png', link: '/shop?category=jackets' }
+  { id: 'm_1', title: 'BLACK TEA', image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Black Tea' },
+  { id: 'm_2', title: 'GREEN TEA', image: 'https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Green Tea' },
+  { id: 'm_3', title: 'HERBAL TEA', image: 'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Herbal Tea' },
+  { id: 'm_4', title: 'CHAI SPICES', image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Chai Spices' }
 ];
 
 const CategorySection = () => {
@@ -22,8 +22,8 @@ const CategorySection = () => {
         const snap = await getDocs(q);
         if (snap.empty) {
           const defaults = [
-            { id: 'cat_1', title: 'MENS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/aksfxvhby4udttszyk8u.jpg', link: '/shop?category=Men', sort_order: 1, is_active: true, position: 'left' },
-            { id: 'cat_2', title: 'WOMENS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317405/jmm894vjineywo4jlbkm.jpg', link: '/shop?category=Women', sort_order: 2, is_active: true, position: 'right' }
+            { id: 'cat_1', title: 'BLACK TEA', image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=1000&auto=format&fit=crop', link: '/shop?category=Black Tea', sort_order: 1, is_active: true, position: 'left' },
+            { id: 'cat_2', title: 'GREEN TEA', image: 'https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?q=80&w=1000&auto=format&fit=crop', link: '/shop?category=Green Tea', sort_order: 2, is_active: true, position: 'right' }
           ];
           for (const item of defaults) {
             await setDoc(doc(db, 'shop_by_category', item.id), item);
@@ -66,7 +66,7 @@ const CategorySection = () => {
             <div className="hidden md:block flex-1 h-[1px] bg-zinc-200 ml-8 mr-4 self-center mt-1" />
           </div>
           <div className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[320px] text-left md:text-right font-light leading-relaxed">
-            Curated separates crafted for uncompromising quality and fit.
+            Tea blends harvested for exceptional aroma and taste.
           </div>
         </div>
       </div>

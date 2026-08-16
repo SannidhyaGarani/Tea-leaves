@@ -6,7 +6,7 @@ const TermsConditions = () => {
     <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
       <PageHeader
         title="Terms & Conditions"
-        subtitle="Please read our terms of service carefully before using our atelier services."
+        subtitle="Please read our terms of service carefully before using our tea store services."
         breadcrumbItems={[{ label: 'Home', path: '/' }, { label: 'Terms & Conditions' }]}
       />
 
@@ -17,7 +17,7 @@ const TermsConditions = () => {
             1. Overview & Agreement
           </h2>
           <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
-            Welcome to PASOJA. By accessing or browsing our digital platform, placing an order, or utilizing any of our atelier services, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you should discontinue use of our platform immediately.
+            Welcome to Vaarta Chai. By accessing or browsing our digital platform, placing an order, or utilizing any of our tea services, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you should discontinue use of our platform immediately.
           </p>
         </section>
 
@@ -27,7 +27,7 @@ const TermsConditions = () => {
             2. Intellectual Property Rights
           </h2>
           <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
-            All content published on this site—including but not limited to brand typography, trademarks, imagery, lookbooks, product designs, graphics, and software—is the exclusive intellectual property of PASOJA and is protected by international copyright and trademark laws. Unauthorized reproduction or redistribution is strictly prohibited.
+            All content published on this site—including but not limited to brand typography, trademarks, imagery, tea blends, product packaging, graphics, and software—is the exclusive intellectual property of Vaarta Chai and is protected by international copyright and trademark laws. Unauthorized reproduction or redistribution is strictly prohibited.
           </p>
         </section>
 
@@ -50,17 +50,17 @@ const TermsConditions = () => {
             4. Shipping, Delivery & Transit
           </h2>
           <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
-            We strive to dispatch all orders within 24 to 48 working hours. Estimated delivery timelines (typically 3 to 5 business days) are approximate and may vary based on courier performance or remote region transit times. PASOJA is not liable for delay caused by natural events or logistics disruptions beyond our control.
+            We strive to dispatch all orders within 24 to 48 working hours. Estimated delivery timelines (typically 3 to 5 business days) are approximate and may vary based on courier performance or remote region transit times. Vaarta Chai is not liable for delay caused by natural events or logistics disruptions beyond our control.
           </p>
         </section>
 
         {/* Returns & Refunds */}
         <section className="space-y-4 border-t border-zinc-200 pt-8">
           <h2 className="text-xl font-light uppercase tracking-widest text-[#b8860b]">
-            5. Returns, Exchanges & Refunds
+            5. Freshness Guarantee & Refunds
           </h2>
           <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
-            Items may be returned or exchanged within 30 days of delivery, provided they remain unworn, unwashed, and in their original packaging with all security tags intact. Custom or bespoke garments are non-returnable unless defective.
+            We stand by the garden-fresh quality of our tea blends. If you receive a damaged package or incorrect item, please notify us within 7 days of delivery for a prompt replacement or resolution.
           </p>
         </section>
 
@@ -70,7 +70,7 @@ const TermsConditions = () => {
             6. Governing Law & Contact
           </h2>
           <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
-            These Terms shall be governed by and construed in accordance with the laws of India. For any inquiries regarding our terms, please contact our support team at <span className="text-zinc-900 font-bold">support@pasoja.com</span>.
+            These Terms shall be governed by and construed in accordance with the laws of India. For any inquiries regarding our terms, please contact our support team at <span className="text-zinc-900 font-bold">support@vartachai.com</span>.
           </p>
         </section>
       </div>

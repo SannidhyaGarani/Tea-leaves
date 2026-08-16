@@ -4,20 +4,18 @@ import { X, ChevronDown, ChevronUp, RotateCcw, Filter, Check, Star } from "lucid
 
 export const DEFAULT_CATEGORIES = [
   "All",
-  "T-Shirts",
-  "Shirts",
-  "Jeans",
-  "Jackets",
-  "Dresses",
-  "Skirts",
-  "Shorts",
-  "Sweaters",
-  "Accessories"
+  "Black Tea",
+  "Green Tea",
+  "Oolong Tea",
+  "White Tea",
+  "Herbal Tea",
+  "Chai Spices",
+  "Teaware"
 ];
 
-export const DEFAULT_GENDERS = ["All", "Men", "Women", "Unisex"];
+export const DEFAULT_GENDERS = ["All", "High Caffeine", "Medium Caffeine", "Low Caffeine", "Caffeine-Free"];
 
-export const DEFAULT_SIZES = ["S", "M", "L", "XL", "XXL"];
+export const DEFAULT_SIZES = ["100g", "250g", "500g", "1kg"];
 
 export const COLOR_MAP = {
   black: "#000000",
@@ -190,9 +188,9 @@ const ShopFilterSidebar = ({
           </div>
         </FilterSection>
 
-        {/* Gender Filter */}
+        {/* Caffeine Filter */}
         <FilterSection
-          title="Gender"
+          title="Caffeine Level"
           defaultOpen={true}
           activeCount={filters.gender !== "All" ? 1 : 0}
         >
@@ -280,9 +278,9 @@ const ShopFilterSidebar = ({
           </div>
         </FilterSection>
 
-        {/* Sizes Filter */}
+        {/* Sizes / Pack Weight Filter */}
         <FilterSection
-          title="Sizes"
+          title="Pack Weight / Size"
           defaultOpen={true}
           activeCount={filters.sizes?.length || 0}
         >

@@ -16,7 +16,7 @@ const Contact = () => {
   const communicationChannels = [
     { icon: Mail, label: 'Email Us', val: 'hello@vartachai.com', href: 'mailto:hello@vartachai.com', desc: 'We reply within 24 hours' },
     { icon: Phone, label: 'Call Us', val: '+91 98765 43210', href: 'tel:+919876543210', desc: 'Mon–Sat, 10am – 7pm IST' },
-    { icon: MapPin, label: 'Visit Us', val: 'Mumbai, Maharashtra', href: '#', desc: '123 Fashion Street, 400001' }
+    { icon: MapPin, label: 'Visit Us', val: 'Assam, India', href: '#', desc: 'Vaarta Chai Tea Estate, Assam 781001' }
   ];
 
   const fadeUp = {
@@ -39,10 +39,10 @@ const Contact = () => {
         {formSubmitted && (
           <motion.div
             initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-5 py-3.5 shadow-2xl flex items-center gap-3"
+            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#1c2b21] text-white px-5 py-3.5 shadow-2xl flex items-center gap-3 border border-[#b8860b]/40"
           >
-            <CheckCircle size={14} />
-            <p className="text-[12px] font-black uppercase tracking-wider">Message sent! We'll respond shortly.</p>
+            <CheckCircle size={14} className="text-[#c9a962]" />
+            <p className="text-[12px] font-bold uppercase tracking-wider">Message sent! We'll respond shortly.</p>
             <button onClick={() => setFormSubmitted(false)} className="opacity-40 hover:opacity-100 ml-1"><X size={13} /></button>
           </motion.div>
         )}
@@ -54,10 +54,10 @@ const Contact = () => {
           {/* LEFT: Channels */}
           <motion.div {...fadeUp} className="lg:col-span-5 space-y-7">
             <div>
-              <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-500 block mb-4">Reach Out</span>
+              <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#b8860b] block mb-4">Reach Out</span>
               <h2 className="text-3xl sm:text-4xl font-light text-zinc-900 tracking-widest leading-[1.05] uppercase">We're Here<br />to Help</h2>
-              <p className="text-[14px] text-zinc-600 mt-4 leading-relaxed max-w-sm">
-                Whether you have a question about sizing, need styling advice, or want to discuss a bulk order — our team is ready.
+              <p className="text-[14px] text-zinc-600 mt-4 leading-relaxed max-w-sm font-light">
+                Whether you have a question about tea varieties, need brewing advice, or want to discuss a wholesale order — our team is ready.
               </p>
             </div>
 
@@ -70,9 +70,9 @@ const Contact = () => {
                     key={i}
                     onMouseEnter={() => setActiveChannel(i)}
                     onMouseLeave={() => setActiveChannel(null)}
-                    className="flex items-center gap-4 p-4 sm:p-5 bg-white border border-zinc-200 hover:border-black/30 transition-all duration-300 group shadow-sm"
+                    className="flex items-center gap-4 p-4 sm:p-5 bg-white border border-zinc-200 hover:border-[#b8860b]/40 transition-all duration-300 group shadow-sm"
                   >
-                    <div className="w-10 h-10 border border-zinc-300 text-zinc-600 group-hover:bg-black group-hover:text-white group-hover:border-black flex items-center justify-center transition-all duration-400 shrink-0">
+                    <div className="w-10 h-10 border border-zinc-300 text-zinc-600 group-hover:bg-[#1c2b21] group-hover:text-[#c9a962] group-hover:border-[#1c2b21] flex items-center justify-center transition-all duration-400 shrink-0">
                       <Icon size={16} strokeWidth={1.5} />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -80,7 +80,7 @@ const Contact = () => {
                       <p className="text-[15px] font-bold text-zinc-900 truncate">{item.val}</p>
                       <p className="text-[11px] text-zinc-500 mt-0.5">{item.desc}</p>
                     </div>
-                    <ArrowUpRight size={15} className={`text-zinc-400 transition-all duration-300 shrink-0 ${activeChannel === i ? 'rotate-45 text-black' : ''}`} />
+                    <ArrowUpRight size={15} className={`text-zinc-400 transition-all duration-300 shrink-0 ${activeChannel === i ? 'rotate-45 text-[#b8860b]' : ''}`} />
                   </a>
                 );
               })}
@@ -100,7 +100,7 @@ const Contact = () => {
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="lg:col-span-7">
             <div className="bg-white border border-zinc-200 p-6 sm:p-8 md:p-10 shadow-sm">
               <div className="flex items-center gap-2 mb-7">
-                <MessageSquare size={14} className="text-zinc-400" />
+                <MessageSquare size={14} className="text-[#b8860b]" />
                 <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">Send a Message</h3>
               </div>
 
@@ -126,10 +126,10 @@ const Contact = () => {
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Subject</label>
                   <select className="w-full bg-zinc-50 border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none focus:border-zinc-500 transition-colors appearance-none cursor-pointer">
                     <option>Order Inquiry</option>
-                    <option>Product Question</option>
-                    <option>Sizing Help</option>
-                    <option>Returns & Exchanges</option>
-                    <option>Wholesale / B2B</option>
+                    <option>Tea Product Question</option>
+                    <option>Brewing Guide Help</option>
+                    <option>Returns & Support</option>
+                    <option>Wholesale / B2B Estate Orders</option>
                     <option>General Inquiry</option>
                   </select>
                 </div>

@@ -29,7 +29,8 @@ import {
   History,
   HelpCircle,
   LogOut,
-  Shirt,
+  Leaf,
+  Warehouse,
   X
 } from 'lucide-react';
 
@@ -46,6 +47,7 @@ const sidebarSections = [
     title: "CATALOG",
     items: [
       { name: "Products", icon: Package },
+      { name: "Stock Manager", icon: Warehouse },
       { name: "Categories", icon: Grid },
       { name: "Subcategories", icon: Layers },
       { name: "Collections", icon: Sparkles },
@@ -67,7 +69,7 @@ const sidebarSections = [
     items: [
       { name: "Hero Slides", icon: Layout },
       { name: "Shop By Category", icon: Grid },
-      { name: "Shop The Look", icon: Sparkles },
+      { name: "Brewing Rituals", icon: Sparkles },
       { name: "Community Gallery", icon: Image },
       { name: "Benefits Strip", icon: ClipboardList },
       { name: "Blogs", icon: BookOpen },
@@ -120,40 +122,40 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
     <>
       {/* Mobile Drawer Backdrop */}
       {isOpen && (
-        <div 
+        <div
           onClick={onClose}
           className="fixed inset-0 bg-black/60 z-30 lg:hidden"
         />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 border-r border-zinc-200 bg-white text-zinc-600 flex flex-col h-screen shrink-0 transition-transform duration-300 lg:static lg:translate-x-0 selection:bg-black selection:text-white ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 border-r border-[#1b3327] bg-[#0e1a14] text-[#b0c4b8] flex flex-col h-screen shrink-0 transition-transform duration-300 lg:static lg:translate-x-0 selection:bg-[#c9a962] selection:text-[#0a140f] ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Brand Header */}
-        <div className="px-6 py-5 border-b border-zinc-200 sticky top-0 bg-white z-10 flex items-center justify-between">
+        <div className="px-6 py-5 border-b border-[#1b3327] sticky top-0 bg-[#0a140f] z-10 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-black text-white flex items-center justify-center shadow-md">
-              <Shirt size={18} strokeWidth={2.5} />
+            <div className="h-9 w-9 rounded-lg bg-[#c9a962] text-[#0a140f] flex items-center justify-center shadow-lg shadow-[#c9a962]/10">
+              <Leaf size={18} strokeWidth={2.5} />
             </div>
             <div>
-              <p className="text-sm font-poppins font-bold tracking-wider text-zinc-900 uppercase">
-                PASOJA ADMIN
+              <p className="text-sm font-poppins font-bold tracking-wider text-[#f4f6f4] uppercase">
+                VAARTA CHAI
               </p>
-              <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold">E-commerce Suite</p>
+              <p className="text-[10px] text-[#c9a962] uppercase tracking-widest font-semibold">vaarta</p>
             </div>
           </div>
           {/* Close button on mobile */}
-          <button 
-            onClick={onClose} 
-            className="lg:hidden p-1.5 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded"
+          <button
+            onClick={onClose}
+            className="lg:hidden p-1.5 hover:bg-[#162a20] text-[#9cb5a4] hover:text-white rounded"
           >
             <X size={16} />
           </button>
         </div>
 
         {/* Navigation Groups */}
-        <nav className="flex-grow overflow-y-auto px-4 py-6 space-y-7">
+        <nav className="flex-grow overflow-y-auto px-4 py-6 space-y-7 scrollbar-thin scrollbar-thumb-[#1b3327]">
           {sidebarSections.map((section) => (
             <div key={section.title} className="space-y-1.5">
-              <p className="text-[9px] font-bold text-zinc-400 tracking-[0.2em] px-3 uppercase">
+              <p className="text-[9px] font-bold text-[#648773] tracking-[0.2em] px-3 uppercase">
                 {section.title}
               </p>
               <div className="space-y-0.5">
@@ -168,11 +170,10 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
                         setActiveItem(item.name);
                         onClose();
                       }}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
-                        isActive
-                          ? "bg-black text-white shadow-sm"
-                          : "text-zinc-600 hover:bg-zinc-100 hover:text-black border border-transparent"
-                      }`}
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${isActive
+                          ? "bg-[#c9a962] text-[#0a140f] font-extrabold shadow-md shadow-[#c9a962]/15"
+                          : "text-[#a3b8ac] hover:bg-[#162a20] hover:text-[#c9a962] border border-transparent"
+                        }`}
                     >
                       <Icon size={14} strokeWidth={2} />
                       <span>{item.name}</span>
@@ -185,10 +186,10 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
         </nav>
 
         {/* Logout button */}
-        <div className="p-4 border-t border-zinc-200 bg-zinc-50">
+        <div className="p-4 border-t border-[#1b3327] bg-[#0a140f]">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold text-red-600 hover:bg-red-50 hover:text-red-700 transition-all border border-red-200"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold text-red-400 hover:bg-red-950/40 hover:text-red-300 transition-all border border-red-900/40"
           >
             <LogOut size={14} />
             <span>LOGOUT</span>

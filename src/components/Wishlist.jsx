@@ -1,41 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, ShoppingBag, ArrowRight, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "./Home/PageHeader";
 import { useStore } from "./StoreProvider";
-import { db } from "./Firebase";
-import { doc, getDoc } from "firebase/firestore";
 
 const Wishlist = () => {
-  const { wishlist, removeFromWishlist, addToCart, loading } = useStore();
+  const { wishlist, removeFromWishlist, addToCart, loading, products } = useStore();
   const navigate = useNavigate();
   const [feedbackMessage, setFeedbackMessage] = useState(null);
-  const [productStocks, setProductStocks] = useState({});
 
-  useEffect(() => {
-    const fetchStocks = async () => {
-      try {
-        const stocksMap = {};
-        for (const item of wishlist) {
-          const docSnap = await getDoc(doc(db, "products", item.id));
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            stocksMap[item.id] = {
-              stock: data.stock !== undefined ? data.stock : 10,
-              stock_status: data.stock_status || "In Stock"
-            };
-          }
-        }
-        setProductStocks(stocksMap);
-      } catch (err) {
-        console.error("Error fetching wishlist stocks:", err);
-      }
-    };
-    if (wishlist.length > 0) {
-      fetchStocks();
+  // Derive live stock from the global products store
+  const getStockInfo = (itemId) => {
+    const liveProduct = products.find(p => p.id === itemId);
+    if (liveProduct) {
+      const firstVariantStock = liveProduct.size_prices?.[0]?.stock ?? liveProduct.stock ?? 999;
+      return {
+        stock: firstVariantStock,
+        stock_status: liveProduct.stock_status || 'In Stock',
+      };
     }
-  }, [wishlist]);
+    return { stock: 999, stock_status: 'In Stock' };
+  };
+
 
   const triggerToast = (msg) => {
     setFeedbackMessage(msg);
@@ -106,7 +93,7 @@ const Wishlist = () => {
 
                   {
                     (() => {
-                      const stockInfo = productStocks[item.id] || { stock: 999, stock_status: "In Stock" };
+                      const stockInfo = getStockInfo(item.id);
                       const isOutOfStock = stockInfo.stock === 0 || stockInfo.stock_status === "Out of Stock";
 
                       return (

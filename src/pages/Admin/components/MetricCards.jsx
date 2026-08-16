@@ -83,19 +83,19 @@ const MetricCards = () => {
         return (
           <article
             key={card.label}
-            className="bg-white rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-all duration-300 group"
+            className="bg-[#12221a] rounded-2xl border border-[#1b3327] shadow-lg shadow-black/20 hover:border-[#c9a962]/50 transition-all duration-300 group"
           >
             <div className="p-6">
-              <div className={`w-12 h-12 rounded-xl ${card.bg} ${card.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform`}>
+              <div className="w-12 h-12 rounded-xl bg-[#1b3327] text-[#c9a962] border border-[#c9a962]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                 <Icon size={24} strokeWidth={2} />
               </div>
-              <p className="text-xs font-bold tracking-wider text-zinc-500 uppercase mb-1">
+              <p className="text-xs font-bold tracking-wider text-[#9cb5a4] uppercase mb-1">
                 {card.label}
               </p>
-              <p className="text-3xl font-poppins font-extrabold text-zinc-900 mb-1">
+              <p className="text-3xl font-poppins font-extrabold text-[#f4f6f4] mb-1">
                 {card.value}
               </p>
-              <p className="text-xs font-medium text-zinc-500">
+              <p className="text-xs font-medium text-[#648773]">
                 {card.hint}
               </p>
             </div>

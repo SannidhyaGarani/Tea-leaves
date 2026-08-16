@@ -11,42 +11,42 @@ const Benefits = () => {
 
   const biologicalMetrics = [
     {
-      title: "Sustained Glycemic Index",
-      value: "Low-GI",
-      metric: "Baseline Equilibrium",
-      desc: "Unlike processed isolate proteins or synthetic energy compounds that cause acute insulin spikes, the complex structural starches in stone-ground roasted chana digest at an intentionally decelerated pace. This ensures a clean, predictable curve of glucose delivery to muscle and brain tissue.",
+      title: "Rich Polyphenol Antioxidants",
+      value: "EGCG+",
+      metric: "Cellular Shield",
+      desc: "Harvested directly from high-altitude Assam estates, our whole tea leaves are rich in epigallocatechin gallate (EGCG) and flavonoids. These natural antioxidants neutralize free radicals, supporting cellular longevity and healthy vascular function.",
       icon: <Activity size={20} strokeWidth={1.5} />,
       stats: [
-        { label: "Energy Crash Probability", value: "0.0%" },
-        { label: "Digestive Influx Period", value: "4-6 Hrs" }
+        { label: "Antioxidant Potency", value: "98.4%" },
+        { label: "Additives / Extract", value: "Zero" }
       ]
     },
     {
-      title: "Bio-Available Macro Protein",
-      value: "20g+",
-      metric: "Per Curated Serving",
-      desc: "An uncompromised, plant-derived nitrogen structure packed with essential amino acids. Because our processing preserves the natural fibrous shell of the grain during low-heat sand roasting, the protein matrix retains its structural integrity for maximum cellular absorption.",
-      icon: <Dumbbell size={20} strokeWidth={1.5} />,
+      title: "L-Theanine Mental Clarity",
+      value: "Calm Focus",
+      metric: "Sustained Energy",
+      desc: "Unlike synthetic caffeine drinks that trigger nervous jitters and sharp crashes, pure tea pairs caffeine naturally with the amino acid L-Theanine. This induces alpha brain waves for smooth, calm alertness and focused clarity throughout the day.",
+      icon: <Sparkles size={20} strokeWidth={1.5} />,
       stats: [
-        { label: "Absorption Efficiency", value: "94.2%" },
-        { label: "Synthetic Modifiers", value: "Zero" }
+        { label: "Alertness Half-Life", value: "4-6 Hrs" },
+        { label: "Jitter Probability", value: "0.0%" }
       ]
     },
     {
-      title: "Gastrointestinal Alkaline Harmony",
-      value: "Ph+",
-      metric: "Cooling Thermal Matrix",
-      desc: "Revered in traditional Ayurvedic science as an instigator of 'Agni' equilibrium, Sattu possesses innate internal cooling properties. It works actively as a natural antacid, soothing inflammation within the intestinal tract and promoting optimal microbiome biodiversity.",
+      title: "Metabolic & Digestive Harmony",
+      value: "100%",
+      metric: "Natural Wellness",
+      desc: "Revered for centuries across traditional wellness rituals, warm steeped tea aids in digestion, balances gut flora, and enhances metabolic thermogenesis, helping your body process nutrition effortlessly.",
       icon: <Droplet size={20} strokeWidth={1.5} />,
       stats: [
-        { label: "Thermal Metric Index", value: "Cooling" },
-        { label: "Gut Flora Ingestion", value: "Active" }
+        { label: "Gut Thermal Index", value: "Soothing" },
+        { label: "Botanical Purity", value: "100% Pure" }
       ]
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] pt-32 lg:pt-48 pb-32 text-[#1C2B21] relative selection:bg-[#6b4f3] selection:text-white">
+    <div className="min-h-screen bg-[#faf9f5] pt-32 lg:pt-48 pb-32 text-[#1c2b21] relative selection:bg-[#b8860b] selection:text-white">
       {/* Light Luxury Geometric Dot Mesh Overlay */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:32px_32px]"></div>
 
@@ -61,31 +61,31 @@ const Benefits = () => {
             transition={{ duration: 1, ease: premiumEase }}
             className="lg:col-span-8 space-y-8"
           >
-            <div className="flex items-center gap-2.5 text-[#D9A036]">
+            <div className="flex items-center gap-2.5 text-[#b8860b]">
               <Sparkles size={12} strokeWidth={1.5} />
-              <span className="text-[14px] font-bold uppercase tracking-[0.35em]">The Physiological Ledger</span>
+              <span className="text-[12px] font-bold uppercase tracking-[0.35em]">The Wellness Science</span>
             </div>
 
-            <h1 className="text-[11vw] sm:text-[8vw] lg:text-[6vw] font-poppins font-light text-[#1C2B21] leading-[0.95] tracking-tighter">
-              Human Mechanics. <br />
-              <span className="font-poppins italic text-[#6b4f3] font-normal">Uncompromised</span> <br />
-              Efficiency.
+            <h1 className="text-[11vw] sm:text-[8vw] lg:text-[5.5vw] font-light text-[#1c2b21] leading-[0.95] tracking-widest uppercase">
+              PURE LEAVES. <br />
+              <span className="italic text-[#b8860b] font-normal">UNCOMPROMISED</span> <br />
+              WELLNESS.
             </h1>
 
-            <div className="h-[1px] w-20 bg-[#D9A036]" />
+            <div className="h-[1px] w-20 bg-[#b8860b]" />
 
-            <p className="text-base sm:text-lg text-[#5C665E] font-light leading-relaxed max-w-2xl">
-              We reject the empty promises of laboratory-isolated chemicals. Sattu delivers macro-nourishment that aligns perfectly with human biology, providing functional performance rooted in clean agricultural truth.
+            <p className="text-base sm:text-lg text-zinc-600 font-light leading-relaxed max-w-2xl">
+              We reject artificial flavorings and chemical extracts. Vaarta Chai delivers single-origin botanical nourishment that aligns with your daily ritual, providing sustained energy and tranquility.
             </p>
           </motion.div>
 
           {/* Minimalist Sidebar Floating Counter */}
           <div className="lg:col-span-4 lg:text-right pt-6 hidden lg:block">
-            <span className="text-[120px] font-poppins font-light text-[#6b4f3]/10 leading-none select-none pointer-events-none">
+            <span className="text-[120px] font-poppins font-light text-[#b8860b]/10 leading-none select-none pointer-events-none">
               01
             </span>
-            <p className="text-[14px] font-bold uppercase tracking-widest text-[#9A8F80] mt-2">
-              Clinical Integrity Verified
+            <p className="text-[12px] font-bold uppercase tracking-widest text-zinc-500 mt-2">
+              Garden Fresh & Certified Pure
             </p>
           </div>
         </div>
@@ -96,8 +96,8 @@ const Benefits = () => {
           {/* Navigation Track */}
           <div className="lg:col-span-5 flex flex-col justify-between gap-8">
             <div className="space-y-4">
-              <p className="text-[14px] font-bold uppercase tracking-[0.25em] text-[#9A8F80]">Biological Vectors</p>
-              <h2 className="text-2xl font-poppins font-light tracking-tight text-[#1C2B21]">The Three Structural Pillars</h2>
+              <p className="text-[12px] font-bold uppercase tracking-[0.25em] text-[#b8860b]">Botanical Vectors</p>
+              <h2 className="text-2xl font-light tracking-widest uppercase text-[#1c2b21]">The Three Structural Pillars</h2>
             </div>
 
             <div className="space-y-4 flex-1 justify-center flex flex-col">
@@ -105,22 +105,22 @@ const Benefits = () => {
                 <button
                   key={idx}
                   onClick={() => setActiveMetric(idx)}
-                  className={`w-full text-left p-6 rounded-xl border transition-all duration-500 flex items-center justify-between group ${activeMetric === idx
-                      ? 'bg-white border-[#6b4f3]/30 shadow-[0_20px_50px_rgba(28,43,33,0.04)]'
-                      : 'bg-transparent border-[#EAE6DF] hover:border-[#9A8F80]/50'
+                  className={`w-full text-left p-6 rounded-xl border transition-all duration-500 flex items-center justify-between group cursor-pointer ${activeMetric === idx
+                      ? 'bg-white border-[#b8860b]/40 shadow-[0_20px_50px_rgba(28,43,33,0.06)]'
+                      : 'bg-transparent border-zinc-200 hover:border-[#b8860b]/50'
                     }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-500 ${activeMetric === idx ? 'bg-[#6b4f3] text-white' : 'bg-[#EFECE6] text-[#5C665E]'
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-500 ${activeMetric === idx ? 'bg-[#1c2b21] text-[#c9a962]' : 'bg-zinc-100 text-zinc-600'
                       }`}>
                       {item.icon}
                     </div>
                     <div>
-                      <h3 className="text-sm font-poppins font-bold text-[#1C2B21] tracking-tight">{item.title}</h3>
-                      <p className="text-[14px] text-[#9A8F80] tracking-wide mt-0.5">{item.metric}</p>
+                      <h3 className="text-sm font-bold text-[#1c2b21] tracking-wide uppercase">{item.title}</h3>
+                      <p className="text-[12px] text-zinc-500 tracking-wide mt-0.5">{item.metric}</p>
                     </div>
                   </div>
-                  <ArrowUpRight size={14} className={`text-[#9A8F80] transition-transform duration-500 ${activeMetric === idx ? 'rotate-45 text-[#D9A036]' : 'group-hover:translate-x-0.5'
+                  <ArrowUpRight size={14} className={`text-zinc-400 transition-transform duration-500 ${activeMetric === idx ? 'rotate-45 text-[#b8860b]' : 'group-hover:translate-x-0.5'
                     }`} />
                 </button>
               ))}
@@ -128,8 +128,8 @@ const Benefits = () => {
           </div>
 
           {/* Interactive Screen Display Panel */}
-          <div className="lg:col-span-7 bg-white border border-[#EAE6DF] rounded-2xl p-8 sm:p-12 shadow-[0_30px_70px_rgba(28,43,33,0.02)] flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-8 text-sm font-mono font-light text-[#9A8F80]/40 tracking-wider">
+          <div className="lg:col-span-7 bg-white border border-zinc-200 rounded-2xl p-8 sm:p-12 shadow-sm flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 text-sm font-mono font-light text-zinc-300 tracking-wider">
               SYS_REF//00{activeMetric + 1}
             </div>
 
@@ -143,28 +143,28 @@ const Benefits = () => {
                 className="space-y-8 h-full flex flex-col justify-between"
               >
                 <div className="space-y-6">
-                  <div className="inline-flex items-baseline gap-2">
-                    <span className="text-5xl sm:text-6xl font-poppins font-light text-[#6b4f3] tracking-tight">
+                  <div className="inline-flex items-baseline gap-3">
+                    <span className="text-5xl sm:text-6xl font-light text-[#1c2b21] tracking-tight">
                       {biologicalMetrics[activeMetric].value}
                     </span>
-                    <span className="text-sm uppercase tracking-widest font-bold text-[#D9A036]">
+                    <span className="text-xs uppercase tracking-widest font-bold text-[#b8860b]">
                       {biologicalMetrics[activeMetric].metric}
                     </span>
                   </div>
 
-                  <p className="text-sm sm:text-base text-[#5C665E] font-light leading-relaxed">
+                  <p className="text-sm sm:text-base text-zinc-600 font-light leading-relaxed">
                     {biologicalMetrics[activeMetric].desc}
                   </p>
                 </div>
 
                 {/* Micro Technical Data Matrix */}
-                <div className="pt-8 border-t border-[#F9F8F6] grid grid-cols-2 gap-6">
+                <div className="pt-8 border-t border-zinc-100 grid grid-cols-2 gap-6">
                   {biologicalMetrics[activeMetric].stats.map((stat, sIdx) => (
                     <div key={sIdx} className="space-y-1">
-                      <span className="text-[14px] font-bold uppercase tracking-widest text-[#9A8F80] block">
+                      <span className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 block">
                         {stat.label}
                       </span>
-                      <span className="text-lg font-poppins font-light text-[#1C2B21]">
+                      <span className="text-lg font-light text-[#1c2b21]">
                         {stat.value}
                       </span>
                     </div>
@@ -181,18 +181,18 @@ const Benefits = () => {
           {[
             {
               icon: <Feather size={20} strokeWidth={1.5} />,
-              title: "Weight Optimization Strategy",
-              desc: "High complex fiber architecture triggers safe leptin receptor signaling, extending sensations of satiety and naturally shutting down neurological cravings without stimulant intervention."
+              title: "Weight & Wellness Alignment",
+              desc: "Natural whole-leaf infusions contain polyphenols that aid digestive metabolism, supporting sustained gut harmony and overall lightness."
             },
             {
               icon: <Flame size={20} strokeWidth={1.5} />,
-              title: "Metabolic Thermogenesis",
-              desc: "The stone-milling process ensures organic cellular walls remain intact, forcing the system to utilize higher metabolic energy during assimilation to burn calories cleanly."
+              title: "Cellular Thermogenesis",
+              desc: "Fresh tea catechin compounds stimulate clean metabolic cellular activity, encouraging natural fat oxidation without synthetic supplements."
             },
             {
               icon: <ShieldCheck size={20} strokeWidth={1.5} />,
-              title: "Cellular Detoxification Pathway",
-              desc: "The heavy density of raw, non-solubilized fiber sweeps toxic heavy-metal waste and bile assets smoothly out of the vascular system, refreshing arterial cell integrity."
+              title: "Immune & Vascular Integrity",
+              desc: "Rich in bioflavonoids, daily tea steeping helps strengthen immunity, protect vascular walls, and promote vibrant skin radiance."
             }
           ].map((benefit, i) => (
             <motion.div
@@ -201,13 +201,13 @@ const Benefits = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.8, ease: premiumEase }}
-              className="p-10 rounded-xl bg-white border border-[#EAE6DF] hover:shadow-[0_24px_60px_rgba(28,43,33,0.03)] transition-all duration-500 space-y-6"
+              className="p-10 rounded-xl bg-white border border-zinc-200 hover:shadow-lg transition-all duration-500 space-y-6"
             >
-              <div className="w-10 h-10 rounded-lg bg-[#F9F8F6] border border-[#EAE6DF] flex items-center justify-center text-[#6b4f3]">
+              <div className="w-10 h-10 rounded-lg bg-[#faf9f5] border border-zinc-200 flex items-center justify-center text-[#b8860b]">
                 {benefit.icon}
               </div>
-              <h3 className="text-base font-poppins font-bold text-[#1C2B21] tracking-tight">{benefit.title}</h3>
-              <p className="text-sm text-[#5C665E] font-light leading-relaxed">{benefit.desc}</p>
+              <h3 className="text-base font-bold text-[#1c2b21] tracking-wide uppercase">{benefit.title}</h3>
+              <p className="text-sm text-zinc-600 font-light leading-relaxed">{benefit.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -218,28 +218,28 @@ const Benefits = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: premiumEase }}
-          className="bg-[#6b4f3] rounded-2xl p-10 md:p-20 text-[#EFECE6] relative overflow-hidden shadow-xl"
+          className="bg-[#1c2b21] rounded-2xl p-10 md:p-20 text-[#faf9f5] relative overflow-hidden shadow-2xl"
         >
           {/* Asymmetric Artistic Overlay Gradients */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#D9A036]/10 rounded-full blur-[160px] opacity-30 -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#b8860b]/20 rounded-full blur-[160px] opacity-40 -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
           <div className="relative z-10 max-w-4xl space-y-10">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-[1px] bg-[#D9A036]" />
-              <span className="text-[14px] font-bold uppercase tracking-[0.35em] text-[#D9A036]">Biological Charter</span>
+              <div className="w-8 h-[1px] bg-[#b8860b]" />
+              <span className="text-[12px] font-bold uppercase tracking-[0.35em] text-[#b8860b]">Botanical Charter</span>
             </div>
 
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-poppins font-light leading-[1.25] tracking-tight text-white">
-              “We hold an uncompromising belief: human peak performance does not require chemical modification. Our products are engineered by nature, verified by tradition, and refined for biological synergy.”
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-light leading-[1.25] tracking-widest uppercase text-white">
+              “We hold an uncompromising belief: true daily energy does not require synthetic chemical stimulants. Our tea blends are harvested directly from Assam gardens and crafted for biological harmony.”
             </h2>
 
             <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-              <div className="flex items-center gap-8 text-[14px] uppercase tracking-widest font-medium text-[#A69F91]">
-                <span className="flex items-center gap-1.5"><Compass size={11} /> Earth Born Real</span>
-                <span className="flex items-center gap-1.5"><LineChart size={11} /> Glycemic Balance Verified</span>
+              <div className="flex items-center gap-8 text-[12px] uppercase tracking-widest font-medium text-zinc-400">
+                <span className="flex items-center gap-1.5"><Compass size={11} /> 100% Garden Fresh</span>
+                <span className="flex items-center gap-1.5"><LineChart size={11} /> Bio-Antioxidant Verified</span>
               </div>
-              <span className="text-[14px] font-bold uppercase tracking-widest text-[#D9A036]">
-                Maison de la Santé // Established Heritage
+              <span className="text-[12px] font-bold uppercase tracking-widest text-[#b8860b]">
+                Vaarta Chai Tea Estate // Established Heritage
               </span>
             </div>
           </div>

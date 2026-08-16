@@ -124,7 +124,7 @@ const Checkout = () => {
     if (formData.paymentMethod === "online") {
       const options = {
         key: "rzp_test_YOUR_KEY_HERE", amount: total * 100, currency: "INR",
-        name: "Pasoja", description: "Premium Apparel Order", image: "https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png",
+        name: "Vaarta Chai", description: " Tea Order", image: "https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png",
         handler: async (response) => { await saveOrder(response.razorpay_payment_id, "confirmed", "captured"); setIsProcessing(false); },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         theme: { color: "#000000" },
@@ -348,9 +348,9 @@ const Checkout = () => {
               </section>
 
               <button type="submit" disabled={isProcessing}
-                className="w-full py-4 bg-black hover:bg-zinc-800 text-white font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2.5"
+                className="w-full py-4 bg-[#1c2b21] hover:bg-[#2c3e30] text-[#c9a962] font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer shadow-md"
               >
-                {isProcessing ? <><div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />Processing...</> : <>Place Order</>}
+                {isProcessing ? <><div className="w-4 h-4 border-2 border-[#c9a962]/20 border-t-[#c9a962] rounded-full animate-spin" />Processing Order...</> : <>Place Order</>}
               </button>
             </form>
           </div>
@@ -367,7 +367,7 @@ const Checkout = () => {
                     </div>
                     <div className="flex-1 py-0.5">
                       <h4 className="text-[12px] font-bold text-zinc-900 line-clamp-1">{item.name}</h4>
-                      {item.size && <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">Size: {item.size}</p>}
+                      {item.size && <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">Pack Weight: {item.size}</p>}
                       <div className="flex justify-between items-center mt-1.5">
                         <span className="text-[12px] font-bold text-zinc-900">₹{item.price}</span>
                         <span className="text-[9px] text-zinc-600 bg-zinc-100 border border-zinc-200 px-1.5 py-0.5">×{item.quantity || 1}</span>

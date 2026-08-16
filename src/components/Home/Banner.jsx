@@ -1,231 +1,111 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Leaf } from 'lucide-react';
+import { ArrowRight, Leaf, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Banner = () => {
-  return (
-    <section className="relative overflow-hidden bg-[#f8f3e9] py-12 lg:py-16">
+  const HERO_BANNER_IMAGE = "/img/banner_tea_story.png";
 
-      {/* Decorative background elements */}
+  return (
+    <section className="relative overflow-hidden bg-[#f8f3e9] py-14 sm:py-20 lg:py-24 font-sans">
+      {/* Decorative background ambient glows */}
       <div className="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-[#dce7d7]/40 blur-3xl" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-[#e8dcc7]/50 blur-3xl" />
 
-      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+      <div className="relative mx-auto max-w-[1450px] px-5 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-12 items-center">
 
-        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-
-          {/* =====================================================
-              IMAGE SIDE
-          ====================================================== */}
-
-          <motion.div
-            initial={{ opacity: 0, x: -35 }}
-            whileInView={{ opacity: 1, x: 0 }}
+          {/* ── LEFT COLUMN: EDITORIAL NARRATIVE CONTENT (5 Cols on LG) ── */}
+          <motion.div 
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="relative"
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 relative z-10 max-w-xl mx-auto lg:mx-0"
           >
-
-            {/* Small decorative label */}
-            <div className="absolute -left-2 top-6 z-20 hidden sm:block">
-              <div className="flex items-center gap-2 bg-[#173b25] px-4 py-2.5 text-white shadow-xl">
-                <Leaf size={13} />
-                <span className="text-[9px] font-bold uppercase tracking-[0.18em]">
-                  From Assam
-                </span>
-              </div>
-            </div>
-
-            {/* Main image */}
-            <div className="relative aspect-[4/5] overflow-hidden sm:aspect-[5/6]">
-
-              <img
-                src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786381086/Gemini_Generated_Image_5amn675amn675amn_yqzczh.png"
-                alt="Fresh Assam tea leaves in a lush tea garden"
-                className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04]"
-              />
-
-              {/* Image overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102b1b]/50 via-transparent to-transparent" />
-
-              {/* Bottom image caption */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-
-                <p className="font-serif text-2xl italic text-white sm:text-3xl">
-                  From the gardens
-                </p>
-
-                <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/80">
-                  To your everyday conversations
-                </p>
-
-              </div>
-            </div>
-
-            {/* Floating small image/card */}
-            <div className="absolute -bottom-6 -right-4 hidden w-36 overflow-hidden border-4 border-[#f8f3e9] shadow-2xl sm:block lg:-right-8 lg:w-44">
-              <img
-                src="https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?q=80&w=500&auto=format&fit=crop"
-                alt="Fresh tea leaves"
-                className="aspect-square w-full object-cover"
-              />
-            </div>
-
-          </motion.div>
-
-
-          {/* =====================================================
-              CONTENT SIDE
-          ====================================================== */}
-
-          <motion.div
-            initial={{ opacity: 0, x: 35 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.15,
-              ease: 'easeOut',
-            }}
-            className="lg:pl-4 xl:pl-8"
-          >
-
-            {/* Eyebrow */}
-            <div className="mb-2.5 flex items-center gap-2.5">
-              <span className="h-px w-7 bg-[#B38A45]" />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#B38A45]">
-                Our Story
+            {/* Eyebrow matching site sections */}
+            <div className="mb-3 flex items-center gap-2.5">
+              <span className="h-px w-8 bg-[#B38A45]" />
+              <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.3em] text-[#B38A45]">
+                About Vaarta Chai
               </span>
-              <span className="h-px w-7 bg-[#B38A45]" />
+              <span className="h-px w-8 bg-[#B38A45]" />
             </div>
 
-            {/* Main heading */}
-            <h2 className="max-w-xl font-serif text-2xl sm:text-3xl md:text-4xl font-medium leading-tight tracking-tight text-[#173b25]">
-              Every Conversation <span className="italic text-[#B38A45]">Begins With Tea.</span>
+            {/* Main Heading matching site typography */}
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-medium leading-[1.14] tracking-tight text-[#173b25] mb-4">
+              Every Cup <span className="italic text-[#B38A45]">Has A Story</span>
             </h2>
 
-            {/* Divider */}
-            <div className="my-5 h-px w-14 bg-[#B38A45]" />
+            {/* Gold Accent Divider */}
+            <div className="my-5 h-px w-16 bg-[#B38A45]" />
 
-
-            {/* Story */}
-            <div className="max-w-xl space-y-5 text-sm leading-7 text-[#66645c] sm:text-base">
-
+            {/* Narrative Story Paragraphs */}
+            <div className="space-y-3 text-xs sm:text-sm md:text-base text-[#6d6b61] font-normal leading-relaxed mb-8">
               <p>
-                <span className="font-semibold text-[#173b25]">
-                  Varta
-                </span>{' '}
-                ka matlab hai baatcheet.
+                <strong className="text-[#173b25] font-bold">Vaarta</strong> means conversation.
               </p>
-
               <p>
-                Hamara maanna hai ki zindagi ki sabse khoobsurat
-                baatein aksar ek cup chai ke saath shuru hoti hain.
+                Every memorable conversation starts with a warm cup of tea. We created Vaarta Chai to bring people together over authentic flavours.
               </p>
-
               <p>
-                Assam ke lush tea gardens se carefully selected
-                leaves lekar, hum har cup mein woh warmth,
-                aroma aur authenticity laana chahte hain jo
-                conversations ko yaadgaar bana de.
+                Handpicked directly from lush Assam tea gardens, every pack is carefully selected to deliver garden-fresh aroma, rich strength, and unforgettable taste.
               </p>
-
+              <div className="pt-2 border-l-2 border-[#B38A45] pl-4 italic text-[#173b25] font-serif text-base sm:text-lg">
+                "Because for us, tea is not just a beverage. It is an emotion."
+              </div>
             </div>
 
+            {/* Action CTA */}
+            <Link 
+              to="/about"
+              className="group inline-flex items-center gap-3 bg-[#173b25] hover:bg-[#245433] text-white px-8 py-3.5 sm:py-4 text-xs font-extrabold uppercase tracking-[0.25em] rounded-xs transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 border border-[#173b25]"
+            >
+              <span>DISCOVER OUR STORY</span>
+              <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </motion.div>
 
-            {/* Quote */}
-            <div className="mt-8 border-l border-[#b59a62] pl-5">
+          {/* ── RIGHT COLUMN: BRUSH MASKED VISUAL (7 Cols on LG) ── */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.96 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 relative flex justify-center lg:justify-end"
+          >
+            {/* Ambient Gold Backdrop Glow */}
+            <div className="pointer-events-none absolute -inset-6 bg-[#B38A45]/20 rounded-full blur-3xl" />
 
-              <p className="font-serif text-lg italic leading-relaxed text-[#36543d]">
-                "Because some of life's best conversations
-                deserve a beautiful cup of tea."
-              </p>
+            <div className="relative w-full max-w-2xl lg:max-w-3xl aspect-[16/10] sm:aspect-[1.45/1] lg:aspect-[1.5/1] min-h-[340px] sm:min-h-[440px] lg:min-h-[520px] overflow-hidden drop-shadow-2xl z-10">
+              
+              {/* Top Floating Origin Badge */}
+              <div className="absolute top-5 left-5 z-20 hidden sm:flex items-center gap-2 bg-[#173b25] px-4 py-2.5 text-white shadow-2xl border border-[#B38A45]/40">
+                <Leaf size={13} className="text-[#B38A45]" />
+                <span className="text-[9.5px] font-bold uppercase tracking-[0.22em]">
+                  100% Assam Tea Gardens
+                </span>
+              </div>
 
-            </div>
-
-
-            {/* CTA */}
-            <div className="mt-9 flex flex-wrap items-center gap-6">
-
-              <Link
-                to="/about"
-                className="group inline-flex items-center gap-4 bg-[#173b25] px-7 py-3.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-[#245433]"
+              {/* Painted Brush-Stroke Edge Mask Container */}
+              <div 
+                className="w-full h-full relative bg-[#173b25]" 
+                style={{ 
+                  clipPath: 'polygon(3% 5%, 12% 1%, 25% 3.5%, 40% 0.5%, 58% 2.5%, 72% 0.8%, 86% 3%, 95% 1.5%, 98% 8%, 96.5% 20%, 99% 35%, 97.5% 50%, 100% 68%, 97% 82%, 98.5% 94%, 90% 97.5%, 76% 96%, 60% 99%, 45% 97%, 30% 98.5%, 16% 96.5%, 5% 98%, 1.5% 90%, 3.5% 75%, 0.8% 60%, 2.5% 45%, 0.5% 30%, 3% 15%)' 
+                }}
               >
-                <span>Discover Our Story</span>
-
-                <ArrowRight
-                  size={14}
-                  className="transition-transform duration-300 group-hover:translate-x-1"
+                <img 
+                  src={HERO_BANNER_IMAGE} 
+                  alt="Every Cup Has A Story - Vaarta Chai"
+                  className="w-full h-full object-cover scale-100 hover:scale-105 transition-transform duration-1000 ease-out" 
                 />
-              </Link>
-
-
-              <Link
-                to="/shop"
-                className="group inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#173b25]"
-              >
-                <span>Explore Our Teas</span>
-
-                <ArrowRight
-                  size={13}
-                  className="transition-transform duration-300 group-hover:translate-x-1"
-                />
-              </Link>
-
+                {/* Ambient Subtle Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+              </div>
             </div>
-
           </motion.div>
 
         </div>
-
-
-        {/* =====================================================
-            BOTTOM BRAND STATEMENT
-        ====================================================== */}
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-24 grid border-t border-[#d8cfbe] pt-8 sm:grid-cols-3"
-        >
-
-          <div className="pb-6 sm:pb-0">
-            <p className="font-serif text-xl text-[#173b25]">
-              Carefully Selected
-            </p>
-
-            <p className="mt-1 text-[9px] uppercase tracking-[0.15em] text-[#8a8578]">
-              Premium tea leaves
-            </p>
-          </div>
-
-
-          <div className="border-[#d8cfbe] pb-6 sm:border-l sm:px-8 sm:pb-0">
-            <p className="font-serif text-xl text-[#173b25]">
-              Rooted In Assam
-            </p>
-
-            <p className="mt-1 text-[9px] uppercase tracking-[0.15em] text-[#8a8578]">
-              Authentic origin
-            </p>
-          </div>
-
-
-          <div className="border-[#d8cfbe] sm:border-l sm:px-8">
-            <p className="font-serif text-xl text-[#173b25]">
-              Made For Conversations
-            </p>
-
-            <p className="mt-1 text-[9px] uppercase tracking-[0.15em] text-[#8a8578]">
-              More than just tea
-            </p>
-          </div>
-
-        </motion.div>
-
       </div>
     </section>
   );

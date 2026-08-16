@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { db } from "../components/Firebase";
-import { collection, onSnapshot, doc, setDoc, deleteDoc, getDocs, writeBatch } from "firebase/firestore";
+import { collection, onSnapshot, doc, setDoc, deleteDoc, getDocs, writeBatch, query, orderBy } from "firebase/firestore";
 import { useAuth } from "../components/useAuth";
 
 const StoreContext = createContext();
@@ -12,6 +12,8 @@ export const StoreProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
 
   // --- SYNC GUEST DATA ON LOGIN ---
   useEffect(() => {
@@ -69,6 +71,20 @@ export const StoreProvider = ({ children }) => {
       unsubWishlist();
     };
   }, [user]);
+
+  // --- GLOBAL REAL-TIME PRODUCTS LISTENER ---
+  useEffect(() => {
+    setProductsLoading(true);
+    const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
+    const unsub = onSnapshot(q, (snap) => {
+      setProducts(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setProductsLoading(false);
+    }, (err) => {
+      console.error('Products listener error:', err);
+      setProductsLoading(false);
+    });
+    return () => unsub();
+  }, []);
 
   const addToCart = async (product, selectedSize = null) => {
     const cartId = selectedSize ? `${product.id}-${selectedSize.size}` : product.id;
@@ -166,7 +182,7 @@ export const StoreProvider = ({ children }) => {
   };
 
   return (
-    <StoreContext.Provider value={{ cart, wishlist, loading, addToCart, removeFromCart, updateQuantity, addToWishlist, removeFromWishlist }}>
+    <StoreContext.Provider value={{ cart, wishlist, loading, products, productsLoading, addToCart, removeFromCart, updateQuantity, addToWishlist, removeFromWishlist }}>
       {children}
     </StoreContext.Provider>
   );
