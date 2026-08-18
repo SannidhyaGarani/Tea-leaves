@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ShoppingBag, Trash2, ShieldCheck, Truck, RotateCcw, ChevronRight, Gift, ArrowRight } from "lucide-react";
+import { ShoppingBag, Trash2, ShieldCheck, Truck, RotateCcw, ChevronRight, Gift, ArrowRight, Leaf } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 import { useStore } from "../components/StoreProvider";
@@ -55,20 +55,20 @@ const Cart = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center">
+      <div className="min-h-screen bg-[#faf5ec] flex items-center justify-center font-sans">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border border-zinc-300 border-t-black rounded-full animate-spin" />
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500">Loading your bag...</p>
+          <div className="w-8 h-8 border border-[#B38A45] border-t-[#173b25] rounded-full animate-spin" />
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#173b25]">Loading your bag...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f5]">
+    <div className="min-h-screen bg-[#faf5ec] font-sans">
       <PageHeader
         title="Shopping Bag"
-        subtitle="Review your selections before checkout"
+        subtitle="Review your artisanal tea selections before checkout"
         breadcrumbItems={[{ label: 'Home', path: '/' }, { label: 'Shop', path: '/shop' }, { label: 'Cart' }]}
       />
 
@@ -79,21 +79,27 @@ const Cart = () => {
           <div className="lg:col-span-8 w-full">
             <AnimatePresence mode="popLayout">
               {cart.length === 0 ? (
-                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20 max-w-md mx-auto bg-white border border-zinc-200 p-8 shadow-sm">
-                  <div className="w-16 h-16 border border-zinc-300 flex items-center justify-center text-zinc-400 mx-auto mb-5">
-                    <ShoppingBag size={24} strokeWidth={1.5} />
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16 sm:py-20 max-w-md mx-auto bg-[#f7f2e8] border border-[#e8dfcf] p-8 shadow-md rounded-3xl">
+                  <div className="w-16 h-16 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <ShoppingBag size={24} />
                   </div>
-                  <h3 className="text-xl font-light text-zinc-900 tracking-widest uppercase mb-2">Your bag is empty</h3>
-                  <p className="text-[13px] text-zinc-500 leading-relaxed mb-6">Start exploring our collection.</p>
-                  <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#1c2b21] text-[#c9a962] font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-[#2c3e30] transition-all">
-                    Continue Shopping <ArrowRight size={13} />
+                  <h3 className="font-serif text-2xl font-medium text-[#173b25] mb-1">Your Bag Is Empty</h3>
+                  <h4 
+                    className="text-lg font-normal text-[#173b25] mt-1 mb-3"
+                    style={{ fontFamily: '"Noto Serif Devanagari", "Rozha One", Georgia, serif' }}
+                  >
+                    आपकी टोकरी खाली है
+                  </h4>
+                  <p className="text-xs text-[#524f46] font-medium leading-relaxed mb-6">Explore our artisanal tea collection and find your favorite daily brew.</p>
+                  <Link to="/shop" className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-[#173b25] hover:bg-[#245433] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all shadow-md">
+                    <span>EXPLORE SHOP</span> <ArrowRight size={14} />
                   </Link>
                 </motion.div>
               ) : (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
-                    <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
-                      {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#B38A45]/20">
+                    <h2 className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#173b25]">
+                      {cart.length} {cart.length === 1 ? 'TEA BLEND' : 'TEA BLENDS'} IN BAG
                     </h2>
                   </div>
                   <motion.div layout className="space-y-3">
@@ -108,33 +114,33 @@ const Cart = () => {
                           layout
                           initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -30 }}
                           transition={{ duration: 0.4 }}
-                          className="group bg-white border border-zinc-200 p-4 flex flex-col sm:flex-row items-center gap-4 hover:border-black/30 transition-all shadow-sm"
+                          className="group bg-[#f7f2e8] border border-[#e8dfcf] hover:border-[#B38A45] p-4 flex flex-col sm:flex-row items-center gap-4 transition-all shadow-2xs rounded-2xl"
                         >
-                          <Link to={`/product/${item.id}`} className="w-20 h-24 bg-zinc-100 shrink-0 overflow-hidden border border-zinc-200">
+                          <Link to={`/product/${item.id}`} className="w-20 h-24 bg-[#FAF5EC] shrink-0 overflow-hidden border border-[#e2d7c5] rounded-xl p-1">
                             <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                           </Link>
                           <div className="flex-1 text-center sm:text-left space-y-0.5">
-                            {item.category && <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#b8860b]">{item.category}</span>}
-                            <h3 className="text-sm font-bold text-zinc-900 group-hover:text-black transition-colors leading-tight">{item.name}</h3>
-                            {item.size && <p className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Pack Weight: {item.size}</p>}
+                            {item.category && <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#B38A45]">{item.category}</span>}
+                            <h3 className="font-serif text-base font-medium text-[#173b25] group-hover:text-[#B38A45] transition-colors leading-tight">{item.name}</h3>
+                            {item.size && <p className="text-[11px] font-semibold text-[#827963] uppercase tracking-wider">Pack Weight: {item.size}</p>}
                             <div className="flex flex-wrap items-center gap-2 mt-1 sm:justify-start justify-center">
-                              <p className="text-sm font-bold text-zinc-900">₹{Number(item.price).toLocaleString("en-IN")}</p>
+                              <p className="text-sm font-bold text-[#173b25]">₹{Number(item.price).toLocaleString("en-IN")}</p>
                               {isOutOfStock ? (
-                                <span className="bg-red-500/10 border border-red-500/20 text-red-600 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">Out of Stock</span>
+                                <span className="bg-red-500/10 border border-red-500/20 text-red-600 px-2 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider">Out of Stock</span>
                               ) : item.quantity > stockInfo.stock ? (
-                                <span className="bg-amber-500/10 border border-amber-500/20 text-amber-700 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">Only {stockInfo.stock} left</span>
+                                <span className="bg-amber-500/10 border border-amber-500/20 text-amber-700 px-2 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider">Only {stockInfo.stock} left</span>
                               ) : null}
                             </div>
                           </div>
-                          <div className="flex items-center bg-zinc-50 border border-zinc-300 h-9">
+                          <div className="flex items-center bg-[#faf5ec] border border-[#e2d7c5] rounded-md h-9">
                             <button 
                               onClick={() => updateQuantity(item.cartId || item.id, -1)} 
                               disabled={item.quantity <= 1}
-                              className="w-8 h-full flex items-center justify-center text-zinc-500 hover:text-black transition-colors text-sm font-bold disabled:opacity-20"
+                              className="w-8 h-full flex items-center justify-center text-[#173b25] hover:text-[#B38A45] transition-colors text-sm font-bold disabled:opacity-20"
                             >
                               −
                             </button>
-                            <span className="w-7 text-center text-[13px] font-bold text-zinc-900">{item.quantity || 1}</span>
+                            <span className="w-7 text-center text-[13px] font-bold text-[#173b25]">{item.quantity || 1}</span>
                             <button 
                               onClick={() => {
                                 if (item.quantity < stockInfo.stock) {
@@ -142,16 +148,16 @@ const Cart = () => {
                                 }
                               }} 
                               disabled={isOutOfStock || item.quantity >= stockInfo.stock}
-                              className="w-8 h-full flex items-center justify-center text-zinc-500 hover:text-black transition-colors text-sm font-bold disabled:opacity-20"
+                              className="w-8 h-full flex items-center justify-center text-[#173b25] hover:text-[#B38A45] transition-colors text-sm font-bold disabled:opacity-20"
                             >
                               +
                             </button>
                           </div>
                           <button onClick={() => removeFromCart(item.cartId || item.id)}
-                            className="p-2.5 bg-zinc-100 text-zinc-500 border border-zinc-300 hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all"
+                            className="p-2.5 bg-[#faf5ec] text-[#524f46] border border-[#e2d7c5] rounded-md hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all"
                             aria-label="Remove item"
                           >
-                            <Trash2 size={14} strokeWidth={1.5} />
+                            <Trash2 size={14} />
                           </button>
                         </motion.div>
                       );
@@ -166,73 +172,73 @@ const Cart = () => {
           {/* Order Summary */}
           {cart.length > 0 && (
             <aside className="lg:col-span-4 w-full sticky top-28">
-              <div className="bg-white border border-zinc-200 p-6 shadow-sm">
-                <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500 mb-5 pb-4 border-b border-zinc-200">Order Summary</h2>
+              <div className="bg-[#f7f2e8] border border-[#e8dfcf] p-6 shadow-md rounded-3xl">
+                <h2 className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#173b25] mb-5 pb-3 border-b border-[#B38A45]/20">Order Summary</h2>
                 <div className="space-y-3 mb-5">
-                  <div className="flex justify-between text-[12px] text-zinc-600">
+                  <div className="flex justify-between text-xs text-[#524f46] font-medium">
                     <span>Subtotal</span>
-                    <span className="font-bold text-zinc-900">₹{total.toLocaleString("en-IN")}</span>
+                    <span className="font-bold text-[#173b25]">₹{total.toLocaleString("en-IN")}</span>
                   </div>
-                  <div className="flex justify-between text-[12px] text-zinc-600">
-                    <span>Shipping</span>
-                    <span className="text-zinc-900 font-semibold">Free</span>
+                  <div className="flex justify-between text-xs text-[#524f46] font-medium">
+                    <span>Garden Direct Shipping</span>
+                    <span className="text-[#173b25] font-bold">FREE</span>
                   </div>
-                  <div className="flex justify-between text-[12px] text-zinc-600">
+                  <div className="flex justify-between text-xs text-[#524f46] font-medium">
                     <span>GST (Included)</span>
-                    <span className="font-bold text-zinc-900">₹0</span>
+                    <span className="font-bold text-[#173b25]">₹0</span>
                   </div>
 
                   {/* Gift Note */}
-                  <div className="pt-2 border-t border-zinc-200">
+                  <div className="pt-2 border-t border-[#e8dfcf]">
                     <button onClick={() => setIsGiftNoteOpen(!isGiftNoteOpen)}
-                      className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-600 hover:text-black transition-colors"
+                      className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-wider text-[#B38A45] hover:text-[#173b25] transition-colors"
                     >
-                      <Gift size={12} strokeWidth={1.5} />
+                      <Gift size={13} />
                       {isGiftNoteOpen ? 'Remove gift note' : 'Add a gift note'}
                     </button>
                     <AnimatePresence>
                       {isGiftNoteOpen && (
                         <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden mt-2">
                           <textarea value={giftNote} onChange={(e) => setGiftNote(e.target.value)}
-                            placeholder="Write your message..." maxLength={180}
-                            className="w-full h-16 bg-zinc-50 border border-zinc-300 p-2.5 text-[12px] text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-500 resize-none"
+                            placeholder="Write your personal tea gift message..." maxLength={180}
+                            className="w-full h-16 bg-[#faf5ec] border border-[#e2d7c5] rounded-md p-2.5 text-xs text-[#173b25] placeholder-[#827963] focus:outline-none focus:border-[#173b25] resize-none"
                           />
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
 
-                  <div className="pt-4 mt-2 border-t border-dashed border-zinc-300 flex justify-between items-end">
-                    <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-[0.2em]">Total</span>
-                    <span className="text-2xl font-light text-zinc-900 tracking-widest font-heading">₹{total.toLocaleString("en-IN")}</span>
+                  <div className="pt-4 mt-2 border-t border-dashed border-[#B38A45]/30 flex justify-between items-end">
+                    <span className="text-[10px] font-extrabold text-[#173b25] uppercase tracking-[0.2em]">Total</span>
+                    <span className="text-2xl font-serif font-bold text-[#173b25]">₹{total.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
 
                 <button 
                   onClick={() => !hasOutOfStockItem && handleCheckout()}
                   disabled={hasOutOfStockItem}
-                  className={`w-full py-4 font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5 cursor-pointer ${
+                  className={`w-full py-4 font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all duration-300 flex items-center justify-center gap-2 mb-5 cursor-pointer shadow-md ${
                     hasOutOfStockItem
                       ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
-                      : 'bg-[#1c2b21] hover:bg-[#2c3e30] text-[#c9a962]'
+                      : 'bg-[#173b25] hover:bg-[#245433] text-white hover:shadow-lg'
                   }`}
                 >
-                  {hasOutOfStockItem ? 'Remove Out of Stock Items' : 'Checkout'} <ChevronRight size={14} />
+                  {hasOutOfStockItem ? 'Remove Out of Stock Items' : 'PROCEED TO CHECKOUT'} <ChevronRight size={15} />
                 </button>
 
-                <div className="space-y-3 pt-4 border-t border-zinc-200">
+                <div className="space-y-3 pt-4 border-t border-[#e8dfcf]">
                   {[
                     { icon: ShieldCheck, title: 'Secure Checkout', sub: '256-bit encryption' },
-                    { icon: Truck, title: 'Free Shipping', sub: 'On orders ₹1999+' },
-                    { icon: RotateCcw, title: 'Freshness Guarantee', sub: '100% garden fresh' },
+                    { icon: Truck, title: 'Garden Fresh Shipping', sub: 'Direct from Assam' },
+                    { icon: RotateCcw, title: '100% Quality Guarantee', sub: 'Pure Assam CTC & Leaf' },
                   ].map(({ icon: Icon, title, sub }, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 shrink-0">
-                        <Icon size={13} strokeWidth={1.5} />
+                      <div className="w-8 h-8 rounded-full bg-[#faf5ec] border border-[#e2d7c5] flex items-center justify-center text-[#B38A45] shrink-0">
+                        <Icon size={14} />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-zinc-800 uppercase tracking-wide">{title}</p>
-                        <p className="text-[10px] text-zinc-500">{sub}</p>
+                        <p className="text-[10px] font-extrabold text-[#173b25] uppercase tracking-wide">{title}</p>
+                        <p className="text-[10px] text-[#524f46] font-medium">{sub}</p>
                       </div>
                     </div>
                   ))}

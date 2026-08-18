@@ -3,7 +3,7 @@ import PageHeader from '../components/Home/PageHeader';
 
 const TermsConditions = () => {
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
+    <div className="min-h-screen bg-[#faf5ec] font-sans text-[#173b25]">
       <PageHeader
         title="Terms & Conditions"
         subtitle="Please read our terms of service carefully before using our tea store services."

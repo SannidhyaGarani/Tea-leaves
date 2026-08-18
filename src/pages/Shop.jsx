@@ -444,10 +444,10 @@ const Shop = () => {
   }, [filters, searchTerm, maxPriceLimit]);
 
   return (
-    <div className="min-h-screen bg-[#faf9f5]">
+    <div className="min-h-screen bg-[#faf5ec] font-sans text-[#173b25]">
       <PageHeader
-        title="Shop Collection"
-        subtitle="Explore our luxury attire crafted with precision"
+        title="Tea Collection"
+        subtitle="Explore our artisanal tea blends crafted with Assam garden-fresh leaves"
         breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Shop" }]}
       />
 

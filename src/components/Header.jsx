@@ -36,7 +36,7 @@ const Header = () => {
   const { cart, wishlist } = useStore();
 
   const isHomePage = location.pathname === '/';
-  const isTransparent = false;
+  const isTransparent = isHomePage && !isScrolled;
 
   const cartCount = cart ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
   const wishlistCount = wishlist ? wishlist.length : 0;
@@ -140,7 +140,7 @@ const Header = () => {
       <nav 
         className={`transition-all duration-300 ${
           isTransparent 
-            ? 'bg-transparent border-b border-white/10 py-4 md:py-5' 
+            ? 'bg-transparent border-b border-[#173B25]/10 py-3.5 md:py-4' 
             : 'bg-[#F7F2E8]/95 backdrop-blur-md border-b border-[#EFE6D7] py-3 md:py-3.5 shadow-xs'
         }`}
       >
@@ -150,18 +150,18 @@ const Header = () => {
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="flex items-center gap-2">
               <svg width="38" height="40" viewBox="0 0 50 52" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:scale-105">
-                <path d="M25 5C15 15 8 28 8 38C8 44 12 48 18 48C26 48 30 38 30 30" stroke={isTransparent ? "#B38A45" : "#173B25"} strokeWidth="3.5" strokeLinecap="round"/>
-                <path d="M25 5C35 15 42 28 42 38C42 44 38 48 32 48C24 48 20 38 20 30" stroke={isTransparent ? "#F7F2E8" : "#B38A45"} strokeWidth="2.5" strokeLinecap="round"/>
-                <path d="M25 8V44" stroke={isTransparent ? "#B38A45" : "#173B25"} strokeWidth="2.5" strokeLinecap="round"/>
+                <path d="M25 5C15 15 8 28 8 38C8 44 12 48 18 48C26 48 30 38 30 30" stroke="#173B25" strokeWidth="3.5" strokeLinecap="round"/>
+                <path d="M25 5C35 15 42 28 42 38C42 44 38 48 32 48C24 48 20 38 20 30" stroke="#B38A45" strokeWidth="2.5" strokeLinecap="round"/>
+                <path d="M25 8V44" stroke="#173B25" strokeWidth="2.5" strokeLinecap="round"/>
               </svg>
               <div className="flex flex-col">
-                <span className={`text-2xl font-bold tracking-tight leading-none transition-colors duration-300 ${isTransparent ? 'text-[#F7F2E8]' : 'text-[#173B25]'}`} style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif" }}>
+                <span className="text-2xl font-bold tracking-tight leading-none text-[#173B25] transition-colors duration-300" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif" }}>
                   Vaarta
                 </span>
-                <span className={`text-xs font-semibold tracking-[0.2em] leading-none mt-0.5 transition-colors duration-300 ${isTransparent ? 'text-[#B38A45]' : 'text-[#173B25]'}`} style={{ fontFamily: '"Noto Sans Devanagari", sans-serif' }}>
+                <span className="text-xs font-semibold tracking-[0.2em] leading-none mt-0.5 text-[#173B25] transition-colors duration-300" style={{ fontFamily: '"Noto Sans Devanagari", sans-serif' }}>
                   चाय
                 </span>
-                <span className={`text-[8px] font-medium tracking-tighter leading-none mt-1 transition-colors duration-300 ${isTransparent ? 'text-[#EFE6D7]/80' : 'text-[#1D2A21]/70'}`}>
+                <span className="text-[8px] font-medium tracking-tighter leading-none mt-1 text-[#1D2A21]/70 transition-colors duration-300">
                   हर घूंट में छुपी एक कहानी
                 </span>
               </div>
@@ -184,11 +184,7 @@ const Header = () => {
                     <button
                       type="button"
                       onClick={() => navigate('/shop')}
-                      className={`flex items-center gap-1 text-xs font-semibold tracking-[0.2em] uppercase transition-colors duration-300 relative group ${
-                        isTransparent 
-                          ? 'text-[#F7F2E8] hover:text-[#B38A45]' 
-                          : 'text-[#173B25] hover:text-[#B38A45]'
-                      }`}
+                      className="flex items-center gap-1 text-xs font-semibold tracking-[0.2em] uppercase transition-colors duration-300 relative group text-[#173B25] hover:text-[#B38A45]"
                     >
                       <span>{item.label}</span>
                       <ChevronDown size={12} className={`transition-transform duration-300 ${isShopDropdownOpen ? 'rotate-180' : ''}`} />
@@ -233,8 +229,6 @@ const Header = () => {
                   className={`relative py-1 text-xs font-semibold tracking-[0.2em] uppercase transition-colors duration-300 group ${
                     isActive
                       ? 'text-[#B38A45] border-b-2 border-[#B38A45] pb-0.5'
-                      : isTransparent
-                      ? 'text-[#F7F2E8] hover:text-[#B38A45]'
                       : 'text-[#173B25] hover:text-[#B38A45]'
                   }`}
                 >
@@ -252,11 +246,7 @@ const Header = () => {
             {/* Search Icon */}
             <button
               onClick={() => setIsSearchActive(!isSearchActive)}
-              className={`p-1.5 transition-colors duration-300 ${
-                isTransparent 
-                  ? 'text-[#F7F2E8] hover:text-[#B38A45]' 
-                  : 'text-[#173B25] hover:text-[#B38A45]'
-              }`}
+              className="p-1.5 transition-colors duration-300 text-[#173B25] hover:text-[#B38A45]"
               aria-label="Search"
             >
               <Search size={19} strokeWidth={1.8} />
@@ -265,11 +255,7 @@ const Header = () => {
             {/* Account Icon */}
             <Link 
               to="/account" 
-              className={`p-1.5 hidden sm:block transition-colors duration-300 ${
-                isTransparent 
-                  ? 'text-[#F7F2E8] hover:text-[#B38A45]' 
-                  : 'text-[#173B25] hover:text-[#B38A45]'
-              }`}
+              className="p-1.5 hidden sm:block transition-colors duration-300 text-[#173B25] hover:text-[#B38A45]"
               aria-label="Account"
             >
               <User size={19} strokeWidth={1.8} />
@@ -278,11 +264,7 @@ const Header = () => {
             {/* Wishlist Icon */}
             <Link 
               to="/wishlist" 
-              className={`p-1.5 relative transition-colors duration-300 group ${
-                isTransparent 
-                  ? 'text-[#F7F2E8] hover:text-[#B38A45]' 
-                  : 'text-[#173B25] hover:text-[#B38A45]'
-              }`}
+              className="p-1.5 relative transition-colors duration-300 group text-[#173B25] hover:text-[#B38A45]"
               aria-label="Wishlist"
             >
               <Heart size={19} strokeWidth={1.8} className="group-hover:scale-110 transition-transform" />
@@ -296,11 +278,7 @@ const Header = () => {
             {/* Shopping Bag Icon */}
             <Link 
               to="/cart" 
-              className={`p-1.5 relative transition-colors duration-300 group ${
-                isTransparent 
-                  ? 'text-[#F7F2E8] hover:text-[#B38A45]' 
-                  : 'text-[#173B25] hover:text-[#B38A45]'
-              }`}
+              className="p-1.5 relative transition-colors duration-300 group text-[#173B25] hover:text-[#B38A45]"
               aria-label="Shopping Bag"
             >
               <ShoppingBag size={19} strokeWidth={1.8} className="group-hover:scale-110 transition-transform" />
@@ -314,9 +292,7 @@ const Header = () => {
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`lg:hidden p-1.5 ml-1 transition-colors duration-300 ${
-                isTransparent ? 'text-[#F7F2E8]' : 'text-[#173B25]'
-              }`}
+              className="lg:hidden p-1.5 ml-1 transition-colors duration-300 text-[#173B25]"
               aria-label="Toggle Navigation Menu"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}

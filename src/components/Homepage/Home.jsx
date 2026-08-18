@@ -12,15 +12,14 @@ const Home = () => {
     <main className="bg-white min-h-screen selection:bg-[#2d5a27] selection:text-white">
       {/* 1. World-Class Luxury Cinematic Video Hero */}
       <HeroSection />
+
       <FeaturesStrip/>
 
-      {/* 2. Explore Our Premium Teas — Product swiper */}
-      <div id="home-content">
+           {/* 3. Our Story — "Every Conversation Begins With Tea" */}
+      <Banner />
+       <div id="home-content">
         <Bestsellers />
       </div>
-
-      {/* 3. Our Story — "Every Conversation Begins With Tea" */}
-      <Banner />
 
       {/* 4. From Our Gardens To Your Cup — 5-step journey */}
       <TeaJourney />

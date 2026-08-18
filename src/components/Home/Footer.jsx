@@ -11,6 +11,7 @@ import {
   Clock,
   ArrowUpRight,
   Check,
+  Leaf,
 } from 'lucide-react';
 
 const Footer = () => {
@@ -31,7 +32,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#173b25] font-sans text-white">
+    <footer className="bg-[#173b25] font-sans text-white border-t border-[#B38A45]/30">
 
       {/* =====================================================
           NEWSLETTER
@@ -44,22 +45,36 @@ const Footer = () => {
 
           <div className="max-w-md">
 
-            <div className="mb-3 flex items-center gap-2">
+            <div className="mb-2 flex items-center gap-2">
 
-              <span className="h-px w-6 bg-[#b38a45]" />
+              <span className="h-px w-6 bg-[#B38A45]" />
 
-              <span className="text-[9px] font-bold uppercase tracking-[0.28em] text-[#d4b66f]">
+              <span className="text-[9px] font-extrabold uppercase tracking-[0.28em] text-[#B38A45]">
                 Stay In The Loop
               </span>
 
             </div>
 
             <h2 className="font-serif text-3xl font-medium leading-tight text-[#f7f2e8]">
-              Join The Varta Family
+              Join The <span className="italic text-[#B38A45]">Vaarta Family</span>
             </h2>
 
-            <p className="mt-2 text-xs leading-6 text-white/55">
-              New blends, special offers and stories from the world of tea.
+            <h3 
+              className="text-lg font-normal text-[#d4b66f] mt-1"
+              style={{ fontFamily: '"Noto Serif Devanagari", "Rozha One", Georgia, serif' }}
+            >
+              हर घूंट में एक नई कहानी
+            </h3>
+
+            {/* Gold Leaf Emblem Line Divider */}
+            <div className="flex items-center gap-3 my-3">
+              <div className="w-10 h-[1px] bg-[#B38A45]/40" />
+              <div className="text-[#B38A45]"><Leaf size={14} fill="#B38A45" /></div>
+              <div className="w-10 h-[1px] bg-[#B38A45]/40" />
+            </div>
+
+            <p className="mt-1 text-xs leading-6 text-white/60 font-medium">
+              New blends, special offers, and stories from the world of Assam tea.
             </p>
 
           </div>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Quote, Leaf, CheckCircle2, ArrowRight, ArrowLeft, Heart } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Star, Quote, Leaf, CheckCircle2, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const REVIEWS = [
   {
@@ -36,212 +36,253 @@ const REVIEWS = [
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop',
     rating: 5,
   },
+  {
+    id: 4,
+    quote:
+      'Ordered for the first time and already a repeat customer. The kadak CTC blend is exactly what chai lovers dream about.',
+    name: 'Arjun Singh',
+    location: 'Jaipur, India',
+    role: 'Verified Buyer · Kadak CTC Blend',
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop',
+    rating: 5,
+  },
+  {
+    id: 5,
+    quote:
+      'Subah ki shuruat Varta Chai ke sath alag hi energy deti hai. The rich color and strong taste are unmatched.',
+    name: 'Kavita Patel',
+    location: 'Ahmedabad, India',
+    role: 'Verified Buyer · Masala Chai',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
+    rating: 5,
+  },
+  {
+    id: 6,
+    quote:
+      'Garden fresh aroma is real! As soon as you open the pouch, the rich scent fills the kitchen. Highly recommended.',
+    name: 'Suresh Menon',
+    location: 'Kochi, India',
+    role: 'Verified Buyer · Royal CTC',
+    avatar:
+      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop',
+    rating: 5,
+  },
+  {
+    id: 7,
+    quote:
+      'Authentic taste of Assam tea. Rich strength without any bitter aftertaste. Truly a luxury tea experience.',
+    name: 'Priya Nair',
+    location: 'Chennai, India',
+    role: 'Verified Buyer · Assam Orthodox',
+    avatar:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop',
+    rating: 5,
+  },
+  {
+    id: 8,
+    quote:
+      'Mehmaan bhi tareef kiye bina nahi reh paate. Vaarta Chai has become our official family tea brand.',
+    name: 'Rajesh Gupta',
+    location: 'Kolkata, India',
+    role: 'Verified Buyer · Premium Leaf Chai',
+    avatar:
+      'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=200&auto=format&fit=crop',
+    rating: 5,
+  },
 ];
 
 const Testimonials = () => {
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+
+  // Update items per page based on window width
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 1024) {
+        setItemsPerPage(4); // 4 slides in large devices
+      } else if (width >= 768) {
+        setItemsPerPage(3); // 3 slides in mid devices
+      } else if (width >= 640) {
+        setItemsPerPage(2); // 2 slides in sm devices
+      } else {
+        setItemsPerPage(1); // 1 slide on extra small mobile
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const maxIndex = Math.max(0, REVIEWS.length - itemsPerPage);
 
   const handleNext = () => {
-    setActiveSlide((prev) => (prev + 1) % REVIEWS.length);
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
   };
 
   const handlePrev = () => {
-    setActiveSlide((prev) => (prev - 1 + REVIEWS.length) % REVIEWS.length);
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#faf5ec] py-14 sm:py-20 lg:py-24 font-sans">
+    <section className="relative overflow-hidden bg-[#faf5ec] py-10 sm:py-14 lg:py-16 font-sans">
       {/* ── Ambient Luxury Glow Orbs ── */}
       <div className="pointer-events-none absolute -left-20 top-10 h-96 w-96 rounded-full bg-[#B38A45]/12 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 bottom-10 h-96 w-96 rounded-full bg-[#173b25]/8 blur-3xl" />
-
       <div className="pointer-events-none absolute right-10 top-14 opacity-[0.03] text-[#173b25]">
         <Leaf size={280} strokeWidth={0.7} />
       </div>
 
       <div className="relative mx-auto max-w-[1450px] px-4 sm:px-8 lg:px-12">
 
-        {/* ── SECTION HEADER ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-10 md:mb-14 flex flex-col items-center text-center"
-        >
-          <div className="mb-3 flex items-center justify-center gap-2.5">
-            <span className="h-px w-8 bg-[#B38A45]" />
-            <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.3em] text-[#B38A45]">
-              Customer Stories
-            </span>
-            <span className="h-px w-8 bg-[#B38A45]" />
-          </div>
-
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#173b25]">
+        {/* ── SECTION HEADER & CAROUSEL CONTROLS ── */}
+        <div className="mb-8 sm:mb-10 flex flex-col items-center text-center max-w-3xl mx-auto relative">
+          {/* Main Title */}
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#173b25] mb-1">
             Loved By <span className="italic text-[#B38A45]">Tea Lovers</span>
           </h2>
-          <p className="mt-3 max-w-lg text-xs sm:text-sm text-[#6d6b61] leading-relaxed">
+
+          {/* Hindi Tagline */}
+          <h3
+            className="text-xl sm:text-2xl font-normal text-[#173b25] mt-1 mb-2"
+            style={{ fontFamily: '"Noto Serif Devanagari", "Rozha One", Georgia, serif' }}
+          >
+            चाय प्रेमियों का भरोसेमंद नाम
+          </h3>
+
+          {/* Gold Emblem Line Divider */}
+          <div className="flex items-center justify-center gap-3 my-3">
+            <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+            <div className="text-[#2d5a27]"><Leaf size={15} fill="#2d5a27" /></div>
+            <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+          </div>
+
+          {/* Subtext */}
+          <p className="max-w-lg text-xs sm:text-sm text-[#524f46] font-medium leading-relaxed mb-4">
             Real stories and heartfelt moments shared by tea enthusiasts across India.
           </p>
-        </motion.div>
 
-        {/* ── MOBILE VIEW: INTERACTIVE SWIPER CAROUSEL (SWIPER / SLIDER) ── */}
-        <div className="block md:hidden">
-          <div className="relative bg-[#f7f2e8] rounded-2xl p-6 border border-[#e8dfcf] shadow-xs overflow-hidden">
+          {/* Prev / Next Slider Arrows */}
+          <div className="flex items-center justify-center gap-3 mt-2">
+            <button
+              onClick={handlePrev}
+              className="p-2.5 rounded-full border border-[#173b25]/30 hover:border-[#173b25] bg-[#faf5ec] hover:bg-[#173b25] text-[#173b25] hover:text-white transition-all duration-300 shadow-2xs cursor-pointer active:scale-95"
+              aria-label="Previous testimonials"
+            >
+              <ChevronLeft size={18} />
+            </button>
             
-            {/* Top Indicator & Stars */}
-            <div className="flex items-center justify-between border-b border-[#e8dfcf] pb-4 mb-5">
-              <div className="flex gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} size={14} fill="#B38A45" strokeWidth={0} className="text-[#B38A45]" />
-                ))}
-              </div>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#B38A45]">
-                STORY {activeSlide + 1} OF {REVIEWS.length}
-              </span>
+            <div className="text-xs font-serif text-[#827963] px-2 font-medium">
+              <span className="text-[#173b25] font-bold">{currentIndex + 1}</span> / {maxIndex + 1}
             </div>
 
-            {/* Slide Content with AnimatePresence */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeSlide}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.35 }}
-                className="space-y-5"
-              >
-                <div className="relative">
-                  <Quote size={32} strokeWidth={1} className="text-[#B38A45]/25 absolute -top-2 -left-2" />
-                  <p className="relative z-10 pt-2 font-serif text-lg leading-relaxed text-[#173b25] italic">
-                    "{REVIEWS[activeSlide].quote}"
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-[#e8dfcf] flex items-center gap-3.5">
-                  <img
-                    src={REVIEWS[activeSlide].avatar}
-                    alt={REVIEWS[activeSlide].name}
-                    className="h-11 w-11 rounded-full object-cover ring-2 ring-[#B38A45]/50 shadow-sm"
-                  />
-                  <div>
-                    <h3 className="text-sm font-bold text-[#173b25] flex items-center gap-1.5">
-                      <span>{REVIEWS[activeSlide].name}</span>
-                      <CheckCircle2 size={13} className="text-[#B38A45]" />
-                    </h3>
-                    <span className="text-[10px] font-semibold text-[#827963]">
-                      {REVIEWS[activeSlide].role}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Slider Controls Bar */}
-            <div className="mt-6 pt-4 border-t border-[#e8dfcf] flex items-center justify-between">
-              <button
-                onClick={handlePrev}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#173b25]/30 text-[#173b25] text-xs font-bold uppercase tracking-wider hover:bg-[#173b25]/5"
-              >
-                <ArrowLeft size={13} />
-                <span>PREV</span>
-              </button>
-
-              <div className="flex items-center gap-1.5">
-                {REVIEWS.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveSlide(idx)}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      idx === activeSlide ? 'w-6 bg-[#173b25]' : 'w-2 bg-[#d8cebe]'
-                    }`}
-                  />
-                ))}
-              </div>
-
-              <button
-                onClick={handleNext}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#173b25] text-white text-xs font-bold uppercase tracking-wider shadow-sm hover:bg-[#245433]"
-              >
-                <span>NEXT</span>
-                <ArrowRight size={13} />
-              </button>
-            </div>
+            <button
+              onClick={handleNext}
+              className="p-2.5 rounded-full border border-[#173b25]/30 hover:border-[#173b25] bg-[#faf5ec] hover:bg-[#173b25] text-[#173b25] hover:text-white transition-all duration-300 shadow-2xs cursor-pointer active:scale-95"
+              aria-label="Next testimonials"
+            >
+              <ChevronRight size={18} />
+            </button>
           </div>
         </div>
 
-        {/* ── DESKTOP VIEW: 3 LUXURY REVIEWS CARDS GRID ── */}
-        <div className="hidden md:grid grid-cols-3 gap-6 lg:gap-8">
-          {REVIEWS.map((review, index) => (
-            <motion.div
-              key={review.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative bg-[#f7f2e8] border border-[#e8dfcf] hover:border-[#B38A45] p-7 lg:p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl rounded-2xl flex flex-col justify-between"
-            >
-              <Quote
-                size={32}
-                strokeWidth={1}
-                className="absolute right-7 top-7 text-[#B38A45]/25 group-hover:text-[#B38A45]/50 transition-colors"
-              />
-
-              <div>
-                {/* 5 Stars */}
-                <div className="mb-4 flex gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      size={14}
-                      fill="#B38A45"
-                      strokeWidth={0}
-                      className="text-[#B38A45]"
-                    />
-                  ))}
-                </div>
-
-                {/* Review Quote Text */}
-                <p className="pr-4 font-serif text-base lg:text-[1.1rem] leading-relaxed text-[#173b25] italic mb-6">
-                  “{review.quote}”
-                </p>
-              </div>
-
-              {/* Reviewer Profile */}
-              <div>
-                <div className="my-4 h-px bg-[#e8dfcf]" />
-
-                <div className="flex items-center gap-3.5">
-                  <img
-                    src={review.avatar}
-                    alt={review.name}
-                    className="h-11 w-11 rounded-full object-cover ring-2 ring-[#B38A45]/40"
+        {/* ── RESPONSIVE CAROUSEL SLIDER TRACK ── */}
+        <div className="overflow-hidden py-2 px-1">
+          <div
+            className="flex transition-transform duration-500 ease-out"
+            style={{
+              transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
+            }}
+          >
+            {REVIEWS.map((review) => (
+              <div
+                key={review.id}
+                className="px-2.5 shrink-0"
+                style={{
+                  width: `${100 / itemsPerPage}%`,
+                }}
+              >
+                <div className="group relative bg-[#f7f2e8] border border-[#e8dfcf] hover:border-[#B38A45] p-5 lg:p-6 transition-all duration-400 hover:-translate-y-1.5 hover:shadow-xl rounded-2xl flex flex-col justify-between h-full min-h-[220px]">
+                  {/* Quote watermark */}
+                  <Quote
+                    size={26}
+                    strokeWidth={1}
+                    className="absolute right-5 top-5 text-[#B38A45]/20 group-hover:text-[#B38A45]/40 transition-colors"
                   />
 
-                  <div className="leading-tight">
-                    <h3 className="text-xs font-bold text-[#173b25] flex items-center gap-1.5">
-                      <span>{review.name}</span>
-                      <CheckCircle2 size={13} className="text-[#B38A45]" />
-                    </h3>
+                  <div>
+                    {/* 5 Stars */}
+                    <div className="mb-3 flex gap-0.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} size={12} fill="#B38A45" strokeWidth={0} className="text-[#B38A45]" />
+                      ))}
+                    </div>
 
-                    <span className="mt-1 block text-[9.5px] font-extrabold uppercase tracking-[0.14em] text-[#827963]">
-                      {review.role}
-                    </span>
+                    {/* Review Quote Text */}
+                    <p className="pr-4 font-serif text-xs sm:text-sm leading-relaxed text-[#173b25] italic mb-5">
+                      "{review.quote}"
+                    </p>
+                  </div>
+
+                  {/* Reviewer Profile */}
+                  <div>
+                    <div className="mb-3 h-px bg-[#e8dfcf]" />
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={review.avatar}
+                        alt={review.name}
+                        className="h-9 w-9 rounded-full object-cover ring-2 ring-[#B38A45]/40 flex-shrink-0"
+                      />
+                      <div className="leading-tight min-w-0">
+                        <h3 className="text-xs font-bold text-[#173b25] flex items-center gap-1 truncate">
+                          <span>{review.name}</span>
+                          <CheckCircle2 size={11} className="text-[#B38A45] flex-shrink-0" />
+                        </h3>
+                        <span className="mt-0.5 block text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#827963] truncate">
+                          {review.role}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── DOTS INDICATOR ── */}
+        <div className="flex items-center justify-center gap-1.5 mt-6">
+          {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                idx === currentIndex ? 'w-6 bg-[#173b25]' : 'w-2 bg-[#d8cebe] hover:bg-[#B38A45]'
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
           ))}
         </div>
 
         {/* ── TRUST BADGE FOOTER ── */}
-        <div className="mt-12 md:mt-16 flex items-center justify-center gap-4 text-center">
-          <div className="h-px w-12 bg-[#B38A45]/30" />
-          <div className="flex items-center gap-2 text-[9.5px] sm:text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#827963]">
-            <Heart size={12} className="text-[#B38A45] fill-[#B38A45]" />
-             </div>
-          <div className="h-px w-12 bg-[#B38A45]/30" />
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mt-8 flex items-center justify-center gap-3 text-center"
+        >
+          <div className="h-px w-10 bg-[#B38A45]/30" />
+          <div className="flex items-center gap-2 text-[9.5px] font-extrabold uppercase tracking-[0.22em] text-[#827963]">
+            <Heart size={11} className="text-[#B38A45] fill-[#B38A45]" />
+            <span>Trusted by 10,000+ Tea Lovers Across India</span>
+            <Heart size={11} className="text-[#B38A45] fill-[#B38A45]" />
+          </div>
+          <div className="h-px w-10 bg-[#B38A45]/30" />
+        </motion.div>
 
       </div>
     </section>

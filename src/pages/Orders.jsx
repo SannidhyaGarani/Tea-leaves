@@ -241,7 +241,7 @@ const Orders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
+    <div className="min-h-screen bg-[#faf5ec] font-sans text-[#173b25]">
       <PageHeader
         title="My Orders"
         subtitle="View your order history, track shipments, and download tax invoices"

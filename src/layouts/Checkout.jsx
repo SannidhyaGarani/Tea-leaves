@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import MiniLoader from "../components/MiniLoader";
 import { useAuth } from "../components/useAuth";
 import { db } from "../components/Firebase";
-import { collection, getDocs, addDoc, serverTimestamp, doc, deleteDoc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, serverTimestamp, doc, deleteDoc, getDoc } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
-import { CreditCard, MapPin, User, Phone, Mail, CheckCircle, X, ShieldCheck, Zap, Sparkles, Plus, Check } from "lucide-react";
+import { CreditCard, MapPin, User, Phone, Mail, CheckCircle, X, ShieldCheck, Zap, Sparkles, Plus, Check, Leaf } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 
@@ -82,7 +82,6 @@ const Checkout = () => {
         // Update product stocks
         for (const item of items) {
           try {
-            // Find base product id (robust fallback if it's cartId format)
             const productId = item.id || item.cartId?.split("-")[0];
             if (productId) {
               const productRef = doc(db, "products", productId);
@@ -91,30 +90,18 @@ const Checkout = () => {
                 const currentStock = Number(productSnap.data().stock) || 0;
                 const quantityPurchased = Number(item.quantity) || 1;
                 const newStock = Math.max(0, currentStock - quantityPurchased);
-                
-                // Set matching status
                 let newStatus = "In Stock";
-                if (newStock === 0) {
-                  newStatus = "Out of Stock";
-                } else if (newStock <= 5) {
-                  newStatus = "Low Stock";
-                }
-
-                await updateDoc(productRef, {
-                  stock: newStock,
-                  stock_status: newStatus
-                });
+                if (newStock === 0) newStatus = "Out of Stock";
+                else if (newStock <= 5) newStatus = "Low Stock";
+                await updateDoc(productRef, { stock: newStock, stock_status: newStatus });
               }
             }
-          } catch (stockErr) {
-            console.error("Failed to update stock for item", item.id, stockErr);
-          }
+          } catch (err) { console.error("Error updating stock:", err); }
         }
-        await clearCart(); 
-        setOrderStatus("success"); 
+        await clearCart(); setOrderStatus("success"); 
       }
-      else { setOrderStatus("failed"); }
-    } catch (error) { console.error("Error saving order:", error); triggerToast("Order save failed. Please contact support."); }
+      else setOrderStatus("failed");
+    } catch (e) { console.error("Save Order Error:", e); setOrderStatus("failed"); }
   };
 
   const handlePlaceOrder = async (e) => {
@@ -124,10 +111,10 @@ const Checkout = () => {
     if (formData.paymentMethod === "online") {
       const options = {
         key: "rzp_test_YOUR_KEY_HERE", amount: total * 100, currency: "INR",
-        name: "Vaarta Chai", description: " Tea Order", image: "https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png",
+        name: "Vaarta Chai", description: "Tea Order", image: "https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png",
         handler: async (response) => { await saveOrder(response.razorpay_payment_id, "confirmed", "captured"); setIsProcessing(false); },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
-        theme: { color: "#000000" },
+        theme: { color: "#173b25" },
         modal: { ondismiss: () => setIsProcessing(false) }
       };
       const rzp = new window.Razorpay(options);
@@ -139,58 +126,59 @@ const Checkout = () => {
     }
   };
 
-  const inputClass = "w-full bg-white border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400";
+  const inputClass = "w-full bg-[#faf5ec] border border-[#e2d7c5] rounded-md px-4 py-3 text-xs sm:text-sm text-[#173b25] outline-none focus:border-[#173b25] transition-colors placeholder:text-[#827963]";
 
   if (loading) return <MiniLoader message="Preparing Checkout" />;
 
   if (!user) return (
-    <div className="min-h-screen bg-[#faf9f5]">
+    <div className="min-h-screen bg-[#faf5ec] font-sans">
       <PageHeader title="Checkout" subtitle="Secure your order" breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Checkout" }]} />
-      <div className="flex flex-col items-center justify-center py-28 px-6 text-center">
-        <div className="w-16 h-16 border border-zinc-300 flex items-center justify-center mb-5 bg-white shadow-sm">
-          <ShieldCheck size={26} strokeWidth={1.2} className="text-zinc-500" />
+      <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
+        <div className="w-16 h-16 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center mb-4 shadow-md">
+          <ShieldCheck size={26} />
         </div>
-        <h2 className="text-xl font-light text-zinc-900 tracking-widest uppercase mb-2">Sign in Required</h2>
-        <p className="text-[13px] text-zinc-500 max-w-xs mb-6 leading-relaxed">Please sign in to proceed with your order.</p>
-        <Link to="/login?redirect=checkout" className="px-8 py-3.5 bg-black text-white font-semibold text-[11px] uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all shadow-sm">Sign In</Link>
+        <h2 className="font-serif text-2xl font-medium text-[#173b25] mb-1">Sign In Required</h2>
+        <p className="text-xs text-[#524f46] font-medium max-w-xs mb-6 leading-relaxed">Please sign in to proceed with your tea order.</p>
+        <Link to="/login?redirect=checkout" className="px-8 py-3.5 bg-[#173b25] hover:bg-[#245433] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all shadow-md">Sign In</Link>
       </div>
     </div>
   );
 
   if (orderStatus === "success") return (
-    <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center px-6">
-      <div className="max-w-md text-center py-20 bg-white border border-zinc-200 p-8 shadow-sm">
+    <div className="min-h-screen bg-[#faf5ec] font-sans flex items-center justify-center px-6">
+      <div className="max-w-md text-center py-16 bg-[#f7f2e8] border border-[#e8dfcf] p-8 shadow-xl rounded-3xl">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-          className="w-20 h-20 border border-zinc-300 flex items-center justify-center mx-auto mb-6 bg-zinc-50"
+          className="w-20 h-20 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center mx-auto mb-6 shadow-md"
         >
-          <CheckCircle size={36} className="text-emerald-600" />
+          <CheckCircle size={36} />
         </motion.div>
-        <h2 className="text-3xl font-light text-zinc-900 tracking-widest uppercase mb-3">Order Confirmed!</h2>
-        <p className="text-[14px] text-zinc-600 mb-8 leading-relaxed">Thank you. We're preparing your order for shipment.</p>
+        <h2 className="font-serif text-3xl font-medium text-[#173b25] mb-1">Order Confirmed!</h2>
+        <h3 className="text-xl font-normal text-[#173b25] mt-1 mb-3" style={{ fontFamily: '"Noto Serif Devanagari", Georgia, serif' }}>आपका धन्यवाद!</h3>
+        <p className="text-xs text-[#524f46] font-medium mb-8 leading-relaxed">Thank you. We are preparing your fresh Assam tea order for fast delivery.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link to="/orders" className="px-6 py-3.5 bg-black text-white font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all shadow-sm">View Orders</Link>
-          <Link to="/shop" className="px-6 py-3.5 bg-white border border-zinc-300 text-zinc-700 font-semibold text-[10px] uppercase tracking-[0.2em] hover:border-black hover:text-black transition-all shadow-sm">Continue Shopping</Link>
+          <Link to="/orders" className="px-6 py-3.5 bg-[#173b25] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md hover:bg-[#245433] transition-all shadow-md">View Orders</Link>
+          <Link to="/shop" className="px-6 py-3.5 bg-[#faf5ec] border border-[#e2d7c5] text-[#173b25] font-extrabold text-xs uppercase tracking-[0.2em] rounded-md hover:border-[#173b25] transition-all shadow-xs">Continue Shopping</Link>
         </div>
       </div>
     </div>
   );
 
   if (orderStatus === "failed") return (
-    <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center px-6">
-      <div className="max-w-md text-center py-20 bg-white border border-zinc-200 p-8 shadow-sm">
-        <div className="w-20 h-20 border border-red-300 bg-red-50 flex items-center justify-center mx-auto mb-6">
-          <X size={36} className="text-red-600" />
+    <div className="min-h-screen bg-[#faf5ec] font-sans flex items-center justify-center px-6">
+      <div className="max-w-md text-center py-16 bg-[#f7f2e8] border border-[#e8dfcf] p-8 shadow-xl rounded-3xl">
+        <div className="w-20 h-20 rounded-full bg-red-100 border border-red-300 text-red-600 flex items-center justify-center mx-auto mb-6">
+          <X size={36} />
         </div>
-        <h2 className="text-3xl font-light text-zinc-900 tracking-widest uppercase mb-3">Payment Failed</h2>
-        <p className="text-[14px] text-zinc-600 mb-8 leading-relaxed">The transaction could not be completed. Please try again.</p>
-        <button onClick={() => setOrderStatus(null)} className="px-8 py-3.5 bg-black text-white font-semibold text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-sm">Try Again</button>
+        <h2 className="font-serif text-3xl font-medium text-[#173b25] mb-2">Payment Failed</h2>
+        <p className="text-xs text-[#524f46] font-medium mb-8 leading-relaxed">The transaction could not be completed. Please try again.</p>
+        <button onClick={() => setOrderStatus(null)} className="px-8 py-3.5 bg-[#173b25] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md hover:bg-[#245433] transition-all shadow-md">Try Again</button>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#faf9f5]">
-      <PageHeader title="Checkout" subtitle="Complete your purchase" breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Cart", path: "/cart" }, { label: "Checkout" }]} />
+    <div className="min-h-screen bg-[#faf5ec] font-sans">
+      <PageHeader title="Checkout" subtitle="Complete your artisanal tea purchase" breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Cart", path: "/cart" }, { label: "Checkout" }]} />
 
       <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
@@ -201,19 +189,19 @@ const Checkout = () => {
 
               {/* Shipping */}
               <section className="space-y-5">
-                <div className="flex items-center gap-3 pb-4 border-b border-zinc-200">
-                  <div className="w-9 h-9 border border-zinc-300 text-zinc-600 flex items-center justify-center bg-white"><MapPin size={15} /></div>
-                  <h2 className="text-[13px] font-light text-zinc-900 uppercase tracking-widest">Shipping Address</h2>
+                <div className="flex items-center gap-3 pb-4 border-b border-[#B38A45]/20">
+                  <div className="w-9 h-9 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center"><MapPin size={15} /></div>
+                  <h2 className="text-xs font-extrabold text-[#173b25] uppercase tracking-widest">Shipping Address</h2>
                 </div>
 
                 {/* SAVED ADDRESS SELECTOR */}
                 {savedAddresses.length > 0 && (
-                  <div className="space-y-3 mb-6 bg-white border border-zinc-200 p-4 rounded shadow-sm">
+                  <div className="space-y-3 mb-6 bg-[#f7f2e8] border border-[#e8dfcf] p-4 rounded-2xl shadow-2xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-[#b8860b] uppercase tracking-widest">
+                      <span className="text-[10px] font-extrabold text-[#B38A45] uppercase tracking-widest">
                         Choose Saved Shipping Address
                       </span>
-                      <Link to="/account" className="text-[9px] text-zinc-500 hover:text-black uppercase tracking-wider underline">
+                      <Link to="/account" className="text-[9px] text-[#173b25] hover:underline uppercase tracking-wider font-bold">
                         Manage Addresses
                       </Link>
                     </div>
@@ -237,29 +225,29 @@ const Checkout = () => {
                               }));
                               triggerToast(`Selected: ${addr.name}`);
                             }}
-                            className={`p-3.5 border cursor-pointer transition-all relative rounded ${
+                            className={`p-3.5 border cursor-pointer transition-all relative rounded-xl ${
                               isSelected
-                                ? 'border-black bg-zinc-50 shadow-sm'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400'
+                                ? 'border-[#173b25] bg-[#faf5ec] shadow-sm'
+                                : 'border-[#e2d7c5] bg-[#faf5ec] hover:border-[#173b25]'
                             }`}
                           >
                             {addr.isDefault && (
-                              <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#b8860b]/15 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-bold uppercase tracking-wider">
+                              <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#B38A45]/15 border border-[#B38A45]/30 text-[#B38A45] text-[8px] font-extrabold uppercase tracking-wider rounded">
                                 Default
                               </span>
                             )}
                             <div className="flex items-start gap-2.5">
                               <div className={`w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${
-                                isSelected ? 'border-black bg-black text-white' : 'border-zinc-400'
+                                isSelected ? 'border-[#173b25] bg-[#173b25] text-white' : 'border-[#e2d7c5]'
                               }`}>
                                 {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
                               <div className="space-y-1 text-xs pr-10">
-                                <p className="font-bold text-zinc-900 uppercase tracking-wide">{addr.name}</p>
-                                <p className="text-zinc-500 text-[11px] leading-relaxed line-clamp-2">
+                                <p className="font-bold text-[#173b25] uppercase tracking-wide">{addr.name}</p>
+                                <p className="text-[#524f46] text-[11px] leading-relaxed line-clamp-2">
                                   {addr.address}, {addr.city}, {addr.state} - {addr.pincode}
                                 </p>
-                                <p className="text-[10px] text-[#b8860b] font-semibold">Ph: {addr.phone}</p>
+                                <p className="text-[10px] text-[#B38A45] font-bold">Ph: {addr.phone}</p>
                               </div>
                             </div>
                           </div>
@@ -277,14 +265,14 @@ const Checkout = () => {
                             pincode: ""
                           }));
                         }}
-                        className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded ${
+                        className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded-xl ${
                           selectedAddressId === "custom"
-                            ? 'border-black bg-zinc-50'
-                            : 'border-dashed border-zinc-300 bg-white hover:border-zinc-400'
+                            ? 'border-[#173b25] bg-[#faf5ec]'
+                            : 'border-dashed border-[#e2d7c5] bg-[#faf5ec] hover:border-[#173b25]'
                         }`}
                       >
-                        <Plus size={14} className="text-zinc-500" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-700">
+                        <Plus size={14} className="text-[#173b25]" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#173b25]">
                           + Enter Custom Address
                         </span>
                       </div>
@@ -293,26 +281,26 @@ const Checkout = () => {
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Full Name</label>
-                    <div className="relative"><User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" /><input type="text" name="name" required value={formData.name} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="Your name" /></div>
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">Full Name</label>
+                    <div className="relative"><User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#827963]" /><input type="text" name="name" required value={formData.name} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="Your name" /></div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Email</label>
-                    <div className="relative"><Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" /><input type="email" name="email" required value={formData.email} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="email@example.com" /></div>
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">Email</label>
+                    <div className="relative"><Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#827963]" /><input type="email" name="email" required value={formData.email} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="email@example.com" /></div>
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Phone Number</label>
-                  <div className="relative"><Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" /><input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="+91 00000 00000" /></div>
+                  <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">Phone Number</label>
+                  <div className="relative"><Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#827963]" /><input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="+91 00000 00000" /></div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Full Address</label>
+                  <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">Full Address</label>
                   <textarea name="address" required rows={3} value={formData.address} onChange={handleInputChange} className={`${inputClass} resize-none`} placeholder="Street, house number, area" />
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   {["city", "state", "pincode"].map((field) => (
                     <div key={field} className="space-y-1.5">
-                      <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 capitalize">{field}</label>
+                      <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25] capitalize">{field}</label>
                       <input type="text" name={field} required value={formData[field]} onChange={handleInputChange} className={inputClass} placeholder={field === 'pincode' ? "000000" : ""} />
                     </div>
                   ))}
@@ -320,10 +308,10 @@ const Checkout = () => {
               </section>
 
               {/* Payment */}
-              <section className="space-y-5 pt-6 border-t border-zinc-200">
-                <div className="flex items-center gap-3 pb-4 border-b border-zinc-200">
-                  <div className="w-9 h-9 border border-zinc-300 text-zinc-600 flex items-center justify-center bg-white"><CreditCard size={15} /></div>
-                  <h2 className="text-[13px] font-light text-zinc-900 uppercase tracking-widest">Payment Method</h2>
+              <section className="space-y-5 pt-6 border-t border-[#B38A45]/20">
+                <div className="flex items-center gap-3 pb-4 border-b border-[#B38A45]/20">
+                  <div className="w-9 h-9 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center"><CreditCard size={15} /></div>
+                  <h2 className="text-xs font-extrabold text-[#173b25] uppercase tracking-widest">Payment Method</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
@@ -334,12 +322,12 @@ const Checkout = () => {
                     const active = formData.paymentMethod === method.id;
                     return (
                       <button key={method.id} type="button" onClick={() => setFormData(p => ({ ...p, paymentMethod: method.id }))}
-                        className={`p-4 border-2 transition-all flex items-start gap-3 text-left ${active ? 'border-black bg-zinc-50' : 'border-zinc-200 bg-white hover:border-zinc-400'}`}
+                        className={`p-4 border-2 transition-all flex items-start gap-3 text-left rounded-2xl ${active ? 'border-[#173b25] bg-[#f7f2e8]' : 'border-[#e2d7c5] bg-[#faf5ec] hover:border-[#173b25]'}`}
                       >
-                        <div className={`w-9 h-9 flex items-center justify-center shrink-0 border ${active ? 'bg-black text-white border-black' : 'text-zinc-500 border-zinc-300 bg-white'}`}><Icon size={15} /></div>
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 border ${active ? 'bg-[#173b25] text-[#B38A45] border-[#173b25]' : 'text-[#827963] border-[#e2d7c5] bg-[#faf5ec]'}`}><Icon size={15} /></div>
                         <div>
-                          <p className={`text-[11px] font-semibold uppercase tracking-wider ${active ? 'text-zinc-900' : 'text-zinc-600'}`}>{method.label}</p>
-                          <p className="text-[10px] text-zinc-400 mt-0.5">{method.desc}</p>
+                          <p className={`text-xs font-bold uppercase tracking-wider ${active ? 'text-[#173b25]' : 'text-[#524f46]'}`}>{method.label}</p>
+                          <p className="text-[10px] text-[#827963] mt-0.5">{method.desc}</p>
                         </div>
                       </button>
                     );
@@ -348,40 +336,40 @@ const Checkout = () => {
               </section>
 
               <button type="submit" disabled={isProcessing}
-                className="w-full py-4 bg-[#1c2b21] hover:bg-[#2c3e30] text-[#c9a962] font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer shadow-md"
+                className="w-full py-4 bg-[#173b25] hover:bg-[#245433] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer shadow-md hover:shadow-lg"
               >
-                {isProcessing ? <><div className="w-4 h-4 border-2 border-[#c9a962]/20 border-t-[#c9a962] rounded-full animate-spin" />Processing Order...</> : <>Place Order</>}
+                {isProcessing ? <><div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />Processing Order...</> : <>PLACE ORDER NOW</>}
               </button>
             </form>
           </div>
 
           {/* Summary */}
           <div className="lg:col-span-5">
-            <div className="bg-white border border-zinc-200 p-6 sticky top-28 shadow-sm">
-              <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-[0.25em] mb-5 pb-4 border-b border-zinc-200">Order Summary</h3>
+            <div className="bg-[#f7f2e8] border border-[#e8dfcf] p-6 sticky top-28 shadow-md rounded-3xl">
+              <h3 className="text-[10px] font-extrabold text-[#173b25] uppercase tracking-[0.25em] mb-5 pb-3 border-b border-[#B38A45]/20">Order Summary</h3>
               <div className="space-y-4 mb-6 max-h-[300px] overflow-auto pr-1">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-3">
-                    <div className="w-16 h-16 bg-zinc-100 shrink-0 border border-zinc-200 p-1.5">
+                    <div className="w-16 h-16 bg-[#FAF5EC] shrink-0 border border-[#e2d7c5] rounded-xl p-1">
                       <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 py-0.5">
-                      <h4 className="text-[12px] font-bold text-zinc-900 line-clamp-1">{item.name}</h4>
-                      {item.size && <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">Pack Weight: {item.size}</p>}
+                      <h4 className="font-serif text-sm font-medium text-[#173b25] line-clamp-1">{item.name}</h4>
+                      {item.size && <p className="text-[10px] text-[#827963] font-semibold uppercase tracking-wider mt-0.5">Pack Weight: {item.size}</p>}
                       <div className="flex justify-between items-center mt-1.5">
-                        <span className="text-[12px] font-bold text-zinc-900">₹{item.price}</span>
-                        <span className="text-[9px] text-zinc-600 bg-zinc-100 border border-zinc-200 px-1.5 py-0.5">×{item.quantity || 1}</span>
+                        <span className="text-xs font-bold text-[#173b25]">₹{item.price}</span>
+                        <span className="text-[9px] text-[#173b25] font-bold bg-[#FAF5EC] border border-[#e2d7c5] px-2 py-0.5 rounded">×{item.quantity || 1}</span>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="space-y-2.5 pt-4 border-t border-zinc-200">
-                <div className="flex justify-between text-[12px]"><span className="text-zinc-600">Subtotal</span><span className="font-bold text-zinc-900">₹{total}</span></div>
-                <div className="flex justify-between text-[12px]"><span className="text-zinc-600">Delivery</span><span className="text-zinc-900 font-bold">Free</span></div>
-                <div className="flex justify-between pt-4 border-t border-dashed border-zinc-300 items-baseline">
-                  <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-[0.2em]">Total</span>
-                  <span className="text-2xl font-light text-zinc-900 tracking-widest font-heading">₹{total}</span>
+              <div className="space-y-2.5 pt-4 border-t border-[#e8dfcf]">
+                <div className="flex justify-between text-xs text-[#524f46] font-medium"><span>Subtotal</span><span className="font-bold text-[#173b25]">₹{total}</span></div>
+                <div className="flex justify-between text-xs text-[#524f46] font-medium"><span>Garden Direct Shipping</span><span className="text-[#173b25] font-bold">FREE</span></div>
+                <div className="flex justify-between pt-4 border-t border-dashed border-[#B38A45]/30 items-baseline">
+                  <span className="text-[10px] font-extrabold text-[#173b25] uppercase tracking-[0.2em]">Total</span>
+                  <span className="text-2xl font-serif font-bold text-[#173b25]">₹{total}</span>
                 </div>
               </div>
             </div>
@@ -393,10 +381,10 @@ const Checkout = () => {
       <AnimatePresence>
         {feedbackMessage && (
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-5 py-3 shadow-2xl flex items-center gap-3"
+            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#173b25] text-white px-6 py-3.5 shadow-2xl flex items-center gap-3 border border-[#B38A45] rounded-md"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
-            <button onClick={() => setFeedbackMessage(null)} className="opacity-40 hover:opacity-100 ml-1"><X size={13} /></button>
+            <p className="text-xs font-extrabold uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
+            <button onClick={() => setFeedbackMessage(null)} className="opacity-60 hover:opacity-100 ml-2"><X size={14} /></button>
           </motion.div>
         )}
       </AnimatePresence>

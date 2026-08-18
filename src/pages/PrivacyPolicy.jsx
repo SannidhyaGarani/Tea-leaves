@@ -3,7 +3,7 @@ import PageHeader from '../components/Home/PageHeader';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
+    <div className="min-h-screen bg-[#faf5ec] font-sans text-[#173b25]">
       <PageHeader
         title="Privacy Policy"
         subtitle="Your privacy is paramount. Learn how we safeguard your personal information."

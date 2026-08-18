@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, ArrowUpRight, X, CheckCircle, Clock, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, ArrowUpRight, X, CheckCircle, Clock, MessageSquare, Leaf } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageHeader from '../components/Home/PageHeader';
 
@@ -15,8 +15,8 @@ const Contact = () => {
 
   const communicationChannels = [
     { icon: Mail, label: 'Email Us', val: 'hello@vartachai.com', href: 'mailto:hello@vartachai.com', desc: 'We reply within 24 hours' },
-    { icon: Phone, label: 'Call Us', val: '+91 98765 43210', href: 'tel:+919876543210', desc: 'Mon–Sat, 10am – 7pm IST' },
-    { icon: MapPin, label: 'Visit Us', val: 'Assam, India', href: '#', desc: 'Vaarta Chai Tea Estate, Assam 781001' }
+    { icon: Phone, label: 'Call Us', val: '+91 12345 67890', href: 'tel:+911234567890', desc: 'Mon–Sat, 10am – 7pm IST' },
+    { icon: MapPin, label: 'Visit Us', val: 'Indore, MP, India', href: '#', desc: 'Vaarta Chai Head Office' }
   ];
 
   const fadeUp = {
@@ -27,10 +27,10 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f5]">
+    <div className="min-h-screen bg-[#faf5ec] font-sans">
       <PageHeader
         title="Get In Touch"
-        subtitle="We'd love to hear from you. Reach out anytime."
+        subtitle="We'd love to hear from you. Reach out anytime for orders, inquiries or tea stories."
         breadcrumbItems={[{ label: 'Home', path: '/' }, { label: 'Contact' }]}
       />
 
@@ -39,29 +39,47 @@ const Contact = () => {
         {formSubmitted && (
           <motion.div
             initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#1c2b21] text-white px-5 py-3.5 shadow-2xl flex items-center gap-3 border border-[#b8860b]/40"
+            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#173b25] text-white px-6 py-4 shadow-2xl flex items-center gap-3 border border-[#B38A45] rounded-md"
           >
-            <CheckCircle size={14} className="text-[#c9a962]" />
-            <p className="text-[12px] font-bold uppercase tracking-wider">Message sent! We'll respond shortly.</p>
-            <button onClick={() => setFormSubmitted(false)} className="opacity-40 hover:opacity-100 ml-1"><X size={13} /></button>
+            <CheckCircle size={16} className="text-[#B38A45]" />
+            <p className="text-xs font-bold uppercase tracking-wider">Message sent! We'll respond shortly.</p>
+            <button onClick={() => setFormSubmitted(false)} className="opacity-60 hover:opacity-100 ml-2"><X size={14} /></button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-14 md:py-20">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-12 md:py-16">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
 
           {/* LEFT: Channels */}
-          <motion.div {...fadeUp} className="lg:col-span-5 space-y-7">
+          <motion.div {...fadeUp} className="lg:col-span-5 space-y-6">
             <div>
-              <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#b8860b] block mb-4">Reach Out</span>
-              <h2 className="text-3xl sm:text-4xl font-light text-zinc-900 tracking-widest leading-[1.05] uppercase">We're Here<br />to Help</h2>
-              <p className="text-[14px] text-zinc-600 mt-4 leading-relaxed max-w-sm font-light">
+              <span className="text-[10px] font-extrabold tracking-[0.28em] uppercase text-[#B38A45] block mb-2">Reach Out</span>
+              <h2 className="font-serif text-3xl sm:text-4xl font-medium text-[#173b25] leading-tight">
+                We're Here <span className="italic text-[#B38A45]">To Help</span>
+              </h2>
+              
+              {/* Hindi Tagline */}
+              <h3 
+                className="text-xl font-normal text-[#173b25] mt-1 mb-3"
+                style={{ fontFamily: '"Noto Serif Devanagari", "Rozha One", Georgia, serif' }}
+              >
+                बातचीत की शुरुआत करें
+              </h3>
+
+              {/* Leaf Emblem Line Divider */}
+              <div className="flex items-center gap-3 my-3">
+                <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+                <div className="text-[#2d5a27]"><Leaf size={15} fill="#2d5a27" /></div>
+                <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+              </div>
+
+              <p className="text-xs sm:text-sm text-[#524f46] font-medium leading-relaxed max-w-sm">
                 Whether you have a question about tea varieties, need brewing advice, or want to discuss a wholesale order — our team is ready.
               </p>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               {communicationChannels.map((item, i) => {
                 const Icon = item.icon;
                 return (
@@ -70,61 +88,61 @@ const Contact = () => {
                     key={i}
                     onMouseEnter={() => setActiveChannel(i)}
                     onMouseLeave={() => setActiveChannel(null)}
-                    className="flex items-center gap-4 p-4 sm:p-5 bg-white border border-zinc-200 hover:border-[#b8860b]/40 transition-all duration-300 group shadow-sm"
+                    className="flex items-center gap-4 p-4 sm:p-5 bg-[#f7f2e8] border border-[#e8dfcf] hover:border-[#B38A45] rounded-2xl transition-all duration-300 group shadow-2xs"
                   >
-                    <div className="w-10 h-10 border border-zinc-300 text-zinc-600 group-hover:bg-[#1c2b21] group-hover:text-[#c9a962] group-hover:border-[#1c2b21] flex items-center justify-center transition-all duration-400 shrink-0">
-                      <Icon size={16} strokeWidth={1.5} />
+                    <div className="w-10 h-10 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center transition-all duration-300 shrink-0">
+                      <Icon size={16} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[9px] font-black uppercase tracking-[0.25em] text-[#b8860b] mb-0.5">{item.label}</p>
-                      <p className="text-[15px] font-bold text-zinc-900 truncate">{item.val}</p>
-                      <p className="text-[11px] text-zinc-500 mt-0.5">{item.desc}</p>
+                      <p className="text-[9px] font-extrabold uppercase tracking-[0.25em] text-[#B38A45] mb-0.5">{item.label}</p>
+                      <p className="text-sm font-bold text-[#173b25] truncate">{item.val}</p>
+                      <p className="text-[11px] text-[#524f46] font-medium">{item.desc}</p>
                     </div>
-                    <ArrowUpRight size={15} className={`text-zinc-400 transition-all duration-300 shrink-0 ${activeChannel === i ? 'rotate-45 text-[#b8860b]' : ''}`} />
+                    <ArrowUpRight size={16} className={`text-[#173b25] transition-all duration-300 shrink-0 ${activeChannel === i ? 'rotate-45 text-[#B38A45]' : ''}`} />
                   </a>
                 );
               })}
             </div>
 
-            <div className="flex items-start gap-3 p-4 bg-white border border-zinc-200 shadow-sm">
-              <Clock size={14} className="text-zinc-500 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-4 bg-[#f7f2e8] border border-[#e8dfcf] rounded-2xl shadow-2xs">
+              <Clock size={16} className="text-[#B38A45] shrink-0 mt-0.5" />
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-1">Business Hours</p>
-                <p className="text-[12px] text-zinc-700 font-medium">Monday – Saturday: 10:00 AM – 7:00 PM IST</p>
-                <p className="text-[12px] text-zinc-500">Sunday: Closed</p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25] mb-1">Business Hours</p>
+                <p className="text-xs text-[#524f46] font-medium">Monday – Saturday: 10:00 AM – 7:00 PM IST</p>
+                <p className="text-xs text-[#827963]">Sunday: Closed</p>
               </div>
             </div>
           </motion.div>
 
           {/* RIGHT: Form */}
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="lg:col-span-7">
-            <div className="bg-white border border-zinc-200 p-6 sm:p-8 md:p-10 shadow-sm">
-              <div className="flex items-center gap-2 mb-7">
-                <MessageSquare size={14} className="text-[#b8860b]" />
-                <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">Send a Message</h3>
+            <div className="bg-[#f7f2e8] border border-[#e8dfcf] p-6 sm:p-8 md:p-10 shadow-lg rounded-3xl">
+              <div className="flex items-center gap-2 mb-6">
+                <MessageSquare size={16} className="text-[#B38A45]" />
+                <h3 className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#173b25]">Send A Message</h3>
               </div>
 
               <form className="space-y-4" onSubmit={handleFormSubmit}>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Full Name</label>
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">Full Name</label>
                     <input type="text" required
-                      className="w-full bg-zinc-50 border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
+                      className="w-full bg-[#faf5ec] border border-[#e2d7c5] rounded-md px-4 py-3 text-xs sm:text-sm text-[#173b25] outline-none focus:border-[#173b25] transition-colors placeholder:text-[#827963]"
                       placeholder="Your name"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Email Address</label>
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">Email Address</label>
                     <input type="email" required
-                      className="w-full bg-zinc-50 border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
+                      className="w-full bg-[#faf5ec] border border-[#e2d7c5] rounded-md px-4 py-3 text-xs sm:text-sm text-[#173b25] outline-none focus:border-[#173b25] transition-colors placeholder:text-[#827963]"
                       placeholder="email@example.com"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Subject</label>
-                  <select className="w-full bg-zinc-50 border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none focus:border-zinc-500 transition-colors appearance-none cursor-pointer">
+                  <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">Subject</label>
+                  <select className="w-full bg-[#faf5ec] border border-[#e2d7c5] rounded-md px-4 py-3 text-xs sm:text-sm text-[#173b25] outline-none focus:border-[#173b25] transition-colors appearance-none cursor-pointer">
                     <option>Order Inquiry</option>
                     <option>Tea Product Question</option>
                     <option>Brewing Guide Help</option>
@@ -135,43 +153,24 @@ const Contact = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Your Message</label>
+                  <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">Your Message</label>
                   <textarea rows="5" required
-                    className="w-full bg-zinc-50 border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none focus:border-zinc-500 transition-colors resize-none placeholder:text-zinc-400"
+                    className="w-full bg-[#faf5ec] border border-[#e2d7c5] rounded-md px-4 py-3 text-xs sm:text-sm text-[#173b25] outline-none focus:border-[#173b25] transition-colors resize-none placeholder:text-[#827963]"
                     placeholder="Tell us how we can help..."
                   ></textarea>
                 </div>
 
                 <button type="submit"
-                  className="w-full py-4 bg-black hover:bg-zinc-800 text-white font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2.5 group"
+                  className="w-full py-4 bg-[#173b25] hover:bg-[#245433] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all duration-300 flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg"
                 >
-                  <Send size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-                  Send Message
+                  <Send size={14} />
+                  <span>Send Message</span>
                 </button>
               </form>
             </div>
           </motion.div>
         </div>
       </div>
-
-      {/* MAP */}
-      <section className="bg-[#faf9f5] py-14 md:py-16 border-t border-zinc-200">
-        <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
-          <div className="mb-8 pb-8 border-b border-zinc-200">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold block mb-3">Find Us</span>
-            <h2 className="text-2xl font-light text-zinc-900 uppercase tracking-widest">Visit Our Store</h2>
-          </div>
-          <div className="w-full h-[280px] sm:h-[350px] bg-zinc-100 overflow-hidden border border-zinc-200 shadow-sm">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.116396!2d72.74109995!3d19.08219865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-              width="100%" height="100%"
-              style={{ border: 0 }}
-              allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-              title="Pasoja Store Location"
-            ></iframe>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

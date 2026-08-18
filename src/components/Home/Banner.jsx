@@ -7,13 +7,13 @@ const Banner = () => {
   const HERO_BANNER_IMAGE = "/img/banner_tea_story.png";
 
   return (
-    <section className="relative overflow-hidden bg-[#f8f3e9] py-14 sm:py-20 lg:py-24 font-sans">
+    <section className="relative overflow-hidden bg-[#faf5ec] py-10 sm:py-14 lg:py-16 font-sans">
       {/* Decorative background ambient glows */}
       <div className="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-[#dce7d7]/40 blur-3xl" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-[#e8dcc7]/50 blur-3xl" />
 
-      <div className="relative mx-auto max-w-[1450px] px-5 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-12 items-center">
+      <div className="relative mx-auto max-w-[1450px] px-4 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
           {/* ── LEFT COLUMN: EDITORIAL NARRATIVE CONTENT (5 Cols on LG) ── */}
           <motion.div 
@@ -21,27 +21,30 @@ const Banner = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 relative z-10 max-w-xl mx-auto lg:mx-0"
+            className="lg:col-span-5 relative z-10 max-w-xl mx-auto lg:mx-0 text-center lg:text-left"
           >
-            {/* Eyebrow matching site sections */}
-            <div className="mb-3 flex items-center gap-2.5">
-              <span className="h-px w-8 bg-[#B38A45]" />
-              <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.3em] text-[#B38A45]">
-                About Vaarta Chai
-              </span>
-              <span className="h-px w-8 bg-[#B38A45]" />
-            </div>
-
-            {/* Main Heading matching site typography */}
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-medium leading-[1.14] tracking-tight text-[#173b25] mb-4">
+            {/* Main Heading */}
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-medium leading-[1.14] tracking-tight text-[#173b25] mb-1">
               Every Cup <span className="italic text-[#B38A45]">Has A Story</span>
             </h2>
 
-            {/* Gold Accent Divider */}
-            <div className="my-5 h-px w-16 bg-[#B38A45]" />
+            {/* Hindi Tagline */}
+            <h3 
+              className="text-xl sm:text-2xl font-normal text-[#173b25] mt-1 mb-2"
+              style={{ fontFamily: '"Noto Serif Devanagari", "Rozha One", Georgia, serif' }}
+            >
+              हर घूंट में एक नई कहानी
+            </h3>
+
+            {/* Gold Emblem Line Divider */}
+            <div className="flex items-center justify-center lg:justify-start gap-3 my-4">
+              <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+              <div className="text-[#2d5a27]"><Leaf size={15} fill="#2d5a27" /></div>
+              <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+            </div>
 
             {/* Narrative Story Paragraphs */}
-            <div className="space-y-3 text-xs sm:text-sm md:text-base text-[#6d6b61] font-normal leading-relaxed mb-8">
+            <div className="space-y-3 text-xs sm:text-sm text-[#524f46] font-medium leading-relaxed mb-6">
               <p>
                 <strong className="text-[#173b25] font-bold">Vaarta</strong> means conversation.
               </p>
@@ -51,7 +54,7 @@ const Banner = () => {
               <p>
                 Handpicked directly from lush Assam tea gardens, every pack is carefully selected to deliver garden-fresh aroma, rich strength, and unforgettable taste.
               </p>
-              <div className="pt-2 border-l-2 border-[#B38A45] pl-4 italic text-[#173b25] font-serif text-base sm:text-lg">
+              <div className="pt-2 border-l-2 border-[#B38A45] pl-4 italic text-[#173b25] font-serif text-sm sm:text-base text-left">
                 "Because for us, tea is not just a beverage. It is an emotion."
               </div>
             </div>
@@ -59,10 +62,9 @@ const Banner = () => {
             {/* Action CTA */}
             <Link 
               to="/about"
-              className="group inline-flex items-center gap-3 bg-[#173b25] hover:bg-[#245433] text-white px-8 py-3.5 sm:py-4 text-xs font-extrabold uppercase tracking-[0.25em] rounded-xs transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 border border-[#173b25]"
+              className="inline-flex items-center justify-center bg-[#173b25] hover:bg-[#245433] text-white px-8 py-3.5 sm:py-4 text-xs font-extrabold uppercase tracking-[0.25em] rounded-xs transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5"
             >
               <span>DISCOVER OUR STORY</span>
-              <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </motion.div>
 

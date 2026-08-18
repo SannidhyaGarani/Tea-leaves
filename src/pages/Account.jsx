@@ -446,7 +446,7 @@ const Account = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900 pt-[72px] md:pt-[80px] pb-24 px-4 sm:px-6 md:px-10 lg:px-14 font-sans select-none">
+    <div className="min-h-screen bg-[#faf5ec] font-sans text-zinc-900 pt-[72px] md:pt-[80px] pb-24 px-4 sm:px-6 md:px-10 lg:px-14 select-none">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-8 right-8 z-[100] bg-black text-white px-6 py-3.5 shadow-2xl flex items-center gap-3 border border-zinc-800 animate-bounce">

@@ -141,15 +141,15 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-[#faf9f5] flex flex-col items-center justify-center text-center p-6 pt-24">
-        <div className="w-16 h-16 rounded-full bg-zinc-200 flex items-center justify-center mb-4 text-zinc-600">
+      <div className="min-h-screen bg-[#faf5ec] font-sans flex flex-col items-center justify-center text-center p-6 pt-24">
+        <div className="w-16 h-16 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center mb-4 shadow-md">
           <Leaf size={28} />
         </div>
-        <h3 className="text-lg font-bold tracking-wider uppercase text-zinc-900 mb-2">Tea Product Not Found</h3>
-        <p className="text-xs text-zinc-500 max-w-sm mb-6">
+        <h3 className="font-serif text-2xl font-medium text-[#173b25] mb-1">Tea Product Not Found</h3>
+        <p className="text-xs text-[#524f46] font-medium max-w-sm mb-6 leading-relaxed">
           The requested tea product could not be loaded or may have been removed.
         </p>
-        <Link to="/shop" className="px-8 py-3 bg-[#0a140f] text-white font-semibold text-[11px] uppercase tracking-widest hover:bg-zinc-800 transition-all rounded-lg shadow-md flex items-center gap-2">
+        <Link to="/shop" className="px-8 py-3.5 bg-[#173b25] hover:bg-[#245433] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all shadow-md flex items-center gap-2">
           <ArrowLeft size={14} /> Return To Tea Collection
         </Link>
       </div>
@@ -177,7 +177,7 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900 pt-[80px] pb-24">
+    <div className="min-h-screen bg-[#faf5ec] text-[#173b25] font-sans pt-[80px] pb-24">
       {/* Toast Notification */}
       <AnimatePresence>
         {feedbackMessage && (
@@ -185,18 +185,18 @@ const ProductDetail = () => {
             initial={{ opacity: 0, y: 20, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 10, x: '-50%' }}
-            className="fixed bottom-8 left-1/2 z-50 bg-[#0a140f] text-white px-6 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 border border-[#c9a962]/40 min-w-[280px]"
+            className="fixed bottom-8 left-1/2 z-50 bg-[#173b25] text-white px-6 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 border border-[#B38A45] min-w-[280px]"
           >
-            <ShoppingBag size={16} className="text-[#c9a962] shrink-0" />
-            <p className="text-[11px] font-semibold uppercase tracking-wider flex-1 text-zinc-100">{feedbackMessage}</p>
+            <ShoppingBag size={16} className="text-[#B38A45] shrink-0" />
+            <p className="text-[11px] font-extrabold uppercase tracking-wider flex-1 text-white">{feedbackMessage}</p>
           </motion.div>
         )}
       </AnimatePresence>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-10">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-[11px] text-zinc-500 uppercase tracking-widest mb-6">
-          <Link to="/" className="hover:text-black transition-colors">Home</Link>
+        <div className="flex items-center gap-2 text-[11px] font-extrabold text-[#827963] uppercase tracking-widest mb-6">
+          <Link to="/" className="hover:text-[#173b25] transition-colors">Home</Link>
           <ChevronRight size={12} />
           <Link to="/shop" className="hover:text-black transition-colors">Shop</Link>
           <ChevronRight size={12} />

@@ -6,6 +6,7 @@ import {
   ArrowRight,
   Check,
   Star,
+  Leaf,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../StoreProvider';
@@ -70,48 +71,51 @@ const Bestsellers = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#f8f3e9] py-14 md:py-20 font-sans">
+    <section className="relative overflow-hidden bg-[#faf5ec] py-10 sm:py-14 lg:py-16 font-sans">
 
       {/* Decorative background blur */}
       <div className="pointer-events-none absolute -left-32 top-20 h-72 w-72 bg-[#dfe8d8]/40 blur-3xl" />
       <div className="pointer-events-none absolute -right-32 bottom-20 h-80 w-80 bg-[#eadcc4]/50 blur-3xl" />
 
-      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+      <div className="relative mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-12">
 
         {/* =========================
-            SECTION HEADER
+            SECTION HEADER (HERO THEME MATCHED & COMPACT)
         ========================== */}
-        <div className="mb-10 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
+        <div className="mb-8 sm:mb-10 flex flex-col items-center text-center">
+          {/* Main Title */}
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium leading-tight tracking-tight text-[#173b25] mb-1">
+            Explore Our <span className="italic text-[#B38A45]">Bestseller Teas</span>
+          </h2>
 
-          <div className="max-w-2xl">
+          {/* Hindi Tagline */}
+          <h3 
+            className="text-xl sm:text-2xl font-normal text-[#173b25] mt-1 mb-2"
+            style={{ fontFamily: '"Noto Serif Devanagari", "Rozha One", Georgia, serif' }}
+          >
+            हमारी सबसे पसंदीदा और लोकप्रिय चाय
+          </h3>
 
-            {/* Eyebrow */}
-            <div className="mb-2.5 flex items-center gap-2.5">
-              <span className="h-px w-8 bg-[#B38A45]" />
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-[#B38A45]">
-                Artisanal Tea House
-              </span>
-              <span className="h-px w-8 bg-[#B38A45]" />
-            </div>
-
-            {/* Heading */}
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium leading-tight tracking-tight text-[#173b25]">
-              Explore Our <span className="italic text-[#B38A45]">Bestseller Teas</span>
-            </h2>
-
-            <p className="mt-2.5 max-w-xl text-xs sm:text-sm leading-relaxed text-[#6d6b61]">
-              Handpicked leaves directly from Assam tea gardens — crafted for exceptional aroma, authentic taste, and daily warmth.
-            </p>
+          {/* Gold Emblem Line Divider */}
+          <div className="flex items-center justify-center gap-3 my-3">
+            <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+            <div className="text-[#2d5a27]"><Leaf size={15} fill="#2d5a27" /></div>
+            <div className="w-12 h-[1px] bg-[#B38A45]/40" />
           </div>
 
-          {/* View all */}
+          {/* Paragraph Subtext */}
+          <p className="max-w-xl text-xs sm:text-sm text-[#524f46] font-medium leading-relaxed mb-4">
+            Handpicked leaves directly from Assam tea gardens — crafted for exceptional aroma, authentic taste, and daily warmth.
+          </p>
+
+          {/* Explore entire collection link */}
           <Link
             to="/shop"
-            className="group inline-flex w-fit items-center gap-2 border-b-2 border-[#173b25] pb-1 text-xs font-extrabold uppercase tracking-[0.2em] text-[#173b25] transition-all hover:border-[#B38A45] hover:text-[#B38A45]"
+            className="group inline-flex items-center gap-2 border-b-2 border-[#173b25] pb-0.5 text-xs font-extrabold uppercase tracking-[0.2em] text-[#173b25] transition-all hover:border-[#B38A45] hover:text-[#B38A45]"
           >
             <span>Explore Entire Collection</span>
             <ArrowRight
-              size={15}
+              size={14}
               className="transition-transform duration-300 group-hover:translate-x-1"
             />
           </Link>
