@@ -94,13 +94,13 @@ const Header = () => {
 
   const liveSearchResults = searchQuery.trim()
     ? allProducts.filter(p => {
-        const q = searchQuery.toLowerCase().trim();
-        return (
-          p.name?.toLowerCase().includes(q) ||
-          p.category?.toLowerCase().includes(q) ||
-          p.description?.toLowerCase().includes(q)
-        );
-      })
+      const q = searchQuery.toLowerCase().trim();
+      return (
+        p.name?.toLowerCase().includes(q) ||
+        p.category?.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q)
+      );
+    })
     : [];
 
   const navLinks = [
@@ -119,7 +119,7 @@ const Header = () => {
         <div className="hidden sm:block w-24" /> {/* Spacer */}
 
         <div className="flex-1 text-center flex items-center justify-center gap-1.5 sm:gap-2">
-         
+
           <span>FREE SHIPPING on all prepaid orders above ₹499</span>
         </div>
 
@@ -137,35 +137,21 @@ const Header = () => {
       </div>
 
       {/* ── 2. MAIN NAVBAR ── */}
-      <nav 
-        className={`transition-all duration-300 ${
-          isTransparent 
-            ? 'bg-transparent border-b border-[#173B25]/10 py-3.5 md:py-4' 
-            : 'bg-[#F7F2E8]/95 backdrop-blur-md border-b border-[#EFE6D7] py-3 md:py-3.5 shadow-xs'
-        }`}
+      <nav
+        className={`transition-all duration-300 ${isTransparent
+            ? 'bg-transparent border-b border-[#173B25]/10 py-1.5 md:py-2'
+            : 'bg-[#F7F2E8]/95 backdrop-blur-md border-b border-[#EFE6D7] py-1 md:py-1.5 shadow-xs'
+          }`}
       >
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between">
 
           {/* Logo (Left) */}
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="flex items-center gap-2">
-              <svg width="38" height="40" viewBox="0 0 50 52" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:scale-105">
-                <path d="M25 5C15 15 8 28 8 38C8 44 12 48 18 48C26 48 30 38 30 30" stroke="#173B25" strokeWidth="3.5" strokeLinecap="round"/>
-                <path d="M25 5C35 15 42 28 42 38C42 44 38 48 32 48C24 48 20 38 20 30" stroke="#B38A45" strokeWidth="2.5" strokeLinecap="round"/>
-                <path d="M25 8V44" stroke="#173B25" strokeWidth="2.5" strokeLinecap="round"/>
-              </svg>
-              <div className="flex flex-col">
-                <span className="text-2xl font-bold tracking-tight leading-none text-[#173B25] transition-colors duration-300" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif" }}>
-                  Vaarta
-                </span>
-                <span className="text-xs font-semibold tracking-[0.2em] leading-none mt-0.5 text-[#173B25] transition-colors duration-300" style={{ fontFamily: '"Noto Sans Devanagari", sans-serif' }}>
-                  चाय
-                </span>
-                <span className="text-[8px] font-medium tracking-tighter leading-none mt-1 text-[#1D2A21]/70 transition-colors duration-300">
-                  हर घूंट में छुपी एक कहानी
-                </span>
-              </div>
-            </div>
+          <Link to="/" className="flex items-center gap-2.5 group shrink-0">
+            <img
+              src="https://res.cloudinary.com/dcjn4y284/image/upload/v1787474399/VARTA_CHAI_LOGO_NEW_PNG_2_gxlhbz.png"
+              alt="Vaarta Chai Logo"
+              className="h-12 sm:h-14 md:h-16 lg:h-18 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            />
           </Link>
 
           {/* Center Navigation Links (Desktop) */}
@@ -226,11 +212,10 @@ const Header = () => {
                 <Link
                   key={item.label}
                   to={item.path}
-                  className={`relative py-1 text-xs font-semibold tracking-[0.2em] uppercase transition-colors duration-300 group ${
-                    isActive
+                  className={`relative py-1 text-xs font-semibold tracking-[0.2em] uppercase transition-colors duration-300 group ${isActive
                       ? 'text-[#B38A45] border-b-2 border-[#B38A45] pb-0.5'
                       : 'text-[#173B25] hover:text-[#B38A45]'
-                  }`}
+                    }`}
                 >
                   <span>{item.label}</span>
                   {!isActive && (
@@ -253,8 +238,8 @@ const Header = () => {
             </button>
 
             {/* Account Icon */}
-            <Link 
-              to="/account" 
+            <Link
+              to="/account"
               className="p-1.5 hidden sm:block transition-colors duration-300 text-[#173B25] hover:text-[#B38A45]"
               aria-label="Account"
             >
@@ -262,8 +247,8 @@ const Header = () => {
             </Link>
 
             {/* Wishlist Icon */}
-            <Link 
-              to="/wishlist" 
+            <Link
+              to="/wishlist"
               className="p-1.5 relative transition-colors duration-300 group text-[#173B25] hover:text-[#B38A45]"
               aria-label="Wishlist"
             >
@@ -276,8 +261,8 @@ const Header = () => {
             </Link>
 
             {/* Shopping Bag Icon */}
-            <Link 
-              to="/cart" 
+            <Link
+              to="/cart"
               className="p-1.5 relative transition-colors duration-300 group text-[#173B25] hover:text-[#B38A45]"
               aria-label="Shopping Bag"
             >
@@ -408,16 +393,13 @@ const Header = () => {
           >
             {/* Top Bar inside Mobile Drawer */}
             <div className="flex items-center justify-between pb-6 border-b border-[#EFE6D7]">
-              <div className="flex items-center gap-2">
-                <svg width="34" height="36" viewBox="0 0 50 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M25 5C15 15 8 28 8 38C8 44 12 48 18 48C26 48 30 38 30 30" stroke="#173B25" strokeWidth="3.5" strokeLinecap="round"/>
-                  <path d="M25 5C35 15 42 28 42 38C42 44 38 48 32 48C24 48 20 38 20 30" stroke="#B38A45" strokeWidth="2.5" strokeLinecap="round"/>
-                  <path d="M25 8V44" stroke="#173B25" strokeWidth="2.5" strokeLinecap="round"/>
-                </svg>
-                <span className="text-2xl font-bold text-[#173B25] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif" }}>
-                  Vaarta Chai
-                </span>
-              </div>
+              <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+                <img
+                  src="https://res.cloudinary.com/dcjn4y284/image/upload/v1787474399/VARTA_CHAI_LOGO_NEW_PNG_2_gxlhbz.png"
+                  alt="Vaarta Chai Logo"
+                  className="h-14 sm:h-16 w-auto object-contain"
+                />
+              </Link>
 
               <button
                 onClick={() => setIsMobileMenuOpen(false)}

@@ -78,7 +78,7 @@ const Checkout = () => {
         shipping: formData, paymentMethod: formData.paymentMethod,
         paymentId, status, paymentStatus, createdAt: serverTimestamp(),
       });
-      if (status === "confirmed") { 
+      if (status === "confirmed") {
         // Update product stocks
         for (const item of items) {
           try {
@@ -98,7 +98,7 @@ const Checkout = () => {
             }
           } catch (err) { console.error("Error updating stock:", err); }
         }
-        await clearCart(); setOrderStatus("success"); 
+        await clearCart(); setOrderStatus("success");
       }
       else setOrderStatus("failed");
     } catch (e) { console.error("Save Order Error:", e); setOrderStatus("failed"); }
@@ -111,7 +111,7 @@ const Checkout = () => {
     if (formData.paymentMethod === "online") {
       const options = {
         key: "rzp_test_YOUR_KEY_HERE", amount: total * 100, currency: "INR",
-        name: "Vaarta Chai", description: "Tea Order", image: "https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png",
+        name: "Vaarta Chai", description: "Tea Order", image: "https://res.cloudinary.com/dcjn4y284/image/upload/v1787474399/VARTA_CHAI_LOGO_NEW_PNG_2_gxlhbz.png",
         handler: async (response) => { await saveOrder(response.razorpay_payment_id, "confirmed", "captured"); setIsProcessing(false); },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         theme: { color: "#173b25" },
@@ -225,11 +225,10 @@ const Checkout = () => {
                               }));
                               triggerToast(`Selected: ${addr.name}`);
                             }}
-                            className={`p-3.5 border cursor-pointer transition-all relative rounded-xl ${
-                              isSelected
+                            className={`p-3.5 border cursor-pointer transition-all relative rounded-xl ${isSelected
                                 ? 'border-[#173b25] bg-[#faf5ec] shadow-sm'
                                 : 'border-[#e2d7c5] bg-[#faf5ec] hover:border-[#173b25]'
-                            }`}
+                              }`}
                           >
                             {addr.isDefault && (
                               <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#B38A45]/15 border border-[#B38A45]/30 text-[#B38A45] text-[8px] font-extrabold uppercase tracking-wider rounded">
@@ -237,9 +236,8 @@ const Checkout = () => {
                               </span>
                             )}
                             <div className="flex items-start gap-2.5">
-                              <div className={`w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${
-                                isSelected ? 'border-[#173b25] bg-[#173b25] text-white' : 'border-[#e2d7c5]'
-                              }`}>
+                              <div className={`w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${isSelected ? 'border-[#173b25] bg-[#173b25] text-white' : 'border-[#e2d7c5]'
+                                }`}>
                                 {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
                               <div className="space-y-1 text-xs pr-10">
@@ -265,11 +263,10 @@ const Checkout = () => {
                             pincode: ""
                           }));
                         }}
-                        className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded-xl ${
-                          selectedAddressId === "custom"
+                        className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded-xl ${selectedAddressId === "custom"
                             ? 'border-[#173b25] bg-[#faf5ec]'
                             : 'border-dashed border-[#e2d7c5] bg-[#faf5ec] hover:border-[#173b25]'
-                        }`}
+                          }`}
                       >
                         <Plus size={14} className="text-[#173b25]" />
                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#173b25]">

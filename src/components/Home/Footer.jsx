@@ -12,6 +12,10 @@ import {
   ArrowUpRight,
   Check,
   Leaf,
+  ShieldCheck,
+  Truck,
+  Award,
+  Sparkles,
 } from 'lucide-react';
 
 const Footer = () => {
@@ -20,470 +24,295 @@ const Footer = () => {
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-
     if (email.trim()) {
       setSubscribed(true);
       setEmail('');
-
-      setTimeout(() => {
-        setSubscribed(false);
-      }, 3000);
+      setTimeout(() => setSubscribed(false), 3500);
     }
   };
 
   return (
-    <footer className="bg-[#173b25] font-sans text-white border-t border-[#B38A45]/30">
+    <footer className="relative bg-gradient-to-b from-[#0B1E13] via-[#0E2719] to-[#07150C] font-sans text-white border-t border-[#B38A45]/30 overflow-hidden">
+      {/* Top Gold Gradient Line */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#B38A45] to-transparent opacity-80" />
 
-      {/* =====================================================
-          NEWSLETTER
-      ====================================================== */}
+      {/* Background Decorative Ambient Glows */}
+      <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[#B38A45]/5 rounded-full blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#173B25]/30 rounded-full blur-3xl" />
 
-      <section className="border-b border-white/10">
-        <div className="mx-auto flex max-w-[1250px] flex-col gap-7 px-5 py-12 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
-
-          {/* Text */}
-
-          <div className="max-w-md">
-
-            <div className="mb-2 flex items-center gap-2">
-
-              <span className="h-px w-6 bg-[#B38A45]" />
-
-              <span className="text-[9px] font-extrabold uppercase tracking-[0.28em] text-[#B38A45]">
-                Stay In The Loop
-              </span>
-
+      {/* ── 1. VALUE PILLARS & TRUST BADGES ── */}
+      <section className="border-b border-[#B38A45]/20 bg-[#08170F]/60 backdrop-blur-sm relative z-10">
+        <div className="max-w-[1350px] mx-auto px-5 py-8 sm:px-8 lg:px-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+            <div className="flex flex-col sm:flex-row items-center md:items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#B38A45]/30 transition-all duration-300">
+              <div className="w-10 h-10 rounded-full bg-[#B38A45]/15 border border-[#B38A45]/40 flex items-center justify-center text-[#D4B66F] shrink-0">
+                <Leaf size={18} />
+              </div>
+              <div>
+                <h5 className="text-xs font-bold text-[#F7F2E8] tracking-wide">100% Pure Assam Tea</h5>
+                <p className="text-[10px] text-white/50 mt-0.5">Sourced directly from pristine garden estates</p>
+              </div>
             </div>
 
-            <h2 className="font-serif text-3xl font-medium leading-tight text-[#f7f2e8]">
-              Join The <span className="italic text-[#B38A45]">Vaarta Family</span>
-            </h2>
-
-            <h3 
-              className="text-lg font-normal text-[#d4b66f] mt-1"
-              style={{ fontFamily: '"Noto Serif Devanagari", "Rozha One", Georgia, serif' }}
-            >
-              हर घूंट में एक नई कहानी
-            </h3>
-
-            {/* Gold Leaf Emblem Line Divider */}
-            <div className="flex items-center gap-3 my-3">
-              <div className="w-10 h-[1px] bg-[#B38A45]/40" />
-              <div className="text-[#B38A45]"><Leaf size={14} fill="#B38A45" /></div>
-              <div className="w-10 h-[1px] bg-[#B38A45]/40" />
+            <div className="flex flex-col sm:flex-row items-center md:items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#B38A45]/30 transition-all duration-300">
+              <div className="w-10 h-10 rounded-full bg-[#B38A45]/15 border border-[#B38A45]/40 flex items-center justify-center text-[#D4B66F] shrink-0">
+                <Truck size={18} />
+              </div>
+              <div>
+                <h5 className="text-xs font-bold text-[#F7F2E8] tracking-wide">Complimentary Shipping</h5>
+                <p className="text-[10px] text-white/50 mt-0.5">Free delivery on all prepaid orders over ₹499</p>
+              </div>
             </div>
 
-            <p className="mt-1 text-xs leading-6 text-white/60 font-medium">
-              New blends, special offers, and stories from the world of Assam tea.
-            </p>
+            <div className="flex flex-col sm:flex-row items-center md:items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#B38A45]/30 transition-all duration-300">
+              <div className="w-10 h-10 rounded-full bg-[#B38A45]/15 border border-[#B38A45]/40 flex items-center justify-center text-[#D4B66F] shrink-0">
+                <ShieldCheck size={18} />
+              </div>
+              <div>
+                <h5 className="text-xs font-bold text-[#F7F2E8] tracking-wide">Encrypted Checkout</h5>
+                <p className="text-[10px] text-white/50 mt-0.5">100% secure payments via UPI, Cards & Netbanking</p>
+              </div>
+            </div>
 
+            <div className="flex flex-col sm:flex-row items-center md:items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#B38A45]/30 transition-all duration-300">
+              <div className="w-10 h-10 rounded-full bg-[#B38A45]/15 border border-[#B38A45]/40 flex items-center justify-center text-[#D4B66F] shrink-0">
+                <Award size={18} />
+              </div>
+              <div>
+                <h5 className="text-xs font-bold text-[#F7F2E8] tracking-wide">Artisanal Small Batches</h5>
+                <p className="text-[10px] text-white/50 mt-0.5">Hand-picked leaves crafted for rich aroma</p>
+              </div>
+            </div>
           </div>
-
-
-          {/* Email */}
-
-          <form
-            onSubmit={handleSubscribe}
-            className="flex w-full max-w-md border border-white/20 bg-white/[0.06] p-1 backdrop-blur-sm"
-          >
-
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email address"
-              required
-              className="min-w-0 flex-1 bg-transparent px-4 py-3 text-xs text-white outline-none placeholder:text-white/35"
-            />
-
-            <button
-              type="submit"
-              className="flex shrink-0 items-center gap-2 bg-[#b38a45] px-4 py-3 text-[9px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#c49a55]"
-            >
-              <span>{subscribed ? 'THANKS' : 'SUBSCRIBE'}</span>
-
-              {subscribed ? (
-                <Check size={13} />
-              ) : (
-                <Send size={12} />
-              )}
-            </button>
-
-          </form>
-
         </div>
       </section>
 
-
-      {/* =====================================================
-          MAIN FOOTER
-      ====================================================== */}
-
-      <div className="mx-auto max-w-[1250px] px-5 py-12 sm:px-8 lg:px-10">
-
-        <div className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4 lg:grid-cols-5">
-
-
-          {/* =================================================
-              BRAND
-          ================================================== */}
-
-          <div className="col-span-2 md:col-span-2 lg:col-span-1">
-
-            <Link
-              to="/"
-              className="group inline-flex items-center gap-2"
-            >
-
-              {/* Logo */}
-
-              <div className="relative flex h-10 w-10 items-center justify-center">
-
-                <svg
-                  width="38"
-                  height="40"
-                  viewBox="0 0 50 52"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-
-                  <path
-                    d="M25 5C15 15 8 28 8 38C8 44 12 48 18 48C26 48 30 38 30 30"
-                    stroke="#d4b66f"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                  />
-
-                  <path
-                    d="M25 5C35 15 42 28 42 38C42 44 38 48 32 48C24 48 20 38 20 30"
-                    stroke="#d4b66f"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-
-                  <path
-                    d="M25 8V44"
-                    stroke="#f7f2e8"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-
-                </svg>
-
-              </div>
-
-
-              <div>
-
-                <span className="block font-serif text-2xl leading-none text-[#f7f2e8]">
-                  Vaarta
-                </span>
-
-                <span className="mt-1 block text-[9px] font-bold tracking-[0.3em] text-[#d4b66f]">
-                  चाय
-                </span>
-
-              </div>
-
-            </Link>
-
-
-            <p className="mt-5 font-serif text-sm italic text-[#d4b66f]">
+      {/* ── 2. NEWSLETTER VIP CLUB SECTION ── */}
+      <section className="border-b border-[#B38A45]/20 relative z-10">
+        <div className="max-w-[1350px] mx-auto px-5 py-12 sm:px-8 lg:px-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          <div className="max-w-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B38A45]/15 border border-[#B38A45]/30 text-[#D4B66F] text-[9.5px] font-extrabold uppercase tracking-[0.25em] mb-3">
+              <Sparkles size={11} className="text-[#D4B66F]" />
+              <span>Vaarta Tea Club</span>
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl font-medium leading-tight text-[#F7F2E8]">
+              Join Our <span className="italic text-[#D4B66F]">Connoisseur Circle</span>
+            </h2>
+            <p className="text-sm font-medium text-[#D4B66F] mt-1" style={{ fontFamily: '"Noto Serif Devanagari", Georgia, serif' }}>
               हर घूंट में छुपी एक कहानी
             </p>
+            <p className="mt-2 text-xs leading-relaxed text-white/60 font-normal max-w-md">
+              Subscribe to receive private tasting invitations, new seasonal flush announcements, and exclusive tea pairing guides.
+            </p>
+          </div>
 
-            <p className="mt-3 max-w-[230px] text-[11px] leading-6 text-white/50">
-              Premium Assam tea crafted for conversations,
-              quiet mornings and memorable moments.
+          {/* Email Subscription Box */}
+          <form onSubmit={handleSubscribe} className="w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row items-stretch gap-2.5 p-1.5 rounded-2xl bg-white/[0.05] border border-white/15 backdrop-blur-md max-w-md shadow-2xl focus-within:border-[#B38A45] transition-all">
+              <div className="flex items-center gap-2.5 px-4 py-3 flex-1">
+                <Mail size={16} className="text-[#D4B66F] shrink-0" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address..."
+                  required
+                  className="w-full bg-transparent text-xs text-white outline-none placeholder:text-white/40"
+                />
+              </div>
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-2 bg-[#B38A45] hover:bg-[#c99e52] text-[#0B1E13] px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 shrink-0 shadow-lg shadow-[#B38A45]/20 hover:scale-[1.02] active:scale-95"
+              >
+                <span>{subscribed ? 'Joined!' : 'Subscribe'}</span>
+                {subscribed ? <Check size={14} /> : <Send size={13} />}
+              </button>
+            </div>
+            {subscribed && (
+              <p className="text-[11px] text-[#D4B66F] mt-2 font-medium flex items-center gap-1.5">
+                <Check size={12} /> Welcome to the Vaarta Chai family!
+              </p>
+            )}
+          </form>
+        </div>
+      </section>
+
+      {/* ── 3. MAIN FOOTER CONTENT COLUMNS ── */}
+      <div className="max-w-[1350px] mx-auto px-5 py-14 sm:px-8 lg:px-10 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12">
+          
+          {/* Col 1: Brand Identity */}
+          <div className="lg:col-span-2 space-y-5">
+            <Link to="/" className="inline-block group">
+              <img
+                src="https://res.cloudinary.com/dcjn4y284/image/upload/v1787474399/VARTA_CHAI_LOGO_NEW_PNG_2_gxlhbz.png"
+                alt="Vaarta Chai Logo"
+                className="h-16 sm:h-20 md:h-24 w-auto object-contain brightness-0 invert transition-transform duration-300 group-hover:scale-105"
+              />
+            </Link>
+
+            <p className="text-sm italic font-serif text-[#D4B66F]">
+              "हर घूंट में छुपी एक कहानी"
             </p>
 
+            <p className="text-xs leading-relaxed text-white/60 max-w-sm">
+              Hand-picked from the lush tea gardens of Assam. Crafted to transform everyday moments into warm, memorable conversations.
+            </p>
 
-            {/* Social */}
-
-            <div className="mt-6 flex items-center gap-2">
-
+            {/* Social Icons */}
+            <div className="pt-2 flex items-center gap-3">
               {[
-                {
-                  icon: Instagram,
-                  href: 'https://instagram.com',
-                  label: 'Instagram',
-                },
-                {
-                  icon: Facebook,
-                  href: 'https://facebook.com',
-                  label: 'Facebook',
-                },
-                {
-                  icon: MessageCircle,
-                  href: 'https://whatsapp.com',
-                  label: 'WhatsApp',
-                },
+                { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
+                { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
+                { icon: MessageCircle, href: 'https://whatsapp.com', label: 'WhatsApp' },
               ].map(({ icon: Icon, href, label }) => (
-
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noreferrer"
                   aria-label={label}
-                  className="flex h-8 w-8 items-center justify-center border border-white/15 text-white/60 transition-all duration-300 hover:border-[#b38a45] hover:bg-[#b38a45] hover:text-white"
+                  className="w-9 h-9 rounded-xl border border-white/15 bg-white/[0.04] text-white/70 flex items-center justify-center transition-all duration-300 hover:bg-[#B38A45] hover:border-[#B38A45] hover:text-[#0B1E13] hover:scale-110 shadow-sm"
                 >
-                  <Icon size={13} />
+                  <Icon size={15} />
                 </a>
-
               ))}
-
             </div>
-
           </div>
 
-
-          {/* =================================================
-              QUICK LINKS
-          ================================================== */}
-
+          {/* Col 2: Quick Links */}
           <div>
-
-            <h4 className="mb-5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#d4b66f]">
+            <h4 className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#D4B66F] mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B38A45]" />
               Explore
             </h4>
-
-            <ul className="space-y-3">
-
+            <ul className="space-y-3 text-xs font-medium">
               {[
                 ['Home', '/'],
-                ['About Us', '/about'],
-                ['Shop', '/shop'],
-                ['Gift Box', '/shop?category=Gift+Collection'],
-                ['Varta Journal', '/about'],
+                ['Shop Collection', '/shop'],
+                ['Gift Boxes', '/shop?category=Gift+Collection'],
+                ['Our Story', '/about'],
+                ['Tea Journal', '/about'],
                 ['Contact Us', '/contact'],
               ].map(([label, path]) => (
-
                 <li key={label}>
-
                   <Link
                     to={path}
-                    className="group inline-flex items-center gap-1 text-[11px] text-white/55 transition-colors hover:text-white"
+                    className="group inline-flex items-center gap-1.5 text-white/65 hover:text-[#D4B66F] transition-colors"
                   >
-                    {label}
-
-                    <ArrowUpRight
-                      size={9}
-                      className="opacity-0 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-70"
-                    />
+                    <span className="w-1 h-1 rounded-full bg-[#B38A45]/0 group-hover:bg-[#B38A45] transition-all" />
+                    <span>{label}</span>
+                    <ArrowUpRight size={10} className="opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0 text-[#D4B66F]" />
                   </Link>
-
                 </li>
-
               ))}
-
             </ul>
-
           </div>
 
-
-          {/* =================================================
-              CUSTOMER CARE
-          ================================================== */}
-
+          {/* Col 3: Customer Care */}
           <div>
-
-            <h4 className="mb-5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#d4b66f]">
-              Customer Care
+            <h4 className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#D4B66F] mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B38A45]" />
+              Customer Support
             </h4>
-
-            <ul className="space-y-3">
-
+            <ul className="space-y-3 text-xs font-medium">
               {[
                 ['My Account', '/account'],
                 ['Track Order', '/orders'],
                 ['Wishlist', '/wishlist'],
-                ['FAQ', '/contact'],
-                ['Shipping Policy', '/terms'],
-                ['Returns', '/privacy'],
+                ['Privacy Policy', '/privacy'],
+                ['Terms & Conditions', '/terms'],
+                ['Refund Policy', '/terms'],
               ].map(([label, path]) => (
-
                 <li key={label}>
-
                   <Link
                     to={path}
-                    className="text-[11px] text-white/55 transition-colors hover:text-white"
+                    className="group inline-flex items-center gap-1.5 text-white/65 hover:text-[#D4B66F] transition-colors"
                   >
-                    {label}
+                    <span className="w-1 h-1 rounded-full bg-[#B38A45]/0 group-hover:bg-[#B38A45] transition-all" />
+                    <span>{label}</span>
                   </Link>
-
                 </li>
-
               ))}
-
             </ul>
-
           </div>
 
-
-          {/* =================================================
-              CONTACT
-          ================================================== */}
-
+          {/* Col 4: Contact & Boutique Info */}
           <div>
-
-            <h4 className="mb-5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#d4b66f]">
+            <h4 className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#D4B66F] mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B38A45]" />
               Get In Touch
             </h4>
-
-            <div className="space-y-3">
-
-              <a
-                href="tel:+911234567890"
-                className="flex items-start gap-2.5 text-[11px] text-white/55 transition-colors hover:text-white"
-              >
-                <Phone
-                  size={13}
-                  className="mt-0.5 shrink-0 text-[#b38a45]"
-                />
-
+            <div className="space-y-3.5 text-xs text-white/65">
+              <a href="tel:+911234567890" className="flex items-center gap-3 hover:text-[#D4B66F] transition-colors group">
+                <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#D4B66F] group-hover:bg-[#B38A45] group-hover:text-[#0B1E13] transition-all">
+                  <Phone size={12} />
+                </div>
                 <span>+91 12345 67890</span>
               </a>
 
-
-              <a
-                href="mailto:hello@vartachai.com"
-                className="flex items-start gap-2.5 text-[11px] text-white/55 transition-colors hover:text-white"
-              >
-                <Mail
-                  size={13}
-                  className="mt-0.5 shrink-0 text-[#b38a45]"
-                />
-
+              <a href="mailto:hello@vartachai.com" className="flex items-center gap-3 hover:text-[#D4B66F] transition-colors group">
+                <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#D4B66F] group-hover:bg-[#B38A45] group-hover:text-[#0B1E13] transition-all">
+                  <Mail size={12} />
+                </div>
                 <span>hello@vartachai.com</span>
               </a>
 
-
-              <div className="flex items-start gap-2.5 text-[11px] leading-5 text-white/55">
-
-                <MapPin
-                  size={13}
-                  className="mt-0.5 shrink-0 text-[#b38a45]"
-                />
-
-                <span>
-                  Indore, Madhya Pradesh,
-                  <br />
-                  India
-                </span>
-
+              <div className="flex items-start gap-3">
+                <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#D4B66F] shrink-0 mt-0.5">
+                  <MapPin size={12} />
+                </div>
+                <span className="leading-relaxed">Indore, Madhya Pradesh, India</span>
               </div>
 
-
-              <div className="flex items-start gap-2.5 text-[11px] text-white/55">
-
-                <Clock
-                  size={13}
-                  className="mt-0.5 shrink-0 text-[#b38a45]"
-                />
-
-                <span>Mon – Sat · 10AM – 7PM</span>
-
+              <div className="flex items-start gap-3">
+                <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#D4B66F] shrink-0 mt-0.5">
+                  <Clock size={12} />
+                </div>
+                <span>Mon – Sat: 10 AM – 7 PM</span>
               </div>
-
             </div>
-
-          </div>
-
-
-          {/* =================================================
-              PAYMENT
-          ================================================== */}
-
-          <div>
-
-            <h4 className="mb-5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#d4b66f]">
-              Secure Payments
-            </h4>
-
-            <p className="mb-4 text-[10px] leading-5 text-white/40">
-              Safe and secure checkout powered by trusted payment methods.
-            </p>
-
-
-            <div className="flex flex-wrap gap-1.5">
-
-              {['VISA', 'MC', 'UPI', 'Razorpay'].map((method) => (
-
-                <span
-                  key={method}
-                  className="border border-white/10 bg-white/[0.05] px-2.5 py-1.5 text-[8px] font-bold tracking-wide text-white/60"
-                >
-                  {method}
-                </span>
-
-              ))}
-
-            </div>
-
           </div>
 
         </div>
 
-
-        {/* =====================================================
-            BOTTOM BAR
-        ====================================================== */}
-
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-[9px] uppercase tracking-[0.12em] text-white/35 sm:flex-row sm:items-center sm:justify-between">
-
-          <p>
-            © 2024 Varta Chai. All Rights Reserved.
-          </p>
-
-          <div className="flex gap-5">
-
-            <Link
-              to="/privacy"
-              className="transition-colors hover:text-white/70"
-            >
-              Privacy
-            </Link>
-
-            <Link
-              to="/terms"
-              className="transition-colors hover:text-white/70"
-            >
-              Terms
-            </Link>
-
-            <Link
-              to="/terms"
-              className="transition-colors hover:text-white/70"
-            >
-              Refunds
-            </Link>
-
+        {/* ── 4. PAYMENT & SECURITY ROW ── */}
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2 text-xs text-white/50">
+            <ShieldCheck size={15} className="text-[#D4B66F]" />
+            <span>Guaranteed 100% Safe & Secure Checkout</span>
           </div>
 
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {['VISA', 'MASTERCARD', 'UPI', 'NETBANKING', 'RAZORPAY'].map((item) => (
+              <span key={item} className="px-3 py-1 rounded-md bg-white/[0.04] border border-white/10 text-[9px] font-bold tracking-wider text-white/60 uppercase">
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
 
+        {/* ── 5. BOTTOM COPYRIGHT BAR ── */}
+        <div className="mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-medium tracking-wider text-white/40 uppercase">
+          <p>© {new Date().getFullYear()} Vaarta Chai. All Rights Reserved.</p>
+          <div className="flex items-center gap-6">
+            <Link to="/privacy" className="hover:text-[#D4B66F] transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-[#D4B66F] transition-colors">Terms of Service</Link>
+            <Link to="/terms" className="hover:text-[#D4B66F] transition-colors">Refund Policy</Link>
+          </div>
+        </div>
       </div>
 
-
-      {/* =====================================================
-          WHATSAPP
-      ====================================================== */}
-
+      {/* Floating WhatsApp Button */}
       <a
         href="https://wa.me/911234567890"
         target="_blank"
         rel="noreferrer"
         aria-label="Chat on WhatsApp"
-        className="fixed bottom-5 right-5 z-[99] flex h-11 w-11 items-center justify-center rounded-full bg-[#25d366] text-white shadow-lg transition-transform duration-300 hover:scale-110"
+        className="fixed bottom-6 right-6 z-[99] flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-[#25D366]/40 active:scale-95"
       >
-        <MessageCircle
-          size={22}
-          fill="currentColor"
-          strokeWidth={0}
-        />
+        <MessageCircle size={24} fill="currentColor" strokeWidth={0} />
       </a>
-
     </footer>
   );
 };
