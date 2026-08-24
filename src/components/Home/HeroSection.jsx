@@ -35,11 +35,9 @@ const HeroSection = () => {
       className="relative w-full font-sans overflow-hidden bg-[#faf5ec]"
       aria-label="Vaarta Chai Hero Section"
     >
-      {/* ========================================================================= */}
-      {/* 1. DESKTOP VIEW (lg:block - Full Cloudinary Background Image & Left Content) */}
-      {/* ========================================================================= */}
+      
       <div 
-        className="hidden lg:block relative w-full min-h-[730px] xl:min-h-[790px] 2xl:min-h-[850px] bg-cover bg-center bg-no-repeat pt-[185px] xl:pt-[200px] 2xl:pt-[215px] pb-24 xl:pb-28"
+        className="hidden lg:block relative w-full min-h-[820px] xl:min-h-[880px] 2xl:min-h-[950px] bg-cover bg-center bg-no-repeat pt-[205px] xl:pt-[225px] 2xl:pt-[245px] pb-28 xl:pb-32"
         style={{ backgroundImage: `url("${HERO_BG_DESKTOP}")` }}
       >
         {/* Soft Ambient Shadow Overlay on left for maximum text contrast */}
@@ -120,7 +118,7 @@ const HeroSection = () => {
       {/* ========================================================================= */}
       {/* 2. MOBILE & MEDIUM DEVICES VIEW (lg:hidden - Full Screen Image & Clean Text) */}
       {/* ========================================================================= */}
-      <div className="lg:hidden relative w-full pt-[130px] sm:pt-[150px] pb-14 sm:pb-16 bg-[#faf5ec]">
+      <div className="lg:hidden relative w-full pt-[90px] sm:pt-[150px] pb-14 sm:pb-16 bg-[#faf5ec]">
         
         {/* Soft Ambient Background Glows */}
         <div className="pointer-events-none absolute -left-36 top-16 h-80 w-80 rounded-full bg-[#dce7d7]/40 blur-3xl" />

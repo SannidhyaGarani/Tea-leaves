@@ -12,7 +12,7 @@ const Hero = () => {
   ];
 
   return (
-    <section className="bg-[#fbf8f3] pt-28 md:pt-32 pb-12 md:pb-16 px-4 md:px-10 overflow-hidden relative font-sans">
+    <section className="bg-[#fbf8f3] pt-32 md:pt-40 pb-16 md:pb-24 px-4 md:px-10 overflow-hidden relative font-sans">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
         {/* ── LEFT CONTENT (Cols 1-6) ── */}
