@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Search, Menu, X, Heart, ShoppingBag, ChevronDown, Instagram, Facebook, MessageCircle, Leaf, ArrowUpRight } from 'lucide-react';
+import { User, Search, Menu, X, Heart, ShoppingBag, ChevronDown, ChevronRight, Instagram, Facebook, MessageCircle, Leaf, ArrowUpRight } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './useAuth';
 import { useStore } from './StoreProvider';
@@ -24,6 +24,7 @@ const POPULAR_SEARCHES = [
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileCollectionOpen, setIsMobileCollectionOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
@@ -43,6 +44,7 @@ const Header = () => {
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setIsMobileCollectionOpen(false);
     setIsShopDropdownOpen(false);
     setIsSearchActive(false);
   }, [location]);
@@ -381,67 +383,186 @@ const Header = () => {
         )}
       </AnimatePresence>
 
-      {/* ── 4. FULL-SCREEN PREMIUM MOBILE NAVIGATION DRAWER ── */}
+      {/* ── 4. FULL-SCREEN LUXURY MOBILE NAVIGATION SIDEBAR DRAWER ── */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[120] bg-[#F7F2E8] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto"
-          >
-            {/* Top Bar inside Mobile Drawer */}
-            <div className="flex items-center justify-between pb-6 border-b border-[#EFE6D7]">
-              <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
-                <img
-                  src="https://res.cloudinary.com/dcjn4y284/image/upload/v1787474399/VARTA_CHAI_LOGO_NEW_PNG_2_gxlhbz.png"
-                  alt="Vaarta Chai Logo"
-                  className="h-14 sm:h-16 w-auto object-contain"
-                />
-              </Link>
+          <>
+            {/* Backdrop Dimmer Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 z-[115] bg-black/60 backdrop-blur-sm lg:hidden"
+            />
 
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 text-[#173B25] bg-[#EFE6D7]/60 hover:bg-[#EFE6D7] rounded-full transition-colors"
-                aria-label="Close mobile menu"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Drawer Navigation Links */}
-            <div className="flex flex-col py-8 gap-2 flex-1 justify-center">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="py-3.5 border-b border-[#EFE6D7] text-xl font-medium tracking-[0.15em] text-[#173B25] hover:text-[#B38A45] flex items-center justify-between transition-colors group"
-                >
-                  <span>{link.label}</span>
-                  <ArrowUpRight size={18} className="text-[#B38A45] opacity-0 group-hover:opacity-100 transition-opacity" />
+            {/* Luxury Mobile Sidebar Drawer */}
+            <motion.div
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '100%' }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-[360px] z-[120] bg-[#FAF5EC] text-[#173B25] shadow-2xl flex flex-col justify-between border-l border-[#B38A45]/30 overflow-y-auto font-sans lg:hidden"
+            >
+              {/* Top Drawer Header */}
+              <div className="p-4 sm:p-5 border-b border-[#E8DFCF] flex items-center justify-between bg-[#F4EBD9]">
+                <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">
+                  <img
+                    src="https://res.cloudinary.com/dcjn4y284/image/upload/v1787474399/VARTA_CHAI_LOGO_NEW_PNG_2_gxlhbz.png"
+                    alt="Vaarta Chai Logo"
+                    className="h-12 w-auto object-contain"
+                  />
                 </Link>
-              ))}
-            </div>
 
-            {/* Drawer Footer */}
-            <div className="pt-6 border-t border-[#EFE6D7] flex flex-col gap-4">
-              <div className="flex items-center gap-2 text-xs font-semibold tracking-widest text-[#B38A45] uppercase">
-                <Leaf size={14} />
-                <span>100% PREMIUM ASSAM TEA</span>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-[#173B25] hover:bg-[#E8DFCF] rounded-full transition-colors cursor-pointer"
+                  aria-label="Close mobile menu"
+                >
+                  <X size={20} />
+                </button>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-[#1D2A21]/70">
-                <span>© {new Date().getFullYear()} Vaarta Chai</span>
-                <div className="flex items-center gap-4">
-                  <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#173B25]">Instagram</a>
-                  <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-[#173B25]">Facebook</a>
+              {/* Quick Actions Shortcuts (Account, Wishlist, Cart) */}
+              <div className="px-5 pt-4 pb-3 border-b border-[#E8DFCF] bg-[#F9F4EA] grid grid-cols-3 gap-2 text-center">
+                <Link
+                  to="/account"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-[#FAF5EC] border border-[#E8DFCF] hover:border-[#173B25] text-[#173B25] transition-all shadow-xs"
+                >
+                  <User size={17} />
+                  <span className="text-[10px] font-bold mt-1 uppercase tracking-wider">Account</span>
+                </Link>
+
+                <Link
+                  to="/wishlist"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-[#FAF5EC] border border-[#E8DFCF] hover:border-[#173B25] text-[#173B25] transition-all shadow-xs relative"
+                >
+                  <Heart size={17} />
+                  <span className="text-[10px] font-bold mt-1 uppercase tracking-wider">Saved</span>
+                  {wishlistCount > 0 && (
+                    <span className="absolute top-1 right-2 bg-[#B38A45] text-white text-[8px] font-extrabold px-1.5 py-0.2 rounded-full">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Link>
+
+                <Link
+                  to="/cart"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-[#173B25] text-[#FAF5EC] transition-all shadow-xs relative"
+                >
+                  <ShoppingBag size={17} />
+                  <span className="text-[10px] font-bold mt-1 uppercase tracking-wider">Bag</span>
+                  {cartCount > 0 && (
+                    <span className="absolute top-1 right-2 bg-[#B38A45] text-white text-[8px] font-extrabold px-1.5 py-0.2 rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
+              </div>
+
+              {/* Sidebar Navigation Links & Collapsible Collection */}
+              <div className="flex flex-col py-3 px-5 flex-1 overflow-y-auto space-y-1">
+                {navLinks.map((link) => {
+                  if (link.hasDropdown) {
+                    return (
+                      <div key={link.label} className="border-b border-[#E8DFCF]/70 py-1">
+                        <button
+                          type="button"
+                          onClick={() => setIsMobileCollectionOpen(!isMobileCollectionOpen)}
+                          className="w-full py-2.5 text-sm font-bold tracking-[0.14em] uppercase text-[#173B25] hover:text-[#B38A45] flex items-center justify-between transition-colors cursor-pointer"
+                        >
+                          <span>{link.label}</span>
+                          <ChevronDown
+                            size={16}
+                            className={`transition-transform duration-300 ${isMobileCollectionOpen ? 'rotate-180 text-[#B38A45]' : ''}`}
+                          />
+                        </button>
+
+                        <AnimatePresence>
+                          {isMobileCollectionOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25 }}
+                              className="overflow-hidden pl-3 py-1 space-y-1 border-l-2 border-[#B38A45]/40 ml-1 my-1"
+                            >
+                              <button
+                                onClick={() => handleCategorySelect('All')}
+                                className="w-full text-left py-1.5 px-2 text-xs font-extrabold text-[#173B25] hover:text-[#B38A45] uppercase tracking-wider flex items-center justify-between"
+                              >
+                                <span>All Teas</span>
+                                <ArrowUpRight size={13} className="text-[#B38A45]" />
+                              </button>
+                              {collections.map((col) => (
+                                <button
+                                  key={col}
+                                  onClick={() => handleCategorySelect(col)}
+                                  className="w-full text-left py-1.5 px-2 text-xs font-semibold text-[#524f46] hover:text-[#173B25] flex items-center justify-between transition-colors"
+                                >
+                                  <span>{col}</span>
+                                </button>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  }
+
+                  const isActive = location.pathname === link.path && link.label === 'HOME';
+
+                  return (
+                    <Link
+                      key={link.label}
+                      to={link.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`py-3 border-b border-[#E8DFCF]/70 text-sm font-bold tracking-[0.14em] uppercase flex items-center justify-between transition-colors ${
+                        isActive ? 'text-[#B38A45]' : 'text-[#173B25] hover:text-[#B38A45]'
+                      }`}
+                    >
+                      <span>{link.label}</span>
+                      <ChevronRight size={15} className="text-[#B38A45]/60" />
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Sidebar Footer & WhatsApp Banner */}
+              <div className="p-5 border-t border-[#E8DFCF] bg-[#F4EBD9] space-y-3">
+                <a
+                  href="https://wa.me/919876543210"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center gap-2 bg-[#173B25] hover:bg-[#245433] text-white py-2.5 px-4 rounded-lg text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+                >
+                  <MessageCircle size={15} className="text-[#25D366]" />
+                  <span>Chat With Us On WhatsApp</span>
+                </a>
+
+                <div className="flex items-center justify-between text-[11px] font-semibold text-[#524f46]">
+                  <div className="flex items-center gap-1.5 text-[#B38A45]">
+                    <Leaf size={13} fill="#B38A45" />
+                    <span className="text-[10px] tracking-wider uppercase font-bold text-[#173B25]">100% Assam Tea</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-[#173B25]">
+                    <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#B38A45] transition-colors" aria-label="Instagram">
+                      <Instagram size={15} />
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-[#B38A45] transition-colors" aria-label="Facebook">
+                      <Facebook size={15} />
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
 
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 

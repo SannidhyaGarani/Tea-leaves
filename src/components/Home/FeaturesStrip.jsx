@@ -221,35 +221,35 @@ const AnimatedTruckIcon = () => (
 const features = [
   {
     title: 'PREMIUM QUALITY',
-    desc: 'Freshly handpicked tea leaves from Assam.',
+    desc: 'Handpicked Assam tea leaves.',
     icon: <AnimatedLeafIcon />,
   },
   {
     title: 'RICH TASTE',
-    desc: 'Kadak strength with natural tea aroma.',
+    desc: 'Kadak strength & rich aroma.',
     icon: <AnimatedCupIcon />,
   },
   {
     title: 'FRESH PACKING',
-    desc: 'Sealed carefully to preserve freshness.',
+    desc: 'Sealed for peak freshness.',
     icon: <AnimatedPackingIcon />,
   },
   {
-    title: 'PAN INDIA DELIVERY',
-    desc: 'Fast, secure & express door delivery.',
+    title: 'EXPRESS DELIVERY',
+    desc: 'Fast delivery across India.',
     icon: <AnimatedTruckIcon />,
   },
 ];
 
 const FeaturesStrip = () => {
   return (
-    <section className="w-full bg-[#fbf8f3] border-t border-b border-[#e8dfcf] py-8 sm:py-10 lg:py-12 relative overflow-hidden font-sans">
+    <section className="w-full bg-[#fbf8f3] border-t border-b border-[#e8dfcf] py-5 sm:py-6 lg:py-7 relative overflow-hidden font-sans">
       {/* Background Ambient Glow Orbs */}
       <div className="pointer-events-none absolute -left-20 top-0 h-64 w-64 rounded-full bg-[#B38A45]/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-[#173b25]/5 blur-3xl" />
 
       <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 sm:gap-8 lg:gap-0 divide-y sm:divide-y-0 sm:divide-x lg:divide-x divide-[#e2d6c1]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-0 divide-y sm:divide-y-0 sm:divide-x lg:divide-x divide-[#e2d6c1]">
           {features.map((item, idx) => (
             <motion.div
               key={idx}
@@ -257,8 +257,8 @@ const FeaturesStrip = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.12 }}
-              whileHover={{ y: -4 }}
-              className={`group flex items-center gap-4.5 sm:gap-5 px-4 sm:px-6 lg:px-8 py-4 sm:py-2 justify-start lg:justify-center transition-all duration-300 ${
+              whileHover={{ y: -3 }}
+              className={`group flex items-center gap-3.5 sm:gap-4 px-4 sm:px-6 lg:px-8 py-2.5 sm:py-2 justify-start lg:justify-center transition-all duration-300 ${
                 idx % 2 === 0 ? 'sm:border-r sm:border-[#e2d6c1]' : ''
               } lg:border-r lg:border-[#e2d6c1] lg:last:border-r-0`}
             >
@@ -267,10 +267,10 @@ const FeaturesStrip = () => {
 
               {/* Text */}
               <div className="flex flex-col text-left">
-                <h3 className="text-xs sm:text-[0.88rem] font-extrabold text-[#173b25] group-hover:text-[#B38A45] transition-colors duration-300 tracking-[0.14em] uppercase leading-tight flex items-center gap-1.5">
+                <h3 className="text-xs sm:text-sm font-extrabold text-[#173b25] group-hover:text-[#B38A45] transition-colors duration-300 tracking-[0.12em] uppercase leading-tight flex items-center gap-1.5">
                   <span>{item.title}</span>
                 </h3>
-                <p className="text-[11px] sm:text-xs text-[#524f46] font-medium leading-normal mt-1 max-w-[200px]">
+                <p className="text-[11px] text-[#524f46] font-medium leading-snug mt-0.5 max-w-[180px]">
                   {item.desc}
                 </p>
               </div>

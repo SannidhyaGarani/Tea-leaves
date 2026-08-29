@@ -259,66 +259,46 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#faf5ec] py-10 sm:py-14 lg:py-16 font-sans select-none">
-      {/* ── Ambient Luxury Glow Orbs ── */}
-      <div className="pointer-events-none absolute -left-20 top-10 h-96 w-96 rounded-full bg-[#B38A45]/12 blur-3xl" />
-      <div className="pointer-events-none absolute -right-20 bottom-10 h-96 w-96 rounded-full bg-[#173b25]/8 blur-3xl" />
-      <div className="pointer-events-none absolute right-10 top-14 opacity-[0.03] text-[#173b25]">
-        <Leaf size={280} strokeWidth={0.7} />
+    <section className="relative overflow-hidden bg-[#faf5ec] py-8 sm:py-10 lg:py-12 font-sans select-none">
+      {/* Background Image (90% Visibility) */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <img
+          src="https://res.cloudinary.com/dcjn4y284/image/upload/v1787921851/Gemini_Generated_Image_z6mv92z6mv92z6mv_dagdev.png"
+          alt=""
+          className="w-full h-full object-cover opacity-90"
+        />
+        <div className="absolute inset-0 bg-[#faf5ec]/10" />
       </div>
 
-      <div className="relative mx-auto max-w-[1450px] px-4 sm:px-8 lg:px-12">
+      <div className="relative mx-auto max-w-[1450px] px-4 sm:px-8 lg:px-12 z-10">
         {/* ── SECTION HEADER & CONTROLS ── */}
-        <div className="mb-8 flex flex-col items-center text-center max-w-3xl mx-auto relative">
+        <div className="mb-5 sm:mb-6 flex flex-col items-center text-center max-w-3xl mx-auto relative">
           {/* Badge */}
-          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[#B38A45]/30 bg-[#B38A45]/10 px-3.5 py-1 text-xs font-semibold text-[#8a682c]">
-            <Sparkles size={13} className="text-[#B38A45]" />
+          <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-[#B38A45]/30 bg-[#B38A45]/10 px-3 py-0.5 text-[11px] font-semibold text-[#8a682c]">
+            <Sparkles size={12} className="text-[#B38A45]" />
             <span>Customer Stories</span>
           </div>
 
           {/* Main Title */}
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#173b25] mb-1">
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight text-[#173b25] mb-0.5">
             Loved By <span className="italic text-[#B38A45]">Tea Lovers</span>
           </h2>
 
           {/* Hindi Tagline */}
-          <h3
-            className="text-xl sm:text-2xl font-normal text-[#173b25] mt-1 mb-2"
-            style={{ fontFamily: '"Noto Serif Devanagari", "Rozha One", Georgia, serif' }}
-          >
-            चाय प्रेमियों का भरोसेमंद नाम
-          </h3>
-
+        
           {/* Gold Emblem Line Divider */}
-          <div className="flex items-center justify-center gap-3 my-3">
-            <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+          <div className="flex items-center justify-center gap-2.5 my-2">
+            <div className="w-10 h-[1px] bg-[#B38A45]/40" />
             <div className="text-[#2d5a27]">
-              <Leaf size={15} fill="#2d5a27" />
+              <Leaf size={13} fill="#2d5a27" />
             </div>
-            <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+            <div className="w-10 h-[1px] bg-[#B38A45]/40" />
           </div>
 
           {/* Subtext */}
-          <p className="max-w-lg text-xs sm:text-sm text-[#524f46] font-medium leading-relaxed mb-5">
-            Real stories and heartfelt moments shared by tea enthusiasts across India.
+          <p className="max-w-md text-xs text-[#524f46] font-medium leading-relaxed mb-4">
+            Real stories shared by tea lovers across India.
           </p>
-
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => handleCategoryChange(cat.id)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer ${
-                  selectedCategory === cat.id
-                    ? 'bg-[#173b25] text-white shadow-sm'
-                    : 'bg-[#ede5d6] text-[#524f46] hover:bg-[#e2d6c1] hover:text-[#173b25]'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
 
           {/* Carousel Control Buttons & Auto-scroll Toggle */}
           <div className="flex items-center justify-center gap-3">
@@ -472,9 +452,7 @@ const Testimonials = () => {
                             <span>{review.name}</span>
                             <CheckCircle2 size={11} className="text-[#B38A45] flex-shrink-0" />
                           </h3>
-                          <span className="mt-0.5 block text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#827963] truncate">
-                            {review.role}
-                          </span>
+                         
                         </div>
                       </div>
                     </div>

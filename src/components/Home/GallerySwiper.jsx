@@ -37,33 +37,31 @@ const INSTAGRAM_PHOTOS = [
 
 const GallerySwiper = () => {
   return (
-    <section className="relative overflow-hidden bg-[#faf5ec] py-10 sm:py-14 lg:py-16 font-sans">
+    <section className="relative overflow-hidden bg-[#faf5ec] py-8 sm:py-10 lg:py-12 font-sans">
       <div className="relative mx-auto max-w-[1450px] px-4 sm:px-8 lg:px-12">
 
-        {/* ── SECTION HEADER (same as all other sections) ── */}
+        {/* ── SECTION HEADER (COMPACT & SHORTER) ── */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-8 sm:mb-10 flex flex-col items-center text-center max-w-3xl mx-auto"
+          className="mb-5 sm:mb-6 flex flex-col items-center text-center max-w-3xl mx-auto"
         >
           {/* Main Title */}
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#173b25] mb-1">
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight text-[#173b25] mb-0.5">
             Follow Us On <span className="italic text-[#B38A45]">Instagram</span>
           </h2>
 
-          {/* Hindi Tagline */}
-         
           {/* Gold Emblem Line Divider */}
-          <div className="flex items-center justify-center gap-3 my-3">
-            <div className="w-12 h-[1px] bg-[#B38A45]/40" />
-            <div className="text-[#2d5a27]"><Leaf size={15} fill="#2d5a27" /></div>
-            <div className="w-12 h-[1px] bg-[#B38A45]/40" />
+          <div className="flex items-center justify-center gap-2.5 my-2">
+            <div className="w-10 h-[1px] bg-[#B38A45]/40" />
+            <div className="text-[#2d5a27]"><Leaf size={13} fill="#2d5a27" /></div>
+            <div className="w-10 h-[1px] bg-[#B38A45]/40" />
           </div>
 
-          <p className="max-w-md text-xs sm:text-sm text-[#524f46] font-medium leading-relaxed">
-            Capturing morning mists, garden harvests, and quiet tea rituals across India.
+          <p className="max-w-xs text-xs text-[#524f46] font-medium leading-relaxed">
+            Tea rituals & garden harvest moments.
           </p>
         </motion.div>
 
