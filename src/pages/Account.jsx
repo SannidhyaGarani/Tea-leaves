@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 const Account = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, setAccountPassword, linkGuestOrders } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [userData, setUserData] = useState(null);
@@ -81,6 +81,52 @@ const Account = () => {
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  // Security & Password setup
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [savingPassword, setSavingPassword] = useState(false);
+  const [syncingOrders, setSyncingOrders] = useState(false);
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    if (newPassword.length < 6) {
+      showToast("Password must be at least 6 characters in length.");
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      showToast("Passwords do not match. Please re-enter.");
+      return;
+    }
+    setSavingPassword(true);
+    try {
+      await setAccountPassword(newPassword);
+      showToast("Password updated successfully! You can now log in using either OTP or password.");
+      setNewPassword("");
+      setConfirmNewPassword("");
+    } catch (err) {
+      showToast(err.message || "Failed to update password");
+    } finally {
+      setSavingPassword(false);
+    }
+  };
+
+  const handleManualSyncOrders = async () => {
+    setSyncingOrders(true);
+    try {
+      const res = await linkGuestOrders(user);
+      if (res?.linkedCount > 0) {
+        showToast(`Linked ${res.linkedCount} previous guest order(s) to your account!`);
+        fetchData();
+      } else {
+        showToast("All eligible orders for your email are already linked.");
+      }
+    } catch (err) {
+      showToast("Order sync notice: " + err.message);
+    } finally {
+      setSyncingOrders(false);
+    }
   };
 
   const fetchData = async () => {
@@ -553,6 +599,7 @@ const Account = () => {
                 { id: "orders", icon: Package, label: "Orders & Invoices" },
                 { id: "addresses", icon: MapPin, label: "Shipping Addresses" },
                 { id: "payments", icon: CreditCard, label: "Saved Cards" },
+                { id: "security", icon: ShieldCheck, label: "Security & Password" },
                 { id: "notifications", icon: Bell, label: "Notification Preferences" },
               ].map((item) => (
                 <button
@@ -1161,6 +1208,101 @@ const Account = () => {
                       />
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB: SECURITY & PASSWORD */}
+            {activeTab === "security" && (
+              <div className="bg-white border border-zinc-200 p-6 md:p-8 space-y-8 shadow-sm">
+                <div className="pb-4 border-b border-zinc-200">
+                  <h3 className="text-lg font-light text-zinc-900 uppercase tracking-widest">Security & Access</h3>
+                  <p className="text-[11px] text-zinc-500">Configure password login and sync past guest orders</p>
+                </div>
+
+                {/* Account Details Box */}
+                <div className="p-4 bg-zinc-50 border border-zinc-200 rounded-sm space-y-2 text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500 uppercase tracking-wider text-[10px] font-bold">Verified Email</span>
+                    <strong className="text-zinc-900 font-mono">{user?.email}</strong>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500 uppercase tracking-wider text-[10px] font-bold">Authentication</span>
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-extrabold uppercase tracking-wider rounded">
+                      OTP Verified
+                    </span>
+                  </div>
+                </div>
+
+                {/* Set/Update Password Form */}
+                <form onSubmit={handleUpdatePassword} className="space-y-5">
+                  <div>
+                    <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider mb-1">
+                      Set or Update Account Password
+                    </h4>
+                    <p className="text-[11px] text-zinc-500 leading-relaxed">
+                      You can log in anytime with an email OTP. Setting a password enables optional faster password login.
+                    </p>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                        New Password
+                      </label>
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="••••••••"
+                        required
+                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                        Confirm New Password
+                      </label>
+                      <input
+                        type="password"
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        placeholder="••••••••"
+                        required
+                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={savingPassword}
+                    className="px-8 py-3.5 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors disabled:opacity-50 cursor-pointer"
+                  >
+                    {savingPassword ? "Updating Password..." : "Save Account Password"}
+                  </button>
+                </form>
+
+                {/* Guest Orders Sync Box */}
+                <div className="pt-6 border-t border-zinc-200 space-y-3">
+                  <div>
+                    <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider mb-1">
+                      Guest Orders Association
+                    </h4>
+                    <p className="text-[11px] text-zinc-500 leading-relaxed">
+                      If you previously placed tea orders as a guest using <strong>{user?.email}</strong>, click below to re-verify and attach them to your member order history.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleManualSyncOrders}
+                    disabled={syncingOrders}
+                    className="px-6 py-3 bg-white border border-zinc-300 text-zinc-800 text-[10px] font-bold uppercase tracking-wider hover:bg-zinc-50 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    <ShieldCheck size={14} className="text-[#b8860b]" />
+                    <span>{syncingOrders ? "Checking..." : "Re-Sync Guest Orders"}</span>
+                  </button>
                 </div>
               </div>
             )}

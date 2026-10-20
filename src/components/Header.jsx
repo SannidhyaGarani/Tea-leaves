@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Search, Menu, X, Heart, ShoppingBag, ChevronDown, ChevronRight, Instagram, Facebook, MessageCircle, Leaf, ArrowUpRight } from 'lucide-react';
+import { User, Search, Menu, X, Heart, ShoppingBag, ChevronDown, ChevronRight, Instagram, Facebook, MessageCircle, Leaf, ArrowUpRight, Truck } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './useAuth';
 import { useStore } from './StoreProvider';
@@ -118,7 +118,13 @@ const Header = () => {
     <header className="fixed top-0 left-0 w-full z-[100] font-sans transition-all duration-300">
       {/* ── 1. TOP ANNOUNCEMENT BAR (28-30px slim) ── */}
       <div className="h-[28px] sm:h-[30px] bg-[#173B25] text-[#F7F2E8] text-[9.5px] sm:text-[11px] tracking-wider font-medium px-3 sm:px-4 md:px-10 flex items-center justify-between transition-colors duration-300">
-        <div className="hidden sm:block w-24" /> {/* Spacer */}
+        <Link
+          to="/track"
+          className="hidden sm:inline-flex items-center gap-1.5 text-[#F7F2E8]/85 hover:text-[#B38A45] transition-colors text-[10px] font-bold uppercase tracking-wider"
+        >
+          <Truck size={12} />
+          <span>Track Order</span>
+        </Link>
 
         <div className="flex-1 text-center flex items-center justify-center gap-1.5 sm:gap-2">
 

@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Security Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users Collection & Subcollections
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId);
+
+      match /cart/{cartId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /wishlist/{wishId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /addresses/{addressId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Orders Collection
+    // 1. Authenticated users can read only their own orders
+    // 2. Guest orders are protected from public enumeration; guest access uses server-side /api/track-order
+    // 3. Client order creation is restricted to validated initial values
+    // 4. Critical status updates, ownership linking, payment confirmation, and emails are restricted to server-side Firebase Admin SDK
+    match /orders/{orderId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      allow create: if request.resource.data.total is number
+                    && request.resource.data.customerEmail is string
+                    && (
+                      (isAuthenticated() && request.resource.data.userId == request.auth.uid && request.resource.data.isGuest == false) ||
+                      (request.resource.data.userId == null && request.resource.data.isGuest == true)
+                    );
+
+      // Clients cannot update protected fields (userId, isGuest, status, totals)
+      allow update, delete: if false;
+    }
+
+    // Products Catalog
+    match /products/{productId} {
+      allow read: if true;
+      // Stock updates and product management handled securely
+      allow update: if isAuthenticated();
+      allow create, delete: if false;
+    }
+
+    // Internal Security OTP Storage (never accessible from client SDK)
+    match /_security_otps/{emailKey} {
+      allow read, write: if false;
+    }
+
+    match /otps/{otpId} {
+      allow read, write: if false;
+    }
+  }
+}

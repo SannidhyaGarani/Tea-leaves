@@ -24,6 +24,7 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Shop = lazy(() => import("./pages/Shop"));
 const Orders = lazy(() => import("./pages/Orders"));
+const TrackOrder = lazy(() => import("./pages/TrackOrder"));
 const TermsConditions = lazy(() => import("./pages/TermsConditions"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -66,6 +67,8 @@ const AppRoutes = () => {
             <Route path="/shop" element={<Shop />} />
 
             <Route path="/orders" element={<Orders />} />
+            <Route path="/track" element={<TrackOrder />} />
+            <Route path="/track-order" element={<TrackOrder />} />
             <Route path="/terms" element={<TermsConditions />} />
             <Route path="/terms-and-conditions" element={<TermsConditions />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />

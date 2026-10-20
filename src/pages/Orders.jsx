@@ -27,7 +27,7 @@ import PageHeader from "../components/Home/PageHeader";
 import MiniLoader from "../components/MiniLoader";
 
 const Orders = () => {
-  const { user } = useAuth();
+  const { user, linkGuestOrders } = useAuth();
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +42,13 @@ const Orders = () => {
     }
     const fetchOrders = async () => {
       try {
+        if (linkGuestOrders) {
+          try {
+            await linkGuestOrders(user);
+          } catch (e) {
+            console.warn("Auto-link check notice:", e);
+          }
+        }
         const q = query(collection(db, "orders"), where("userId", "==", user.uid));
         const snap = await getDocs(q);
         const ordersList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -66,7 +73,7 @@ const Orders = () => {
       }
     };
     fetchOrders();
-  }, [user, navigate]);
+  }, [user, navigate, linkGuestOrders]);
 
   // Tax Invoice Generation & Print
   const handleDownloadInvoice = (order) => {
@@ -370,7 +377,7 @@ const Orders = () => {
                           Order Reference
                         </span>
                         <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider font-mono">
-                          #{order.id.slice(0, 14).toUpperCase()}
+                          {order.orderNumber ? `#${order.orderNumber}` : `#${order.id.slice(0, 14).toUpperCase()}`}
                         </h3>
                       </div>
                     </div>
@@ -513,7 +520,7 @@ const Orders = () => {
                     Order Specification
                   </span>
                   <h3 className="text-base font-bold text-zinc-900 uppercase tracking-wider font-mono">
-                    #{selectedOrder.id.slice(0, 14).toUpperCase()}
+                    {selectedOrder.orderNumber ? `#${selectedOrder.orderNumber}` : `#${selectedOrder.id.slice(0, 14).toUpperCase()}`}
                   </h3>
                 </div>
                 <button
