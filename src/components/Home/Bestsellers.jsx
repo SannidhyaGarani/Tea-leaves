@@ -282,16 +282,16 @@ const Bestsellers = () => {
                     {/* Pricing Bar */}
                     <div className="mt-2.5 sm:mt-3 pt-2.5 flex items-center justify-between border-t border-[#ded6c7]">
                       <div className="flex items-baseline gap-1.5 flex-wrap">
-                        <span className="font-mono text-lg sm:text-xl font-extrabold text-[#173b25]">
-                          ₹{displayPrice.toLocaleString()}
+                        <span className="font-sans text-lg sm:text-xl font-bold text-[#173b25]">
+                          ₹{displayPrice.toLocaleString("en-IN")}
                         </span>
                         {originalPrice > displayPrice && (
-                          <span className="font-mono text-[11px] text-[#7a786c] line-through">
-                            ₹{originalPrice.toLocaleString()}
+                          <span className="font-sans text-[11px] text-[#7a786c] line-through">
+                            ₹{originalPrice.toLocaleString("en-IN")}
                           </span>
                         )}
                         {variantName && (
-                          <span className="text-[9.5px] font-mono text-[#524f46] font-semibold">
+                          <span className="text-[9.5px] font-sans text-[#524f46] font-semibold">
                             / {variantName}
                           </span>
                         )}

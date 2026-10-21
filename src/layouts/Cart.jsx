@@ -49,8 +49,7 @@ const Cart = () => {
   });
 
   const handleCheckout = () => {
-    if (!user) navigate(`/signup?redirect=${encodeURIComponent('/checkout')}`);
-    else navigate("/checkout");
+    navigate("/checkout");
   };
 
   if (loading) {
@@ -210,7 +209,7 @@ const Cart = () => {
 
                   <div className="pt-4 mt-2 border-t border-dashed border-[#B38A45]/30 flex justify-between items-end">
                     <span className="text-[10px] font-extrabold text-[#173b25] uppercase tracking-[0.2em]">Total</span>
-                    <span className="text-2xl font-serif font-bold text-[#173b25]">₹{total.toLocaleString("en-IN")}</span>
+                    <span className="text-2xl font-bold font-sans text-[#173b25]">₹{total.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
 

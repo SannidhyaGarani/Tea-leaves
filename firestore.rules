@@ -33,7 +33,11 @@ service cloud.firestore {
     // 3. Client order creation is restricted to validated initial values
     // 4. Critical status updates, ownership linking, payment confirmation, and emails are restricted to server-side Firebase Admin SDK
     match /orders/{orderId} {
-      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        (request.auth.token.email != null && resource.data.customerEmail == request.auth.token.email) ||
+        (request.auth.token.email != null && resource.data.shippingAddress.email == request.auth.token.email)
+      );
       
       allow create: if request.resource.data.total is number
                     && request.resource.data.customerEmail is string
@@ -42,8 +46,15 @@ service cloud.firestore {
                       (request.resource.data.userId == null && request.resource.data.isGuest == true)
                     );
 
-      // Clients cannot update protected fields (userId, isGuest, status, totals)
-      allow update, delete: if false;
+      // Clients can claim/link unclaimed guest orders if their verified email matches the order
+      allow update: if isAuthenticated() && (
+        (resource.data.customerEmail == request.auth.token.email || resource.data.shippingAddress.email == request.auth.token.email) &&
+        (resource.data.userId == null || resource.data.isGuest == true || resource.data.userId == request.auth.uid) &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.isGuest == false
+      );
+
+      allow delete: if false;
     }
 
     // Products Catalog

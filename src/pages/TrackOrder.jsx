@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import { useAuth } from "../components/useAuth";
 import {
   Package,
   Truck,
@@ -20,9 +21,10 @@ import PageHeader from "../components/Home/PageHeader";
 import MiniLoader from "../components/MiniLoader";
 
 const TrackOrder = () => {
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
-  const initialOrderNumber = searchParams.get("orderNumber") || searchParams.get("orderId") || "";
-  const initialEmail = searchParams.get("email") || "";
+  const initialOrderNumber = searchParams.get("orderNumber") || searchParams.get("orderId") || localStorage.getItem("last_order_number") || "";
+  const initialEmail = searchParams.get("email") || user?.email || localStorage.getItem("guest_checkout_email") || localStorage.getItem("last_order_email") || "";
 
   const [orderNumber, setOrderNumber] = useState(initialOrderNumber);
   const [email, setEmail] = useState(initialEmail);

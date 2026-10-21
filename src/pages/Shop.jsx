@@ -169,16 +169,16 @@ const ProductCard = ({ product, idx, triggerToast, selectedSizes }) => {
         {/* Price & Cart row */}
         <div className="flex items-center justify-between mt-auto pt-2.5 border-t border-zinc-200">
           <div className="flex items-baseline gap-1.5 flex-wrap">
-            <span className="text-base sm:text-lg font-extrabold font-mono tracking-tight text-zinc-900">
+            <span className="text-base sm:text-lg font-bold font-sans tracking-tight text-zinc-900">
               ₹{displayPrice?.toLocaleString("en-IN")}
             </span>
             {originalPrice > displayPrice && (
-              <span className="text-xs font-mono text-zinc-400 line-through">
+              <span className="text-xs font-sans text-zinc-400 line-through">
                 ₹{originalPrice?.toLocaleString("en-IN")}
               </span>
             )}
             {variantName && (
-              <span className="text-[10px] font-mono text-zinc-500 font-semibold">
+              <span className="text-[10px] font-sans text-zinc-500 font-semibold">
                 / {variantName}
               </span>
             )}

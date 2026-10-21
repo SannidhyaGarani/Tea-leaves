@@ -263,12 +263,12 @@ const ProductDetail = () => {
 
               {/* Price Display */}
               <div className="flex items-baseline gap-3.5 mb-2">
-                <span className="text-3xl font-light tracking-widest text-zinc-900 font-mono">
-                  ₹{currentPrice?.toLocaleString()}
+                <span className="text-3xl font-bold font-sans text-zinc-900">
+                  ₹{currentPrice?.toLocaleString("en-IN")}
                 </span>
                 {currentOriginalPrice > currentPrice && (
-                  <span className="text-base text-zinc-400 line-through font-mono">
-                    ₹{currentOriginalPrice?.toLocaleString()}
+                  <span className="text-base text-zinc-400 line-through font-sans">
+                    ₹{currentOriginalPrice?.toLocaleString("en-IN")}
                   </span>
                 )}
               </div>
@@ -313,7 +313,7 @@ const ProductDetail = () => {
               <div className="border-t border-zinc-200 pt-5">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[10px] uppercase tracking-widest font-black text-zinc-600">Select Pack Weight Variant</span>
-                  <span className="text-[10px] text-zinc-500 font-mono">Current: {selectedSize?.size || product.size_prices[0]?.size}</span>
+                  <span className="text-[10px] text-zinc-500">Current: {selectedSize?.size || product.size_prices[0]?.size}</span>
                 </div>
                 <div className="flex flex-wrap gap-2.5">
                   {product.size_prices.map((sp, idx) => {
@@ -333,7 +333,7 @@ const ProductDetail = () => {
                         }`}
                       >
                         <span className={spOutOfStock ? 'line-through' : ''}>{sp.size}</span>
-                        <span className={`text-[10px] font-mono ${selectedSize?.size === sp.size ? 'text-[#c9a962]' : spOutOfStock ? 'text-zinc-300' : 'text-zinc-500'}`}>
+                        <span className={`text-[10px] font-sans font-semibold ${selectedSize?.size === sp.size ? 'text-[#c9a962]' : spOutOfStock ? 'text-zinc-300' : 'text-zinc-500'}`}>
                           ₹{sp.price}
                         </span>
                         {spOutOfStock && <span className="text-[8px] text-red-400 font-black uppercase">OOS</span>}
@@ -411,15 +411,11 @@ const ProductDetail = () => {
                       if (!cart?.some(item => (item.cartId || item.id) === cartItemId)) {
                         await addToCart(product, selectedSize);
                       }
-                      if (!user) {
-                        navigate(`/signup?redirect=${encodeURIComponent('/checkout')}`);
-                      } else {
-                        navigate('/checkout');
-                      }
+                      navigate('/checkout');
                     }}
                     className="w-full h-13 bg-[#0a140f] text-[#c9a962] font-bold text-[11px] uppercase tracking-widest hover:bg-black transition-all duration-300 rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-pointer border border-[#c9a962]/30"
                   >
-                    Buy Now Directly
+                    Buy Now 
                   </button>
                 )}
               </div>

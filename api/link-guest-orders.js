@@ -22,11 +22,30 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'User does not possess a verified email address.' });
     }
 
-    // Query orders matching the verified email
-    const ordersRef = adminDb.collection('orders');
-    const snapshot = await ordersRef.where('customerEmail', '==', verifiedEmail).get();
+    const rawEmail = decodedToken.email ? decodedToken.email.trim() : '';
 
-    if (snapshot.empty) {
+    // Query orders matching verified email or shipping address email
+    const ordersRef = adminDb.collection('orders');
+    const [snapCustomer, snapShipping] = await Promise.all([
+      ordersRef.where('customerEmail', '==', verifiedEmail).get(),
+      ordersRef.where('shippingAddress.email', '==', verifiedEmail).get(),
+    ]);
+
+    const docMap = new Map();
+    snapCustomer.docs.forEach((d) => docMap.set(d.id, d));
+    snapShipping.docs.forEach((d) => docMap.set(d.id, d));
+
+    // Also check rawEmail if case differed
+    if (rawEmail && rawEmail !== verifiedEmail) {
+      try {
+        const snapRaw = await ordersRef.where('customerEmail', '==', rawEmail).get();
+        snapRaw.docs.forEach((d) => docMap.set(d.id, d));
+      } catch (e) {
+        console.warn('[LinkGuestOrders] Raw email check warning:', e.message);
+      }
+    }
+
+    if (docMap.size === 0) {
       return res.status(200).json({
         success: true,
         linkedCount: 0,
@@ -37,7 +56,7 @@ export default async function handler(req, res) {
     const batch = adminDb.batch();
     const linkedOrderIds = [];
 
-    snapshot.docs.forEach((docSnap) => {
+    docMap.forEach((docSnap) => {
       const order = docSnap.data();
 
       // SECURITY CHECKS:
@@ -51,10 +70,10 @@ export default async function handler(req, res) {
         return;
       }
 
-      // 3. Must be an unclaimed guest order (userId is null/empty or isGuest is true)
-      const isUnclaimedGuestOrder = order.isGuest === true || !order.userId;
+      // 3. Must be an unclaimed guest order (userId is null/empty or isGuest is true or userId matches)
+      const isEligibleOrder = order.isGuest === true || !order.userId || order.userId === authenticatedUid;
 
-      if (isUnclaimedGuestOrder) {
+      if (isEligibleOrder) {
         batch.update(docSnap.ref, {
           userId: authenticatedUid,
           isGuest: false,

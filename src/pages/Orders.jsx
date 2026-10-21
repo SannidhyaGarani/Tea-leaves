@@ -18,7 +18,8 @@ import {
   Truck,
   X,
   FileText,
-  Search,
+  Search,   
+  
   Filter
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -49,9 +50,35 @@ const Orders = () => {
             console.warn("Auto-link check notice:", e);
           }
         }
-        const q = query(collection(db, "orders"), where("userId", "==", user.uid));
-        const snap = await getDocs(q);
-        const ordersList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        const ordersMap = new Map();
+
+        // 1. Fetch orders by authenticated userId
+        try {
+          const q = query(collection(db, "orders"), where("userId", "==", user.uid));
+          const snap = await getDocs(q);
+          snap.docs.forEach((d) => ordersMap.set(d.id, { id: d.id, ...d.data() }));
+        } catch (e) {
+          console.warn("Fetch by userId error:", e);
+        }
+
+        // 2. Fetch orders matching user's email to guarantee instant visibility of past guest orders
+        if (user.email) {
+          const cleanEmail = user.email.trim().toLowerCase();
+          try {
+            const qEmail = query(collection(db, "orders"), where("customerEmail", "==", cleanEmail));
+            const snapEmail = await getDocs(qEmail);
+            snapEmail.docs.forEach((d) => {
+              if (!ordersMap.has(d.id)) {
+                ordersMap.set(d.id, { id: d.id, ...d.data() });
+              }
+            });
+          } catch (e) {
+            console.warn("Fetch by customerEmail error:", e);
+          }
+        }
+
+        const ordersList = Array.from(ordersMap.values());
         ordersList.sort((a, b) => {
           const timeA = a.createdAt?.toMillis
             ? a.createdAt.toMillis()
@@ -103,7 +130,7 @@ const Orders = () => {
       </tr>
     `).join('');
 
-    const shippingAddr = order.shipping || {};
+    const shippingAddr = order.shippingAddress || order.shipping || {};
     const recipientName = shippingAddr.name || user?.displayName || 'Valued Client';
     const recipientPhone = shippingAddr.phone || 'N/A';
 
@@ -533,28 +560,47 @@ const Orders = () => {
               </div>
 
               {/* Shipping & Payment Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-50 p-4 border border-zinc-200 text-xs">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#b8860b] font-bold uppercase tracking-wider text-[10px] mb-1">
-                    <MapPin size={12} /> Shipping Address
-                  </div>
-                  <p className="font-bold text-zinc-900 uppercase">{selectedOrder.shipping?.name || user?.displayName}</p>
-                  <p className="text-zinc-600">{selectedOrder.shipping?.address}</p>
-                  <p className="text-zinc-600">
-                    {selectedOrder.shipping?.city}, {selectedOrder.shipping?.state} - {selectedOrder.shipping?.pincode}
-                  </p>
-                  <p className="text-[#b8860b] font-mono text-[11px] pt-1">Phone: {selectedOrder.shipping?.phone || 'N/A'}</p>
-                </div>
+              {(() => {
+                const shipping = selectedOrder.shippingAddress || selectedOrder.shipping || {};
+                const displayStreet = shipping.houseNo
+                  ? `${shipping.houseNo}, ${shipping.street || shipping.address || ''}`
+                  : (shipping.street || shipping.address || 'N/A');
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-50 p-4 border border-zinc-200 text-xs">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#b8860b] font-bold uppercase tracking-wider text-[10px] mb-1">
+                        <MapPin size={12} /> Shipping Address
+                        {shipping.addressType && (
+                          <span className="ml-auto px-1.5 py-0.2 bg-[#b8860b]/10 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-extrabold uppercase rounded">
+                            {shipping.addressType}
+                          </span>
+                        )}
+                      </div>
+                      <p className="font-bold text-zinc-900 uppercase">{shipping.name || user?.displayName || selectedOrder.customerName}</p>
+                      <p className="text-zinc-600 leading-snug">{displayStreet}</p>
+                      {shipping.landmark && (
+                        <p className="text-zinc-500 text-[11px] italic">Landmark: {shipping.landmark}</p>
+                      )}
+                      <p className="text-zinc-600">
+                        {shipping.city || ''}{shipping.city && shipping.state ? ', ' : ''}{shipping.state || ''}
+                        {shipping.pincode ? ` - ${shipping.pincode}` : ''}
+                      </p>
+                      <p className="text-[#b8860b] font-mono text-[11px] pt-1">
+                        Phone: {shipping.phone || selectedOrder.customerPhone || 'N/A'}
+                      </p>
+                    </div>
 
-                <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#b8860b] font-bold uppercase tracking-wider text-[10px] mb-1">
-                    <CreditCard size={12} /> Payment Info
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#b8860b] font-bold uppercase tracking-wider text-[10px] mb-1">
+                        <CreditCard size={12} /> Payment Info
+                      </div>
+                      <p className="text-zinc-700">Method: <strong className="text-zinc-900 uppercase">{selectedOrder.paymentMethod || 'Online'}</strong></p>
+                      <p className="text-zinc-500 font-mono text-[11px]">Transaction ID: {selectedOrder.paymentId || 'COD'}</p>
+                      <p className="text-zinc-700">Status: <strong className="text-emerald-700 uppercase">PAID / CONFIRMED</strong></p>
+                    </div>
                   </div>
-                  <p className="text-zinc-700">Method: <strong className="text-zinc-900 uppercase">{selectedOrder.paymentMethod || 'Online'}</strong></p>
-                  <p className="text-zinc-500 font-mono text-[11px]">Transaction ID: {selectedOrder.paymentId || 'COD'}</p>
-                  <p className="text-zinc-700">Status: <strong className="text-emerald-700 uppercase">PAID / CONFIRMED</strong></p>
-                </div>
-              </div>
+                );
+              })()}
 
               {/* Purchased Items List */}
               <div className="space-y-3">

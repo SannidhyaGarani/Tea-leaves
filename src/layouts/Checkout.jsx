@@ -19,10 +19,15 @@ import {
   Plus,
   Truck,
   ArrowRight,
-  PackageCheck
+  PackageCheck,
+  Home,
+  Briefcase,
+  Building,
+  Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
+import { INDIAN_STATES, ADDRESS_TYPES } from "../utils/addressConstants";
 
 const Checkout = () => {
   const { user } = useAuth();
@@ -35,10 +40,14 @@ const Checkout = () => {
     name: "",
     email: "",
     phone: "",
-    address: "",
+    houseNo: "",
+    street: "",
+    landmark: "",
     city: "",
     state: "",
     pincode: "",
+    addressType: "Home",
+    saveToAccount: true,
     paymentMethod: "online",
   });
   const [isProcessing, setIsProcessing] = useState(false);
@@ -78,16 +87,35 @@ const Checkout = () => {
               ...prev,
               name: defaultAddr.name || user.displayName || prev.name,
               phone: defaultAddr.phone || prev.phone,
-              address: defaultAddr.address || "",
+              houseNo: defaultAddr.houseNo || "",
+              street: defaultAddr.street || defaultAddr.address || "",
+              landmark: defaultAddr.landmark || "",
               city: defaultAddr.city || "",
               state: defaultAddr.state || "",
               pincode: defaultAddr.pincode || "",
+              addressType: defaultAddr.type || defaultAddr.addressType || "Home",
             }));
           }
         } else {
           // Guest user: load from local storage / store provider cart
           const guestCart = JSON.parse(localStorage.getItem("guest_cart") || "[]");
           setItems(guestCart.length > 0 ? guestCart : storeCart || []);
+          const savedEmail = localStorage.getItem("guest_checkout_email") || localStorage.getItem("last_order_email") || "";
+          const savedGuestAddr = JSON.parse(localStorage.getItem("guest_saved_address") || "null");
+
+          setFormData((prev) => ({
+            ...prev,
+            email: prev.email || savedEmail,
+            name: prev.name || savedGuestAddr?.name || "",
+            phone: prev.phone || savedGuestAddr?.phone || "",
+            houseNo: prev.houseNo || savedGuestAddr?.houseNo || "",
+            street: prev.street || savedGuestAddr?.street || savedGuestAddr?.address || "",
+            landmark: prev.landmark || savedGuestAddr?.landmark || "",
+            city: prev.city || savedGuestAddr?.city || "",
+            state: prev.state || savedGuestAddr?.state || "",
+            pincode: prev.pincode || savedGuestAddr?.pincode || "",
+            addressType: prev.addressType || savedGuestAddr?.addressType || "Home",
+          }));
         }
       } catch (error) {
         console.error("Error loading checkout data:", error);
@@ -132,6 +160,26 @@ const Checkout = () => {
       const normalizedEmail = (formData.email || "").trim().toLowerCase();
       const uniqueOrderNumber = `TEA-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
+      const combinedAddress = [
+        formData.houseNo,
+        formData.street,
+        formData.landmark ? `(Landmark: ${formData.landmark})` : ''
+      ].filter(Boolean).join(', ') || formData.address || '';
+
+      const shippingPayload = {
+        name: (formData.name || "").trim(),
+        phone: (formData.phone || "").trim(),
+        email: normalizedEmail,
+        houseNo: (formData.houseNo || "").trim(),
+        street: (formData.street || "").trim(),
+        landmark: (formData.landmark || "").trim(),
+        address: combinedAddress,
+        city: (formData.city || "").trim(),
+        state: (formData.state || "").trim(),
+        pincode: (formData.pincode || "").trim(),
+        addressType: formData.addressType || "Home",
+      };
+
       const orderPayload = {
         orderNumber: uniqueOrderNumber,
         userId: user ? user.uid : null,
@@ -156,15 +204,7 @@ const Checkout = () => {
         paymentId: paymentId || (formData.paymentMethod === "cod" ? "COD" : "N/A"),
         paymentStatus,
         orderStatus: status,
-        shippingAddress: {
-          name: (formData.name || "").trim(),
-          phone: (formData.phone || "").trim(),
-          email: normalizedEmail,
-          address: (formData.address || "").trim(),
-          city: (formData.city || "").trim(),
-          state: (formData.state || "").trim(),
-          pincode: (formData.pincode || "").trim(),
-        },
+        shippingAddress: shippingPayload,
         emailStatus: {
           customer: "pending",
           admin: "pending",
@@ -176,34 +216,47 @@ const Checkout = () => {
       const docRef = await addDoc(collection(db, "orders"), orderPayload);
 
       if (status === "confirmed") {
-        // Update product inventory
-        for (const item of items) {
+        // Save guest email & address to localStorage so user can easily track or re-order
+        if (!user) {
+          localStorage.setItem("guest_checkout_email", normalizedEmail);
+          localStorage.setItem("last_order_email", normalizedEmail);
+          localStorage.setItem("last_order_number", uniqueOrderNumber);
+          localStorage.setItem("guest_saved_address", JSON.stringify(shippingPayload));
+        } else if (formData.saveToAccount && (selectedAddressId === "custom" || savedAddresses.length === 0)) {
+          // Auto-save this address to the user's account
           try {
-            const productId = item.id || item.cartId?.split("-")[0];
-            if (productId) {
-              const productRef = doc(db, "products", productId);
-              const productSnap = await getDoc(productRef);
-              if (productSnap.exists()) {
-                const currentStock = Number(productSnap.data().stock) || 0;
-                const quantityPurchased = Number(item.quantity) || 1;
-                const newStock = Math.max(0, currentStock - quantityPurchased);
-                let newStatus = "In Stock";
-                if (newStock === 0) newStatus = "Out of Stock";
-                else if (newStock <= 5) newStatus = "Low Stock";
-                await updateDoc(productRef, { stock: newStock, stock_status: newStatus });
-              }
-            }
+            const isFirst = savedAddresses.length === 0;
+            const newAddrDoc = {
+              name: shippingPayload.name,
+              phone: shippingPayload.phone,
+              houseNo: shippingPayload.houseNo,
+              street: shippingPayload.street,
+              landmark: shippingPayload.landmark,
+              address: shippingPayload.address,
+              city: shippingPayload.city,
+              state: shippingPayload.state,
+              pincode: shippingPayload.pincode,
+              type: shippingPayload.addressType || "Home",
+              isDefault: isFirst,
+              createdAt: new Date().toISOString()
+            };
+            const addrRef = await addDoc(collection(db, "users", user.uid, "addresses"), newAddrDoc);
+            setSavedAddresses((prev) => [...prev, { id: addrRef.id, ...newAddrDoc }]);
           } catch (err) {
-            console.error("Error updating stock:", err);
+            console.warn("Could not save address to user account:", err);
           }
         }
 
         // Trigger order emails server-side
-        fetch("/api/send-order-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ orderId: docRef.id }),
-        }).catch((err) => console.warn("Async email dispatch notice:", err.message));
+        try {
+          await fetch("/api/send-order-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderId: docRef.id }),
+          });
+        } catch (err) {
+          console.warn("Async email dispatch notice:", err.message);
+        }
 
         await clearCart();
         setConfirmedOrder({ id: docRef.id, ...orderPayload });
@@ -223,8 +276,24 @@ const Checkout = () => {
       triggerToast("Your bag is empty!");
       return;
     }
+    if (!formData.name?.trim()) {
+      triggerToast("Please enter recipient name.");
+      return;
+    }
     if (!formData.email || !formData.email.includes("@")) {
       triggerToast("Please provide a valid email address for order notifications.");
+      return;
+    }
+    if (!formData.phone || formData.phone.trim().length < 10) {
+      triggerToast("Please provide a valid 10-digit mobile number.");
+      return;
+    }
+    if (!formData.houseNo?.trim() && !formData.street?.trim() && !formData.address?.trim()) {
+      triggerToast("Please provide your house/flat number and street area.");
+      return;
+    }
+    if (!formData.city?.trim() || !formData.state?.trim() || !formData.pincode?.trim()) {
+      triggerToast("Please fill in City, State, and 6-digit Pincode.");
       return;
     }
 
@@ -270,7 +339,7 @@ const Checkout = () => {
   };
 
   const inputClass =
-    "w-full bg-[#faf5ec] border border-[#e2d7c5] rounded-md px-4 py-3 text-xs sm:text-sm text-[#173b25] outline-none focus:border-[#173b25] transition-colors placeholder:text-[#827963]";
+    "w-full px-3.5 py-2.5 bg-white border border-[#e2d7c5] rounded-xl text-xs text-[#173b25] placeholder:text-zinc-400 focus:outline-none focus:border-[#173b25] focus:ring-1 focus:ring-[#173b25] transition-all";
 
   if (loading) return <MiniLoader message="Preparing Checkout" />;
 
@@ -302,15 +371,35 @@ const Checkout = () => {
           </h3>
 
           {/* Order Details Badge */}
-          <div className="bg-white border border-[#e2d7c5] rounded-xl p-4 mb-6 text-left max-w-md mx-auto">
+          <div className="bg-white border border-[#e2d7c5] rounded-xl p-4 mb-6 text-left max-w-md mx-auto space-y-2.5">
             <div className="flex justify-between items-center text-xs pb-2 border-b border-[#eee]">
               <span className="text-zinc-500 font-bold uppercase tracking-wider text-[10px]">Order Number</span>
               <span className="font-mono font-bold text-[#173b25]">#{confirmedOrder.orderNumber}</span>
             </div>
-            <div className="flex justify-between items-center text-xs pt-2">
+            <div className="flex justify-between items-center text-xs pb-2 border-b border-[#eee]">
               <span className="text-zinc-500 font-bold uppercase tracking-wider text-[10px]">Confirmation Sent To</span>
               <span className="font-medium text-[#173b25]">{confirmedOrder.customerEmail}</span>
             </div>
+            {confirmedOrder.shippingAddress && (
+              <div className="text-xs pt-0.5">
+                <span className="text-zinc-500 font-bold uppercase tracking-wider text-[10px] block mb-1">Delivery Destination</span>
+                <p className="text-[#173b25] font-semibold">
+                  {confirmedOrder.shippingAddress.name}
+                  {confirmedOrder.shippingAddress.addressType && (
+                    <span className="ml-2 px-1.5 py-0.2 bg-[#173b25]/10 text-[#173b25] text-[9px] font-extrabold uppercase rounded">
+                      {confirmedOrder.shippingAddress.addressType}
+                    </span>
+                  )}
+                </p>
+                <p className="text-zinc-600 text-[11px] leading-relaxed">
+                  {confirmedOrder.shippingAddress.houseNo ? `${confirmedOrder.shippingAddress.houseNo}, ` : ""}
+                  {confirmedOrder.shippingAddress.street || confirmedOrder.shippingAddress.address || ""}
+                  {confirmedOrder.shippingAddress.landmark ? ` (Landmark: ${confirmedOrder.shippingAddress.landmark})` : ""}
+                  {", "}
+                  {confirmedOrder.shippingAddress.city}, {confirmedOrder.shippingAddress.state} - {confirmedOrder.shippingAddress.pincode}
+                </p>
+              </div>
+            )}
           </div>
 
           <p className="text-xs text-[#524f46] font-medium mb-8 leading-relaxed max-w-md mx-auto">
@@ -348,15 +437,24 @@ const Checkout = () => {
                 Track All Your Orders in One Place
               </h4>
               <p className="text-xs text-zinc-600 max-w-sm mx-auto mb-4 leading-relaxed">
-                Create an account using <strong>{confirmedOrder.customerEmail}</strong> to view order history, save addresses, and earn estate perks.
+                Log in or create an account with <strong>{confirmedOrder.customerEmail}</strong>. When you sign in, all past orders placed with this email will automatically appear in your account.
               </p>
-              <Link
-                to={`/signup?email=${encodeURIComponent(confirmedOrder.customerEmail)}&redirect=orders`}
-                className="inline-flex items-center gap-2 px-7 py-3 bg-[#b8860b] hover:bg-[#996f08] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all shadow-sm"
-              >
-                <span>Create Account</span>
-                <ArrowRight size={13} />
-              </Link>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  to={`/login?email=${encodeURIComponent(confirmedOrder.customerEmail)}&redirect=orders`}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#173b25] hover:bg-[#245433] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all shadow-sm"
+                >
+                  <span>Sign In with this Email</span>
+                  <ArrowRight size={13} />
+                </Link>
+                <Link
+                  to={`/signup?email=${encodeURIComponent(confirmedOrder.customerEmail)}&redirect=orders`}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#b8860b] hover:bg-[#996f08] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-md transition-all shadow-sm"
+                >
+                  <span>Create Account</span>
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
             </motion.div>
           )}
         </div>
@@ -431,30 +529,47 @@ const Checkout = () => {
             <form onSubmit={handlePlaceOrder} className="space-y-8">
               {/* Shipping */}
               <section className="space-y-5">
-                <div className="flex items-center gap-3 pb-4 border-b border-[#B38A45]/20">
-                  <div className="w-9 h-9 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center">
-                    <MapPin size={15} />
+                <div className="flex items-center justify-between pb-4 border-b border-[#B38A45]/20">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-[#173b25] text-[#B38A45] flex items-center justify-center">
+                      <MapPin size={15} />
+                    </div>
+                    <h2 className="text-xs font-extrabold text-[#173b25] uppercase tracking-widest">
+                      Shipping Address
+                    </h2>
                   </div>
-                  <h2 className="text-xs font-extrabold text-[#173b25] uppercase tracking-widest">
-                    Shipping Address
-                  </h2>
+                  {user && (
+                    <Link
+                      to="/account?tab=addresses"
+                      className="text-[10px] text-[#B38A45] hover:underline uppercase tracking-wider font-extrabold flex items-center gap-1"
+                    >
+                      <Plus size={12} /> Add in Account
+                    </Link>
+                  )}
                 </div>
 
                 {/* SAVED ADDRESS SELECTOR (Logged in users) */}
                 {user && savedAddresses.length > 0 && (
                   <div className="space-y-3 mb-6 bg-[#f7f2e8] border border-[#e8dfcf] p-4 rounded-2xl shadow-2xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-extrabold text-[#B38A45] uppercase tracking-widest">
-                        Choose Saved Shipping Address
-                      </span>
-                      <Link to="/account" className="text-[9px] text-[#173b25] hover:underline uppercase tracking-wider font-bold">
-                        Manage Addresses
+                      <div className="flex items-center gap-1.5">
+                        <MapPin size={13} className="text-[#B38A45]" />
+                        <span className="text-[10px] font-extrabold text-[#B38A45] uppercase tracking-widest">
+                          Select Saved Address ({savedAddresses.length})
+                        </span>
+                      </div>
+                      <Link
+                        to="/account?tab=addresses"
+                        className="text-[9px] text-[#173b25] hover:underline uppercase tracking-wider font-bold"
+                      >
+                        Manage Addresses →
                       </Link>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                       {savedAddresses.map((addr) => {
                         const isSelected = selectedAddressId === addr.id;
+                        const type = addr.type || addr.addressType || "Home";
                         return (
                           <div
                             key={addr.id}
@@ -464,24 +579,36 @@ const Checkout = () => {
                                 ...prev,
                                 name: addr.name || prev.name,
                                 phone: addr.phone || prev.phone,
-                                address: addr.address || "",
+                                houseNo: addr.houseNo || "",
+                                street: addr.street || addr.address || "",
+                                landmark: addr.landmark || "",
                                 city: addr.city || "",
                                 state: addr.state || "",
                                 pincode: addr.pincode || "",
+                                addressType: type,
                               }));
-                              triggerToast(`Selected: ${addr.name}`);
+                              triggerToast(`Selected: ${addr.name || 'Saved Address'} (${type})`);
                             }}
-                            className={`p-3.5 border cursor-pointer transition-all relative rounded-xl ${
+                            className={`p-3.5 border cursor-pointer transition-all relative rounded-xl text-left ${
                               isSelected
-                                ? "border-[#173b25] bg-[#faf5ec] shadow-sm"
-                                : "border-[#e2d7c5] bg-[#faf5ec] hover:border-[#173b25]"
+                                ? "border-[#173b25] bg-[#faf5ec] shadow-sm ring-2 ring-[#173b25]"
+                                : "border-[#e2d7c5] bg-white hover:border-[#173b25]"
                             }`}
                           >
-                            {addr.isDefault && (
-                              <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#B38A45]/15 border border-[#B38A45]/30 text-[#B38A45] text-[8px] font-extrabold uppercase tracking-wider rounded">
-                                Default
+                            <div className="flex items-center justify-between gap-2 mb-2">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#173b25]/10 text-[#173b25] text-[9px] font-extrabold uppercase rounded">
+                                {type === "Home" && <Home size={10} />}
+                                {type === "Work" && <Briefcase size={10} />}
+                                {type === "Other" && <Building size={10} />}
+                                <span>{type}</span>
                               </span>
-                            )}
+                              {addr.isDefault && (
+                                <span className="px-2 py-0.5 bg-[#B38A45]/15 border border-[#B38A45]/30 text-[#B38A45] text-[8px] font-extrabold uppercase tracking-wider rounded">
+                                  Default
+                                </span>
+                              )}
+                            </div>
+
                             <div className="flex items-start gap-2.5">
                               <div
                                 className={`w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${
@@ -490,12 +617,20 @@ const Checkout = () => {
                               >
                                 {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
-                              <div className="space-y-1 text-xs pr-10">
-                                <p className="font-bold text-[#173b25] uppercase tracking-wide">{addr.name}</p>
-                                <p className="text-[#524f46] text-[11px] leading-relaxed line-clamp-2">
-                                  {addr.address}, {addr.city}, {addr.state} - {addr.pincode}
+                              <div className="space-y-1 text-xs pr-2">
+                                <p className="font-bold text-[#173b25] uppercase tracking-wide">
+                                  {addr.name || "Recipient"}
                                 </p>
-                                <p className="text-[10px] text-[#B38A45] font-bold">Ph: {addr.phone}</p>
+                                <p className="text-[#524f46] text-[11px] leading-relaxed line-clamp-2">
+                                  {addr.houseNo ? `${addr.houseNo}, ` : ""}
+                                  {addr.street || addr.address || ""}
+                                  {addr.landmark ? ` (Near ${addr.landmark})` : ""}
+                                  {", "}
+                                  {addr.city}, {addr.state} - {addr.pincode}
+                                </p>
+                                <p className="text-[10px] text-[#B38A45] font-bold">
+                                  Ph: {addr.phone || "N/A"}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -507,27 +642,37 @@ const Checkout = () => {
                           setSelectedAddressId("custom");
                           setFormData((prev) => ({
                             ...prev,
-                            address: "",
+                            houseNo: "",
+                            street: "",
+                            landmark: "",
                             city: "",
                             state: "",
                             pincode: "",
+                            addressType: "Home",
                           }));
+                          triggerToast("Ready to enter new address");
                         }}
-                        className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded-xl ${
+                        className={`p-3.5 border cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 rounded-xl text-center min-h-[96px] ${
                           selectedAddressId === "custom"
-                            ? "border-[#173b25] bg-[#faf5ec]"
-                            : "border-dashed border-[#e2d7c5] bg-[#faf5ec] hover:border-[#173b25]"
+                            ? "border-[#173b25] bg-[#faf5ec] ring-2 ring-[#173b25]"
+                            : "border-dashed border-[#e2d7c5] bg-white hover:border-[#173b25]"
                         }`}
                       >
-                        <Plus size={14} className="text-[#173b25]" />
+                        <div className="w-6 h-6 rounded-full bg-[#173b25]/10 flex items-center justify-center text-[#173b25]">
+                          <Plus size={14} />
+                        </div>
                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#173b25]">
-                          + Enter Custom Address
+                          + Enter New Address
+                        </span>
+                        <span className="text-[9px] text-zinc-500">
+                          Ship to a different location
                         </span>
                       </div>
                     </div>
                   </div>
                 )}
 
+                {/* Contact Information */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
@@ -568,7 +713,7 @@ const Checkout = () => {
 
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
-                    Phone Number *
+                    Phone Number (10-Digit Mobile) *
                   </label>
                   <div className="relative">
                     <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#827963]" />
@@ -584,39 +729,159 @@ const Checkout = () => {
                   </div>
                 </div>
 
+                {/* Granular Address Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
+                      Flat, House no., Building, Floor *
+                    </label>
+                    <input
+                      type="text"
+                      name="houseNo"
+                      required
+                      value={formData.houseNo}
+                      onChange={handleInputChange}
+                      className={inputClass}
+                      placeholder="e.g. Flat 302, Green Valley Apts"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
+                      Area, Street, Sector, Village *
+                    </label>
+                    <input
+                      type="text"
+                      name="street"
+                      required
+                      value={formData.street}
+                      onChange={handleInputChange}
+                      className={inputClass}
+                      placeholder="e.g. MG Road, Indiranagar"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
-                    Delivery Address *
+                    Landmark <span className="text-zinc-500 font-normal lowercase">(optional, helps in quick delivery)</span>
                   </label>
-                  <textarea
-                    name="address"
-                    required
-                    rows={3}
-                    value={formData.address}
+                  <input
+                    type="text"
+                    name="landmark"
+                    value={formData.landmark}
                     onChange={handleInputChange}
-                    className={`${inputClass} resize-none`}
-                    placeholder="House / Apartment no., Street, Landmark"
+                    className={inputClass}
+                    placeholder="e.g. Near Apollo Pharmacy / Opp. City Central Mall"
                   />
                 </div>
 
-                <div className="grid grid-cols-3 gap-4">
-                  {["city", "state", "pincode"].map((field) => (
-                    <div key={field} className="space-y-1.5">
-                      <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25] capitalize">
-                        {field} *
-                      </label>
-                      <input
-                        type="text"
-                        name={field}
-                        required
-                        value={formData[field]}
-                        onChange={handleInputChange}
-                        className={inputClass}
-                        placeholder={field === "pincode" ? "000000" : ""}
-                      />
-                    </div>
-                  ))}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
+                      City / Town *
+                    </label>
+                    <input
+                      type="text"
+                      name="city"
+                      required
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      className={inputClass}
+                      placeholder="e.g. Bengaluru"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
+                      State *
+                    </label>
+                    <select
+                      name="state"
+                      required
+                      value={formData.state}
+                      onChange={handleInputChange}
+                      className={`${inputClass} cursor-pointer`}
+                    >
+                      <option value="">Select State</option>
+                      {INDIAN_STATES.map((st) => (
+                        <option key={st} value={st}>
+                          {st}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
+                      6-Digit PIN Code *
+                    </label>
+                    <input
+                      type="text"
+                      name="pincode"
+                      required
+                      maxLength={6}
+                      value={formData.pincode}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          pincode: e.target.value.replace(/\D/g, "").slice(0, 6),
+                        }))
+                      }
+                      className={`${inputClass} font-mono`}
+                      placeholder="560038"
+                    />
+                  </div>
                 </div>
+
+                {/* Address Type Selector */}
+                <div className="space-y-1.5 pt-1">
+                  <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#173b25]">
+                    Address Type
+                  </label>
+                  <div className="flex items-center gap-3">
+                    {ADDRESS_TYPES.map((t) => {
+                      const active = (formData.addressType || "Home") === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => setFormData((p) => ({ ...p, addressType: t.id }))}
+                          className={`flex items-center gap-2 px-4 py-2 border rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                            active
+                              ? "bg-[#173b25] text-[#B38A45] border-[#173b25] shadow-sm"
+                              : "bg-white text-zinc-700 border-[#e2d7c5] hover:border-[#173b25]"
+                          }`}
+                        >
+                          {t.id === "Home" && <Home size={13} />}
+                          {t.id === "Work" && <Briefcase size={13} />}
+                          {t.id === "Other" && <Building size={13} />}
+                          <span>{t.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Save address to user account option */}
+                {user && (
+                  <div className="pt-2">
+                    <label className="inline-flex items-center gap-2.5 cursor-pointer text-xs text-[#173b25]">
+                      <input
+                        type="checkbox"
+                        name="saveToAccount"
+                        checked={formData.saveToAccount}
+                        onChange={(e) =>
+                          setFormData((prev) => ({ ...prev, saveToAccount: e.target.checked }))
+                        }
+                        className="w-4 h-4 rounded text-[#173b25] accent-[#173b25] cursor-pointer"
+                      />
+                      <span className="font-semibold text-zinc-700">
+                        Save this address to my account for faster checkout next time
+                      </span>
+                    </label>
+                  </div>
+                )}
               </section>
 
               {/* Payment */}
@@ -712,7 +977,7 @@ const Checkout = () => {
                           </p>
                         )}
                         <div className="flex justify-between items-center mt-1.5">
-                          <span className="text-xs font-bold text-[#173b25]">₹{item.price}</span>
+                          <span className="text-xs font-bold font-sans text-[#173b25]">₹{Number(item.price).toLocaleString("en-IN")}</span>
                           <span className="text-[9px] text-[#173b25] font-bold bg-[#FAF5EC] border border-[#e2d7c5] px-2 py-0.5 rounded">
                             ×{item.quantity || 1}
                           </span>
@@ -725,7 +990,7 @@ const Checkout = () => {
               <div className="space-y-2.5 pt-4 border-t border-[#e8dfcf]">
                 <div className="flex justify-between text-xs text-[#524f46] font-medium">
                   <span>Subtotal</span>
-                  <span className="font-bold text-[#173b25]">₹{total}</span>
+                  <span className="font-bold font-sans text-[#173b25]">₹{Number(total).toLocaleString("en-IN")}</span>
                 </div>
                 <div className="flex justify-between text-xs text-[#524f46] font-medium">
                   <span>Garden Direct Shipping</span>
@@ -733,7 +998,7 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between pt-4 border-t border-dashed border-[#B38A45]/30 items-baseline">
                   <span className="text-[10px] font-extrabold text-[#173b25] uppercase tracking-[0.2em]">Total</span>
-                  <span className="text-2xl font-serif font-bold text-[#173b25]">₹{total}</span>
+                  <span className="text-2xl font-bold font-sans text-[#173b25]">₹{Number(total).toLocaleString("en-IN")}</span>
                 </div>
               </div>
             </div>
